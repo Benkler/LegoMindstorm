@@ -44,7 +44,6 @@ public class Menu extends TextMenu {
                     BrickScreen.clearScreen();
                     BrickScreen.show(RobotStates.LINE_FOLLOWING.getStateName());
                     controller.stateChanged(RobotStates.LINE_FOLLOWING);
-
                     // fire LineFOllowingEvent
                     break;
                 case MENU_ITEM_OBSTACLE_SHIFTING:

@@ -36,8 +36,8 @@ public class HelloWorld {
 		     LCD.clear();
 	         
 	         LCD.drawString(getColor().toString(), 0, 0);
-	         pilot.travel(-35);
-	         
+	       //  pilot.travel(-35);
+	         LCD.drawString("Hello World", 0, 0);
 	         TimeUnit.SECONDS.sleep(1);
 		     
 		 }

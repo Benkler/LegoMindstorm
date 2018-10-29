@@ -37,11 +37,16 @@ public enum RobotStates {
    
 
     public static String[] getRobotStatesList(){
-        ArrayList<String> robotStatesList = new ArrayList<>();  
-        EnumSet.allOf(RobotStates.class)
-            .forEach(element -> robotStatesList.add(element.getStateName()));
+        
+     String [] returnValue = new String[5];
+     returnValue[0] = LINE_FOLLOWING.stateName;
+     returnValue[1] = OBSTACLE_SHIFTING.getStateName();
+     returnValue[2] = BRIDGE.getStateName();
+     returnValue[3] = COLOR_SEARCH.getStateName();
+     returnValue[4] = PARKOUR.getStateName();
+     
 
-        return robotStatesList.toArray(new String[robotStatesList.size()]);
+        return returnValue;
     }
   
     
