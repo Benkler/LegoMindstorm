@@ -3,6 +3,8 @@ package edu.kit.lego02.Threads;
 import edu.kit.lego02.userIO.BrickScreen;
 
 public class LineFollowingThread implements Runnable {
+	
+	LineFollowingState currentState = new StandardLineFollowingState(this);
 
     @Override
     public void run() {
@@ -18,7 +20,7 @@ public class LineFollowingThread implements Runnable {
 //            Motor.C.forward();
 //            Motor.B.forward();
 //            
-//            readLight = colorSensor.getRedMode().;;; // Vielleicht den anderen wählen
+//            readLight = colorSensor.getRedMode().;;; // Vielleicht den anderen wï¿½hlen
 //        if (readLight < min){
 //        readLight = min+1;
 //        }
