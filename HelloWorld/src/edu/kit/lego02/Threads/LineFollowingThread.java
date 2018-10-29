@@ -1,18 +1,26 @@
 package edu.kit.lego02.Threads;
 
+import edu.kit.lego02.Robot.Robot;
 import edu.kit.lego02.userIO.BrickScreen;
 
 public class LineFollowingThread implements Runnable {
 	
 	LineFollowingState currentState = new StandardLineFollowingState(this);
 
+	Robot robot = null;
+	
+	public LineFollowingThread (Robot robot){
+		this.robot = robot;
+	}
+	
     @Override
     public void run() {
-        BrickScreen.show("Line FOllowing Running");
-        int min = 30, max = 54,  // Diese Parameter adaptieren!!!  element [0,1]
-                refLight = 42, Mspeed = 80, Mspeed2 = 15;
-       // SensorMode readLight = 0;
+        BrickScreen.show("Line Following Running");
+        float min = 30.0f, max = 54.0f,  // Diese Parameter adaptieren!!!  element [0,1]
+                refLight = 42.0f, Mspeed = 80.0f, Mspeed2 = 15.0f;
+        float readLight = 0.0f;       
         
+
        // EV3ColorSensor colorSensor = new EV3ColorSensor(SensorPort.S4); //Richtiger port?
        
         
@@ -45,14 +53,14 @@ public class LineFollowingThread implements Runnable {
 }
 
 /*
- * 
- *      import lejos.nxt.*;
+// * 
+// *      import lejos.nxt.*;
 
-public class Line5e {
+//public class Line5e {
     
-    public static void main(String [] args) {
-        int refdist = 15, objdist = 11, min = 30, max = 54,
-    refLight = 42, readLight = 0, motorSpeed = 400,
+//    public static void main(String [] args) {
+//        int refdist = 15, objdist = 11, min = 30, max = 54,
+/*    refLight = 42, readLight = 0, motorSpeed = 400,
     motorSpeed1 = 300, turnSpeed = 37, Mspeed = 80,
     Mspeed2 = 15, insideWheelSpeed = 250;
         
@@ -63,25 +71,30 @@ public class Line5e {
         while (Button.readButtons() == 0) {
             Motor.C.forward();
             Motor.B.forward();
-            
-            readLight = ls.readValue();
-        if (readLight < min){
-        readLight = min+1;
-        }
+=======
+        while (true) {*/
+            //Motor.C.forward();
+            //Motor.B.forward();
+//            
+//            readLight = robot.getSensorValues().getColorValue(); // Vielleicht den anderen w�hlen
+//	        if (readLight < min){
+//	        readLight = min+1;
+//	        }
+	        
+//	        if (max < readLight){
+//	        readLight = max-1;
+//        }
         
-        if (max < readLight){
-        readLight = max-1;
-        }
-        
-            Motor.B.setSpeed(Mspeed + (Mspeed2 * (readLight - min)));
-            Motor.C.setSpeed(Mspeed + (Mspeed2 * (max - readLight)));
+            //Motor.B.setSpeed(Mspeed + (Mspeed2 * (readLight - min)));
+            //Motor.C.setSpeed(Mspeed + (Mspeed2 * (max - readLight)));
             
-            lcd.clear();
-            lcd.drawInt(readLight, 0, 0);
-        lcd.drawInt(Mspeed * (readLight - min), 0, 1);
-        lcd.drawInt(Mspeed * (max - readLight), 0, 2);
-        }
-    }
-}       
- * 
- */
+//            BrickScreen.clearScreen();
+//            BrickScreen.show("Sensorvalue" + readLight);
+            //BrickScreen.displayInt(Mspeed * (readLight - min), 0, 1);
+            //BrickScreen.displayInt(Mspeed * (max - readLight), 0, 2);
+   
+//        }
+
+//    }
+
+//}

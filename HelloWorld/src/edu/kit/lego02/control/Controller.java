@@ -1,6 +1,7 @@
 package edu.kit.lego02.control;
 
 import edu.kit.lego02.RobotStates;
+import edu.kit.lego02.Robot.Robot;
 import edu.kit.lego02.Threads.BridgeThread;
 import edu.kit.lego02.Threads.ColorSearchThread;
 import edu.kit.lego02.Threads.LineFollowingThread;
@@ -12,6 +13,7 @@ public class Controller {
     
     Menu menu = null;
     Thread routineThread = null;
+    Robot robot = null;
     
     public Controller() {
         
@@ -22,6 +24,7 @@ public class Controller {
     
     public void startRobot(){
         //init Robot etc...
+    	this.robot = new Robot(); 
         
         //TODO starte Menü als Thread?!?!
         menu.startUserInput();
@@ -35,7 +38,8 @@ public class Controller {
         switch (state) {
         case LINE_FOLLOWING:
             //do lineFOllowing
-            routineThread = new Thread(new LineFollowingThread());
+            routineThread =  new Thread(new LineFollowingThread(robot));
+            
             routineThread.start();
             
             break;
