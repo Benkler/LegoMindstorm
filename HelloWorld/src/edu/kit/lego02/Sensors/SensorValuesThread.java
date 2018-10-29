@@ -1,6 +1,6 @@
 package edu.kit.lego02.Sensors;
 
-public class SensorValues implements Runnable{
+public class SensorValuesThread implements Runnable{
 
     
     private SensorWrapper leftTouchSensor;
@@ -15,7 +15,7 @@ public class SensorValues implements Runnable{
     
   
     
-    public SensorValues(SensorWrapper leftTouchSensor, SensorWrapper righTouchSensor, SensorWrapper colorSensor,
+    public SensorValuesThread(SensorWrapper leftTouchSensor, SensorWrapper righTouchSensor, SensorWrapper colorSensor,
             SensorWrapper ultrasonicSensor) {
         super();
         this.leftTouchSensor = leftTouchSensor;

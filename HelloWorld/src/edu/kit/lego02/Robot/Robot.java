@@ -1,6 +1,6 @@
 package edu.kit.lego02.Robot;
 
-import edu.kit.lego02.Sensors.SensorValues;
+import edu.kit.lego02.Sensors.SensorValuesThread;
 import edu.kit.lego02.Sensors.SensorWrapper;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.motor.EV3MediumRegulatedMotor;
@@ -43,7 +43,7 @@ public class Robot {
     private final EV3TouchSensor rightTouchSensor = new EV3TouchSensor(RIGHT_TOUCH_SENSOR_PORT);
     private final EV3UltrasonicSensor  ultrasonicSensor = new EV3UltrasonicSensor(ULTRASONIC_SENSOR_PORT);
     
-    private SensorValues sensorValues;
+    private SensorValuesThread sensorValues;
     public Robot() {
        
         //TODO  auch final?!?!
@@ -56,9 +56,14 @@ public class Robot {
        SensorWrapper touchRight = new SensorWrapper(rightTouchSensor, "Touch");
        SensorWrapper ultrasonic = new SensorWrapper(ultrasonicSensor, "Distance");
        
-       this.sensorValues = new SensorValues(touchLeft, touchRight, color, ultrasonic);
+       this.sensorValues = new SensorValuesThread(touchLeft, touchRight, color, ultrasonic);
        
                 
     }
+    public SensorValuesThread getSensorValues() {
+        return sensorValues;
+    }
+    
+    
 
 }
