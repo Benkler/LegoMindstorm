@@ -12,13 +12,15 @@ public class StandardLineFollowingState extends LineFollowingState {
 		nextState = this;
 	}
 	
+	@Override
 	protected void white() {
 		// TODO
-		// nextState = ...
+		nextState = new CornerState(thread); 
 	}
 	
+	@Override
 	protected void black() {
 		// TODO
-		// nextState = ...
+		nextState = new CheckForGapState(thread); 
 	}
 }
