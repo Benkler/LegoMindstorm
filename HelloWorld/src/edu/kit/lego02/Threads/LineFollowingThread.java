@@ -55,7 +55,7 @@ public final float P = 2.0f;
                 
         
 
-                Thread.sleep(500);
+                Thread.sleep(25); //TODO wie schnell regeln?
 
             }
         } catch (InterruptedException e) {

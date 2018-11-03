@@ -15,9 +15,7 @@ import lejos.robotics.navigation.DifferentialPilot;
 
 public class Robot {
     
-    //--------------Values
-    private final float WHEEL_DIAM = 3.6f;
-    private final float TRACK_WIDTH = 19.0f;
+
     
     
     //--------------Port
