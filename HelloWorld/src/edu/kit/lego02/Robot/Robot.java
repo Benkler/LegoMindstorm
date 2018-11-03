@@ -21,8 +21,6 @@ public class Robot {
     
     
     //--------------Port
-    private static final Port LEFT_MOTOR_PORT = MotorPort.A;
-    private static final Port RIGHT_MOTOR_PORT = MotorPort.B;
     private static final Port ULTRASONIC_MOTOR_PORT = MotorPort.C;
     private static final Port COLOR_SENSOR_PORT = SensorPort.S3;
 
@@ -32,9 +30,7 @@ public class Robot {
 
     
     // -------------Motor
-    private DifferentialPilot pilot;
-    private EV3LargeRegulatedMotor rightMotor;
-    private EV3LargeRegulatedMotor leftMotor;
+
     private EV3MediumRegulatedMotor ultraSonicMotor;
  
     
@@ -45,11 +41,16 @@ public class Robot {
     private final EV3UltrasonicSensor  ultrasonicSensor = new EV3UltrasonicSensor(ULTRASONIC_SENSOR_PORT);
     
     private SensorValuesThread sensorValueThread;
+    
+    
+    private final Drive drive =  new Drive();
+    
+    
     public Robot() {
+        
        
         //TODO  auch final?!?!
-       this.rightMotor = new EV3LargeRegulatedMotor(RIGHT_MOTOR_PORT);
-       this.leftMotor = new EV3LargeRegulatedMotor(LEFT_MOTOR_PORT);
+       
        this.ultraSonicMotor = new EV3MediumRegulatedMotor(ULTRASONIC_MOTOR_PORT);
        
        SensorWrapper color = new SensorWrapper(colorSensor, "Red");
@@ -61,24 +62,17 @@ public class Robot {
        new Thread(sensorValueThread).start();
        
        
+       
+       
                 
+    }
+    public Drive getDrive() {
+        return drive;
     }
     public SensorValuesThread getSensorValues() {
         return sensorValueThread;
     }
-    public float getLeftSpeed() {
-        return leftMotor.getSpeed();
-    }
-    public void changeMotorSpeed(float leftSpeed, float rightSpeed) {
-        leftMotor.startSynchronization();
-        leftMotor.setSpeed(leftSpeed);
-        rightMotor.setSpeed(rightSpeed);
-        leftMotor.endSynchronization();
-        
-    }
-    public float getRightSpeed() {
-        return rightMotor.getSpeed();
-    }
+    
     
     
 
