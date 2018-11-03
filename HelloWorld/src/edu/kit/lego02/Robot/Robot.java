@@ -43,7 +43,7 @@ public class Robot {
     private final EV3TouchSensor rightTouchSensor = new EV3TouchSensor(RIGHT_TOUCH_SENSOR_PORT);
     private final EV3UltrasonicSensor  ultrasonicSensor = new EV3UltrasonicSensor(ULTRASONIC_SENSOR_PORT);
     
-    private SensorValuesThread sensorValues;
+    private SensorValuesThread sensorValueThread;
     public Robot() {
        
         //TODO  auch final?!?!
@@ -56,12 +56,14 @@ public class Robot {
        SensorWrapper touchRight = new SensorWrapper(rightTouchSensor, "Touch");
        SensorWrapper ultrasonic = new SensorWrapper(ultrasonicSensor, "Distance");
        
-       this.sensorValues = new SensorValuesThread(touchLeft, touchRight, color, ultrasonic);
+       this.sensorValueThread = new SensorValuesThread(touchLeft, touchRight, color, ultrasonic);
+       new Thread(sensorValueThread).start();
+       
        
                 
     }
     public SensorValuesThread getSensorValues() {
-        return sensorValues;
+        return sensorValueThread;
     }
     
     

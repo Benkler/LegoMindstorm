@@ -18,27 +18,35 @@ public class LineFollowingThread implements Runnable {
                 refLight = 42.0f, Mspeed = 80.0f, Mspeed2 = 15.0f;
         float readLight = 0.0f;       
         
-        while (true) {
-            //Motor.C.forward();
-            //Motor.B.forward();
+        try {
+            while (true) {
+                //Motor.C.forward();
+                //Motor.B.forward();
+                
+                readLight = robot.getSensorValues().getColorValue(); // Vielleicht den anderen wählen
+                if (readLight < min){
+                readLight = min+1;
+                }
+                
+                if (max < readLight){
+                readLight = max-1;
+            }
             
-            readLight = robot.getSensorValues().getColorValue(); // Vielleicht den anderen wählen
-	        if (readLight < min){
-	        readLight = min+1;
-	        }
-	        
-	        if (max < readLight){
-	        readLight = max-1;
-        }
-        
-            //Motor.B.setSpeed(Mspeed + (Mspeed2 * (readLight - min)));
-            //Motor.C.setSpeed(Mspeed + (Mspeed2 * (max - readLight)));
-            
-            BrickScreen.clearScreen();
-            BrickScreen.show("Sensorvalue" + readLight);
-            //BrickScreen.displayInt(Mspeed * (readLight - min), 0, 1);
-            //BrickScreen.displayInt(Mspeed * (max - readLight), 0, 2);
+                //Motor.B.setSpeed(Mspeed + (Mspeed2 * (readLight - min)));
+                //Motor.C.setSpeed(Mspeed + (Mspeed2 * (max - readLight)));
+                
+                BrickScreen.clearScreen();
+                BrickScreen.show("Sensorvalue" + readLight);
+                
+                    Thread.sleep(500);
+               
+                //BrickScreen.displayInt(Mspeed * (readLight - min), 0, 1);
+                //BrickScreen.displayInt(Mspeed * (max - readLight), 0, 2);
    
+            }
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
 
     }
