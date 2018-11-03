@@ -42,7 +42,7 @@ public abstract class LineFollowingState {
 	 * Executed when the color sensor detects grey. 
 	 * Action depends on the current state of the object. 
 	 */
-	protected void grey() {
+	public void grey() {
 		throw new IllegalStateException("Error, transition in not defined.");
 	}
 	
@@ -50,7 +50,7 @@ public abstract class LineFollowingState {
 	 * Executed when the color sensor detects white. 
 	 * Action depends on the current state of the object. 
 	 */
-	protected void white() {
+	public void white() {
 		throw new IllegalStateException("Error, transition in not defined.");
 	}
 	
@@ -58,7 +58,7 @@ public abstract class LineFollowingState {
 	 * Executed when the color sensor detects black. 
 	 * Action depends on the current state of the object. 
 	 */
-	protected void black() {
+	public void black() {
 		throw new IllegalStateException("Error, transition in not defined.");
 	}
 	
@@ -66,7 +66,7 @@ public abstract class LineFollowingState {
 	 * Executed when a left corner is detected (assuming the Robot is following the right edge of the line).
 	 * Action depends on the current state of the object.  
 	 */
-	protected void cornerDetected() {
+	public void cornerDetected() {
 		throw new IllegalStateException("Error, transition in not defined.");
 	}
 	
@@ -74,7 +74,7 @@ public abstract class LineFollowingState {
 	 * Executed when a gap is detected. 
 	 * Action depends on the current state of the object. 
 	 */
-	protected void gapDetected() {
+	public void gapDetected() {
 		throw new IllegalStateException("Error, transition in not defined.");
 	}
 	
@@ -84,11 +84,11 @@ public abstract class LineFollowingState {
 	 * Updates state variable of the object. Is the new state is different from the old one, 
 	 * the corresponding exit und entry methods are called. 
 	 */
-	protected void changeState() {
-		if (nextState != this) {
+	public void changeState() {
+		//if (nextState != this) {
 			this.exit();
 			nextState.entry();
 			thread.setCurrentState(nextState);
-		}
+		//}
 	}
 }

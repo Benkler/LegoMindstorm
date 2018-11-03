@@ -1,7 +1,6 @@
-package edu.kit.lego02.Threads;
+package edu.kit.lego02.Threads.LineFollowing;
 
-import edu.kit.lego02.Threads.LineFollowing.LineFollowingState;
-import edu.kit.lego02.Threads.LineFollowing.StandardLineFollowingState;
+import edu.kit.lego02.Threads.LineFollowingThread;
 
 public class CornerState extends LineFollowingState {
 
@@ -10,8 +9,15 @@ public class CornerState extends LineFollowingState {
 	}
 	
 	@Override
-	protected void grey() {
+    public void grey() {
 		// TODO
 		nextState = new StandardLineFollowingState(thread);
 	}
+
+    @Override
+    protected void entry() {
+        
+    }
+	
+	
 }

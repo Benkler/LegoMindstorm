@@ -4,6 +4,7 @@ import edu.kit.lego02.Sensors.SensorValuesThread;
 import edu.kit.lego02.Sensors.SensorWrapper;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.motor.EV3MediumRegulatedMotor;
+import lejos.hardware.motor.Motor;
 import lejos.hardware.port.MotorPort;
 import lejos.hardware.port.Port;
 import lejos.hardware.port.SensorPort;
@@ -64,6 +65,19 @@ public class Robot {
     }
     public SensorValuesThread getSensorValues() {
         return sensorValueThread;
+    }
+    public float getLeftSpeed() {
+        return leftMotor.getSpeed();
+    }
+    public void changeMotorSpeed(float leftSpeed, float rightSpeed) {
+        leftMotor.startSynchronization();
+        leftMotor.setSpeed(leftSpeed);
+        rightMotor.setSpeed(rightSpeed);
+        leftMotor.endSynchronization();
+        
+    }
+    public float getRightSpeed() {
+        return rightMotor.getSpeed();
     }
     
     

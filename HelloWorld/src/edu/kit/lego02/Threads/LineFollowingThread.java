@@ -7,48 +7,55 @@ import edu.kit.lego02.userIO.BrickScreen;
 
 public class LineFollowingThread implements Runnable {
 private LineFollowingState currentState = new StandardLineFollowingState(this);
+private float sensorValue;
+private Robot robot = null;
 
-    Robot robot = null;
+private final float WHITE_THRESH = 3.0f;
+private final float BLACK_THRESH = 5.8f;
+public final float GREY = 4.0f;
+public final float P = 2.0f;
+
+
+
+    
 
     public LineFollowingThread(Robot robot) {
         this.robot = robot;
+    }
+    
+    public float getSensorValue(){
+        return sensorValue;
+    }
+
+    public Robot getRobot() {
+        return robot;
     }
 
     @Override
     public void run() {
         BrickScreen.show("Line Following Running");
-        float min = 30.0f, max = 54.0f, // Diese Parameter adaptieren!!! element
-                                        // [0,1]
-                refLight = 42.0f, Mspeed = 80.0f, Mspeed2 = 15.0f;
-        float readLight = 0.0f;
+        
+        
+       
 
         try {
             while (true) {
-                // Motor.C.forward();
-                // Motor.B.forward();
+                
 
-                readLight = robot.getSensorValues().getColorValue(); // Vielleicht
-                                                                     // den
-                                                                     // anderen
-                                                                     // wählen
-                if (readLight < min) {
-                    readLight = min + 1;
+                sensorValue = robot.getSensorValues().getColorValue();
+                
+                if(isBlack(sensorValue)){
+                   black();
+                    
+                }else if(isWhite(sensorValue)){
+                    white();
+                }else{
+                    grey();
                 }
-
-                if (max < readLight) {
-                    readLight = max - 1;
-                }
-
-                // Motor.B.setSpeed(Mspeed + (Mspeed2 * (readLight - min)));
-                // Motor.C.setSpeed(Mspeed + (Mspeed2 * (max - readLight)));
-
-                BrickScreen.clearScreen();
-                BrickScreen.show("Sensorvalue" + readLight);
+                
+        
 
                 Thread.sleep(500);
-
-                // BrickScreen.displayInt(Mspeed * (readLight - min), 0, 1);
-                // BrickScreen.displayInt(Mspeed * (max - readLight), 0, 2);
 
             }
         } catch (InterruptedException e) {
@@ -64,6 +71,38 @@ private LineFollowingState currentState = new StandardLineFollowingState(this);
     public void setCurrentState(LineFollowingState currentState) {
         this.currentState = currentState;
     }
+    
+ 
+    private boolean isWhite(float sensorValue){
+       
+        return sensorValue < WHITE_THRESH;
+    }
+    
+    
+    private boolean isBlack(float sensorValue){
+        return sensorValue > BLACK_THRESH;
+    }
+    
+
+    private void grey() {
+           currentState.grey();
+           currentState.changeState();
+    }
+    
+    private void black(){
+        currentState.black();
+        currentState.changeState();
+    }
+    
+    private void white() {
+        currentState.white();
+        currentState.changeState();
+        
+    }
+    
+    
+    
+    
 }
 
 // }
