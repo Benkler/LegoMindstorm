@@ -73,13 +73,13 @@ public final float P = 2.0f;
     }
     
  
-    private boolean isWhite(float sensorValue){
+    public boolean isWhite(float sensorValue){
        
         return sensorValue < WHITE_THRESH;
     }
     
     
-    private boolean isBlack(float sensorValue){
+    public boolean isBlack(float sensorValue){
         return sensorValue > BLACK_THRESH;
     }
     
@@ -99,8 +99,6 @@ public final float P = 2.0f;
         currentState.changeState();
         
     }
-    
-    
     
     
 }
