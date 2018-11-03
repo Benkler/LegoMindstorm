@@ -1,11 +1,12 @@
 package edu.kit.lego02.Threads;
 
 import edu.kit.lego02.Robot.Robot;
+import edu.kit.lego02.Threads.LineFollowing.LineFollowingState;
+import edu.kit.lego02.Threads.LineFollowing.StandardLineFollowingState;
 import edu.kit.lego02.userIO.BrickScreen;
 
 public class LineFollowingThread implements Runnable {
-
-    LineFollowingState currentState = new StandardLineFollowingState(this);
+private LineFollowingState currentState = new StandardLineFollowingState(this);
 
     Robot robot = null;
 
@@ -54,6 +55,14 @@ public class LineFollowingThread implements Runnable {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+    }
+
+    public LineFollowingState getCurrentState() {
+        return currentState;
+    }
+
+    public void setCurrentState(LineFollowingState currentState) {
+        this.currentState = currentState;
     }
 }
 

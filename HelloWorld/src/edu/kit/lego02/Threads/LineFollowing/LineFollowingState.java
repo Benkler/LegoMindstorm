@@ -1,4 +1,6 @@
-package edu.kit.lego02.Threads;
+package edu.kit.lego02.Threads.LineFollowing;
+
+import edu.kit.lego02.Threads.LineFollowingThread;
 
 /**
  * Abstract class to model a state that can be used by a LineFollowingThread.  
@@ -86,7 +88,7 @@ public abstract class LineFollowingState {
 		if (nextState != this) {
 			this.exit();
 			nextState.entry();
-			thread.currentState = nextState;
+			thread.setCurrentState(nextState);
 		}
 	}
 }

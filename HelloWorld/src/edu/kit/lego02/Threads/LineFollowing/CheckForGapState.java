@@ -1,4 +1,7 @@
-package edu.kit.lego02.Threads;
+package edu.kit.lego02.Threads.LineFollowing;
+
+import edu.kit.lego02.Threads.CornerState;
+import edu.kit.lego02.Threads.LineFollowingThread;
 
 public class CheckForGapState extends LineFollowingState {
 	
