@@ -19,24 +19,31 @@ public class StandardLineFollowingState extends LineFollowingState {
 	@Override
 	public void white() {
 		// TODO
-		nextState = new CornerState(thread); 
+		nextState = new CornerState(lineFollowThread); 
 	}
 	
 	@Override
 	public void black() {
 		// TODO
-		nextState = new CheckForGapState(thread); 
+		nextState = new CheckForGapState(lineFollowThread); 
 	}
 
     @Override
     protected void entry() {
         
+        
         //P-Adaption
-        float sensorValue = thread.getSensorValue();
-        float controlValue = thread.P * (thread.GREY - sensorValue);
-        Drive drive = thread.getRobot().getDrive();
-        float leftSpeed =drive.getLeftSpeed() + controlValue;
-        float rightSpeed = drive.getRightSpeed() - controlValue;
+        float sensorValue = lineFollowThread.getSensorValue();
+        float controlValue = lineFollowThread.P * (lineFollowThread.GREY - sensorValue);
+        Drive drive = lineFollowThread.getRobot().getDrive();
+        float maxSpeed = drive.getMaxSpeed() * 0.3f;
+        
+        
+         float rightSpeed = Math.max(drive.getRightSpeed() + controlValue, maxSpeed);
+         float leftSpeed = Math.max(drive.getLeftSpeed() - controlValue, maxSpeed);
+        
+        
+        
        drive.changeMotorSpeed(leftSpeed, rightSpeed);
     }
 	

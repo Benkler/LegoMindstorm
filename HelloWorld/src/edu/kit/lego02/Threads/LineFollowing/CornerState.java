@@ -15,7 +15,7 @@ public class CornerState extends LineFollowingState {
 	@Override
     public void grey() {
 		// TODO
-		nextState = new StandardLineFollowingState(thread);
+		nextState = new StandardLineFollowingState(lineFollowThread);
 	}
 	
 	/**
@@ -23,15 +23,18 @@ public class CornerState extends LineFollowingState {
 	 */
     @Override
     protected void entry() {
-    	Robot robot = thread.getRobot();
+        
+    	Robot robot = lineFollowThread.getRobot();
         Drive drive = robot.getDrive();
+        
+        drive.stopMotors();
         
         drive.travelFwd(0.5f);
         
         boolean white = true;
         while(white) {
         	drive.turnRightSingleChain(TURNING_DEGREE); // might want to use turnInPlace here
-        	white = thread.isWhite(robot.getSensorValues().getColorValue());
+        	white = lineFollowThread.isWhite(robot.getSensorValues().getColorValue());
         }
     }	
 }

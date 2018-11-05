@@ -17,12 +17,18 @@ public class Drive {
     private DifferentialPilot pilot;
     private EV3LargeRegulatedMotor rightMotor;
     private EV3LargeRegulatedMotor leftMotor;
+    private float maxSpeed;
 
     public Drive() {
         this.rightMotor = new EV3LargeRegulatedMotor(RIGHT_MOTOR_PORT);
         this.leftMotor = new EV3LargeRegulatedMotor(LEFT_MOTOR_PORT);
         this.pilot = new DifferentialPilot(WHEEL_DIAM, TRACK_WIDTH, leftMotor, rightMotor);
+        this.maxSpeed = rightMotor.getMaxSpeed();
 
+    }
+
+    public float getMaxSpeed() {
+        return maxSpeed;
     }
 
     public float getLeftSpeed() {
@@ -38,6 +44,8 @@ public class Drive {
      * @param rightSpeed
      */
     public void changeMotorSpeed(float leftSpeed, float rightSpeed) {
+        leftSpeed = -leftSpeed; //We installed the motor Block in theother direction
+        rightSpeed = -rightSpeed;
         leftMotor.startSynchronization();
         rightMotor.startSynchronization();
         
@@ -125,13 +133,27 @@ public class Drive {
         rightMotor.forward();
 
     }
+    
+    /**
+     * Turn in place
+     * @param (angle < 0) ==> turnLeft ;   (angle >= 0) ==> turnRight
+     *         
+     */
+    public void turnInPlace(float angle){
+        
+        if(angle <0){
+            turnLeftInPlace(angle);
+        }else{
+            turnRightInPlace(angle);
+        }
+    }
 
     /**
      * Travel forward in centimeter
      * @param distance
      */
     public void travelFwd(float distance) {
-        pilot.travel(distance);
+        pilot.travel(-distance);
 
     }
 
@@ -140,7 +162,7 @@ public class Drive {
      * @param distance
      */
     public void travelBwd(float distance) {
-        pilot.travel(-distance);
+        pilot.travel(distance);
     }
  
     /**

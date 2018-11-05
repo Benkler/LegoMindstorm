@@ -25,4 +25,10 @@ public class BrickScreen  {
         LCD.drawString(str, xPos, yPos++);
     }
 
+    public static void displayFloat(float sensorValue, int xPos, int yPos) {
+        String temp =String.valueOf(sensorValue);
+        LCD.drawString(temp, xPos, yPos);
+        
+    }
+
 }

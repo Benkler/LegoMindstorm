@@ -18,7 +18,7 @@ public class GapState extends LineFollowingState {
 	@Override
     public void grey() {
 		// TODO 
-		nextState = new StandardLineFollowingState(thread);
+		nextState = new StandardLineFollowingState(lineFollowThread);
 	}
 	
     @Override

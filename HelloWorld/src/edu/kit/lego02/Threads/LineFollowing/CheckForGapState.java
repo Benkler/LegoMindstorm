@@ -16,20 +16,21 @@ public class CheckForGapState extends LineFollowingState {
 	@Override
     public void grey() {
 		// robot drove left corner
-		nextState = new StandardLineFollowingState(thread);
+		nextState = new StandardLineFollowingState(lineFollowThread);
 	}
 
 	@Override
     public void black() {
 		// as gap was detected
-		nextState = new GapState(thread);
+		nextState = new GapState(lineFollowThread);
 	}
 
 	@Override
 	protected void entry() {
-		Robot robot = thread.getRobot();
+		Robot robot = lineFollowThread.getRobot();
         Drive drive = robot.getDrive();
 		
+        drive.stopMotors();
         // turn to the left in incremental steps until either found grey/white OR 
         // turned far enough and found only black
 		int targetTotalTurningDeg = ceilToIncrement(MIN_TOTAL_TURNING_DEGREE);
@@ -41,7 +42,7 @@ public class CheckForGapState extends LineFollowingState {
 			drive.turnLeftInPlace(TURNING_DEG_INC);
 			totalTurningDeg += TURNING_DEG_INC;
 			
-			black = thread.isBlack(robot.getSensorValues().getColorValue());
+			black = lineFollowThread.isBlack(robot.getSensorValues().getColorValue());
 			turnedEnough = (totalTurningDeg == targetTotalTurningDeg);
 		}
 		

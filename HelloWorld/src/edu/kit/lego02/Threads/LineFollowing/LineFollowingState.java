@@ -13,7 +13,7 @@ import edu.kit.lego02.Threads.LineFollowingThread;
  */
 public abstract class LineFollowingState {
 	
-	protected LineFollowingThread thread;
+	protected LineFollowingThread lineFollowThread;
 	protected LineFollowingState nextState;
 	
 	/**
@@ -21,7 +21,7 @@ public abstract class LineFollowingState {
 	 * @param thread The thread whose behavior this state defines. 
 	 */
 	public LineFollowingState(LineFollowingThread thread) {
-		this.thread = thread;
+		this.lineFollowThread = thread;
 	}
 	
 	/**
@@ -88,7 +88,7 @@ public abstract class LineFollowingState {
 		//if (nextState != this) {
 			this.exit();
 			nextState.entry();
-			thread.setCurrentState(nextState);
+			lineFollowThread.setCurrentState(nextState);
 		//}
 	}
 }
