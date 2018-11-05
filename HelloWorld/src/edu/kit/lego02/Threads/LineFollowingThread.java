@@ -14,10 +14,19 @@ private Robot robot;
 private float maxSpeed;
 
 
-private final float WHITE_THRESH = 0.8f; //TODO parameter need adjustement
-private final float BLACK_THRESH = 0.2f;
-public final float GREY = (WHITE_THRESH+BLACK_THRESH)/2;
-public final float P = 30.0f;
+private final float WHITE_THRESH = 0.78f; //TODO parameter need adjustement
+private final float BLACK_THRESH = 0.14f;
+public final float GREY = ((WHITE_THRESH+BLACK_THRESH)/2);
+
+/*
+ * Target power level ==> Max speed for Robot on line
+ */
+public final float Tp = 220f;
+
+/*
+ * Constant for P controller
+ */
+public final float Kp = (Tp/(WHITE_THRESH-GREY)) * 1.3f;
 
 
 
@@ -41,7 +50,7 @@ public final float P = 30.0f;
     @Override
     public void run() {
         BrickScreen.show("Line Following Running");
-        robot.getDrive().changeMotorSpeed(maxSpeed*0.4f, maxSpeed*0.4f);
+        robot.getDrive().changeMotorSpeed(maxSpeed*0.3f, maxSpeed*0.3f);
         
         
        
@@ -52,21 +61,27 @@ public final float P = 30.0f;
 
                 sensorValue = robot.getSensorValues().getColorValue();
                 
-                BrickScreen.clearScreen();
-                BrickScreen.displayFloat(maxSpeed, 0   , 0);
-                grey();
-//                if(isBlack(sensorValue)){
-//                   black();
-//                    
-//                }else if(isWhite(sensorValue)){
-//                    white();
-//                }else{
-//                    grey();
-//                }
-//                
-//        
+               
+               
+                if(isBlack(sensorValue)){
+                   //black();
+                    BrickScreen.displayString("BLACK", 0, 0);
+                    robot.getDrive().stopMotors();
+                    break;
+                    
+                }else if(isWhite(sensorValue)){
+                   // white();
+                    
+                    BrickScreen.displayString("WHITE", 0, 0);
+                    robot.getDrive().stopMotors();
+                    break;
+                }else{
+                    grey();
+                }
+                
+        
 
-                Thread.sleep(10); //TODO wie schnell regeln?
+                Thread.sleep(5); //TODO wie schnell regeln?
 
             }
         } catch (InterruptedException e) {
@@ -86,12 +101,12 @@ public final float P = 30.0f;
  
     public boolean isWhite(float sensorValue){
        
-        return sensorValue < WHITE_THRESH;
+        return sensorValue > WHITE_THRESH;
     }
     
     
     public boolean isBlack(float sensorValue){
-        return sensorValue > BLACK_THRESH;
+        return sensorValue < BLACK_THRESH;
     }
     
 

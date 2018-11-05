@@ -44,7 +44,7 @@ public class Drive {
      * @param rightSpeed
      */
     public void changeMotorSpeed(float leftSpeed, float rightSpeed) {
-        leftSpeed = -leftSpeed; //We installed the motor Block in theother direction
+        leftSpeed = -leftSpeed; //We installed the motor Block in the other direction
         rightSpeed = -rightSpeed;
         leftMotor.startSynchronization();
         rightMotor.startSynchronization();
