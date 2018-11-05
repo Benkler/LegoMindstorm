@@ -63,6 +63,14 @@ public abstract class LineFollowingState {
 	}
 	
 	/**
+	 * Executed when the color sensor detects blue. 
+	 * Action depends on the current state of the object. 
+	 */
+	public void blue() {
+		throw new IllegalStateException("Error, transition in not defined.");
+	}
+	
+	/**
 	 * Executed when a left corner is detected (assuming the Robot is following the right edge of the line).
 	 * Action depends on the current state of the object.  
 	 */
@@ -75,6 +83,14 @@ public abstract class LineFollowingState {
 	 * Action depends on the current state of the object. 
 	 */
 	public void gapDetected() {
+		throw new IllegalStateException("Error, transition in not defined.");
+	}
+	
+	/**
+	 * Executed when an obstacle is detected. 
+	 * Action depends on the current state of the object. 
+	 */
+	public void obstacleDetected() {
 		throw new IllegalStateException("Error, transition in not defined.");
 	}
 	

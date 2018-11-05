@@ -61,7 +61,7 @@ public final float Kp = (Tp/(WHITE_THRESH-GREY)) * 1.3f;
 
                 sensorValue = robot.getSensorValues().getColorValue();
                 
-               
+ 
                
                 if(isBlack(sensorValue)){
                    //black();
@@ -82,6 +82,7 @@ public final float Kp = (Tp/(WHITE_THRESH-GREY)) * 1.3f;
         
 
                 Thread.sleep(5); //TODO wie schnell regeln?
+
 
             }
         } catch (InterruptedException e) {
@@ -124,6 +125,11 @@ public final float Kp = (Tp/(WHITE_THRESH-GREY)) * 1.3f;
         currentState.white();
         currentState.changeState();
         
+    }
+    
+    private void blue() {
+    	currentState.blue();
+    	currentState.changeState();
     }
     
     
