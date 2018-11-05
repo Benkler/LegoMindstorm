@@ -52,6 +52,9 @@ public final float P = 30.0f;
 
                 sensorValue = robot.getSensorValues().getColorValue();
                 
+                // TODO check for blue
+                // TODO if blue, call blue()
+                
                 BrickScreen.clearScreen();
                 BrickScreen.displayFloat(maxSpeed, 0   , 0);
                 grey();
@@ -109,6 +112,11 @@ public final float P = 30.0f;
         currentState.white();
         currentState.changeState();
         
+    }
+    
+    private void blue() {
+    	currentState.blue();
+    	currentState.changeState();
     }
     
     
