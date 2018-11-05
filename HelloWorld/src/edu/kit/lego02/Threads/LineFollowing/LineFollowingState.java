@@ -78,6 +78,14 @@ public abstract class LineFollowingState {
 		throw new IllegalStateException("Error, transition in not defined.");
 	}
 	
+	/**
+	 * Executed when an obstacle is detected. 
+	 * Action depends on the current state of the object. 
+	 */
+	public void obstacleDetected() {
+		throw new IllegalStateException("Error, transition in not defined.");
+	}
+	
 	//protected abstract LineFollowingState next();
 	
 	/**

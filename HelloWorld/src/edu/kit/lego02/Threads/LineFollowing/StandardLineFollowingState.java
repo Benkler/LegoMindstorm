@@ -29,6 +29,11 @@ public class StandardLineFollowingState extends LineFollowingState {
 	}
 
     @Override
+	public void obstacleDetected() {
+		nextState = new ObstacleState(lineFollowThread);
+	}
+
+	@Override
     protected void entry() {
         
         
