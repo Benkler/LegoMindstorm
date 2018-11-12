@@ -60,10 +60,14 @@ public class GapState extends LineFollowingState {
     //
     public void travelHalfCircles(){
     	//Viertelkreis fahren in stepSize
-    	//Prüfen was besser inPlace oder turnSingleChain  
+    	//Prüfen was besser inPlace oder turnSingleChain
 		while(degree < arcSize){
 			degree += STEP_SIZE;
 			drive.turnInPlace(stepSize);
+        	if (!lineFollowThread.isBlack(lineFollowThread.getRobot().
+        			getSensorValues().getColorValue())){
+        		return;
+        	}
 		}
 		//Zurück drehen
 		drive.turnInPlace(-arcSize);
@@ -73,6 +77,10 @@ public class GapState extends LineFollowingState {
 		while(degree < arcSize){
 			degree += STEP_SIZE;
 			drive.turnInPlace(stepSize);
+        	if (!lineFollowThread.isBlack(lineFollowThread.getRobot().
+        			getSensorValues().getColorValue())){
+        		return;
+        	}
 		}
 		//Zurück drehen
 		drive.turnInPlace(arcSize);
