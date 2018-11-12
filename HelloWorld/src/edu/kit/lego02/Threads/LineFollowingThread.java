@@ -16,7 +16,7 @@ private float maxSpeed;
 
 private final float WHITE_THRESH = 0.78f; //TODO parameter need adjustement
 private final float BLACK_THRESH = 0.14f;
-private final float US_THRESH = 1.0f; // TODO calibrate 
+private final float US_THRESH = 0.01f; // TODO calibrate 
 public final float GREY = ((WHITE_THRESH+BLACK_THRESH)/2);
 
 /*
@@ -72,21 +72,20 @@ public final float Kp = (Tp/(WHITE_THRESH-GREY)) * 1.3f;
                 sensorValue = robot.getSensorValues().getColorValue();
                 
                 if(robot.getSensorValues().getUltrasonicValue() < US_THRESH) {
-                	BrickScreen.displayString("OBSTACLE", 0, 0);
+                	//BrickScreen.displayString("OBSTACLE", 0, 0);
                 	obstacleDetected();
                 	continue;
                 }
                
                 if(isBlack(sensorValue)){
-                    BrickScreen.displayString("BLACK", 0, 0);
+                    //BrickScreen.displayString("BLACK", 0, 0);
                     black();
-                    //BrickScreen.displayString("after black", 0, 0);
                     
                     //robot.getDrive().stopMotors();
          
                     
                 }else if(isWhite(sensorValue)){
-                	BrickScreen.displayString("WHITE", 0, 0);
+                	//BrickScreen.displayString("WHITE", 0, 0);
                     white();
 
                     
