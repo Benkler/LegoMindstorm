@@ -50,50 +50,59 @@ public final float Kp = (Tp/(WHITE_THRESH-GREY)) * 1.3f;
 
     @Override
     public void run() {
-        BrickScreen.show("Line Following Running");
-        robot.getDrive().changeMotorSpeed(maxSpeed*0.3f, maxSpeed*0.3f);
-        
-        
-       
-
-        try {
-            while (true) {
-                
-                sensorValue = robot.getSensorValues().getColorValue();
-                
-                if(robot.getSensorValues().getUltrasonicValue() < US_THRESH) {
-                	BrickScreen.displayString("OBSTACLE", 0, 0);
-                	obstacleDetected();
-                	continue;
-                }
-               
-                if(isBlack(sensorValue)){
-                    BrickScreen.displayString("BLACK", 0, 0);
-                    black();
-                    //BrickScreen.displayString("after black", 0, 0);
-                    
-                    //robot.getDrive().stopMotors();
-         
-                    
-                }else if(isWhite(sensorValue)){
-                	BrickScreen.displayString("WHITE", 0, 0);
-                    white();
-
-                    
-                    //robot.getDrive().stopMotors();
-                    
-                }else{
-                    grey();
-                }
-                
-                Thread.sleep(5); //TODO wie schnell regeln?
-
-
-            }
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+    	while (true) {
+    		BrickScreen.displayFloat(robot.getSensorValues().getUltrasonicValue(), 0, 0);
+    		try {
+				Thread.sleep(300);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    	}
+//        BrickScreen.show("Line Following Running");
+//        robot.getDrive().changeMotorSpeed(maxSpeed*0.3f, maxSpeed*0.3f);
+//        
+//        
+//       
+//
+//        try {
+//            while (true) {
+//                
+//                sensorValue = robot.getSensorValues().getColorValue();
+//                
+//                if(robot.getSensorValues().getUltrasonicValue() < US_THRESH) {
+//                	BrickScreen.displayString("OBSTACLE", 0, 0);
+//                	obstacleDetected();
+//                	continue;
+//                }
+//               
+//                if(isBlack(sensorValue)){
+//                    BrickScreen.displayString("BLACK", 0, 0);
+//                    black();
+//                    //BrickScreen.displayString("after black", 0, 0);
+//                    
+//                    //robot.getDrive().stopMotors();
+//         
+//                    
+//                }else if(isWhite(sensorValue)){
+//                	BrickScreen.displayString("WHITE", 0, 0);
+//                    white();
+//
+//                    
+//                    //robot.getDrive().stopMotors();
+//                    
+//                }else{
+//                    grey();
+//                }
+//                
+//                Thread.sleep(5); //TODO wie schnell regeln?
+//
+//
+//            }
+//        } catch (InterruptedException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
     }
 
     public LineFollowingState getCurrentState() {
