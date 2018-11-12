@@ -85,7 +85,7 @@ public class Drive {
      * @throws IllegalArgumentException
      */
     public void turnLeftSingleChain(float angle) throws IllegalArgumentException {
-        if (angle < 0 || angle > 180) { // TODO Rainer prüft das
+        if (angle < 0 || angle > 180) { // TODO Rainer prï¿½ft das
             throw new IllegalArgumentException();
         }
         pilot.rotate(angle);
@@ -108,13 +108,13 @@ public class Drive {
      * @param angle
      */
     public void turnLeftInPlace(float angle) {
-        int angleVal = (int) (1* angle);  //TODO needs adjustment
-                rightMotor.forward();
-                leftMotor.backward();
-                rightMotor.rotate( angleVal, true); //immediate return
-                leftMotor.rotate(-angleVal, false); //return when rotation finished
+        int angleVal = (int) (6.15f* angle);  //TODO needs adjustment
+                //rightMotor.forward();
+                //leftMotor.backward();
+                rightMotor.rotate(-angleVal, true); //immediate return
+                leftMotor.rotate(angleVal, false); //return when rotation finished
                 
-                leftMotor.forward();
+                //leftMotor.forward();
                 
                 
     }
@@ -124,13 +124,13 @@ public class Drive {
      * @param angle
      */
     public void turnRightInPlace(float angle) {
-        int angleVal = (int) (1* angle);
-        rightMotor.backward();
-        leftMotor.forward();
-        rightMotor.rotate( -angleVal, true); //immediate return
-        leftMotor.rotate(angleVal, false); //return when rotation finished
+        int angleVal = (int) (6.15f * angle);
+        //rightMotor.backward();
+        //leftMotor.forward();
+        rightMotor.rotate( angleVal, true); //immediate return
+        leftMotor.rotate(-angleVal, false); //return when rotation finished
         
-        rightMotor.forward();
+        //rightMotor.forward();
 
     }
     
@@ -153,6 +153,7 @@ public class Drive {
      * @param distance
      */
     public void travelFwd(float distance) {
+    	distance = distance * 1.1f;
         pilot.travel(-distance);
 
     }
@@ -162,6 +163,7 @@ public class Drive {
      * @param distance
      */
     public void travelBwd(float distance) {
+    	distance = distance * 1.1f;
         pilot.travel(distance);
     }
  

@@ -3,6 +3,7 @@ package edu.kit.lego02.Threads.LineFollowing;
 import edu.kit.lego02.Robot.Drive;
 import edu.kit.lego02.Robot.Robot;
 import edu.kit.lego02.Threads.LineFollowingThread;
+import edu.kit.lego02.userIO.BrickScreen;
 
 public class CheckForGapState extends LineFollowingState {
 	
@@ -16,6 +17,8 @@ public class CheckForGapState extends LineFollowingState {
 	@Override
     public void grey() {
 		// robot drove left corner
+		BrickScreen.clearScreen();
+		BrickScreen.displayString("Called grey() of checkforgapstate", 0, 0);
 		nextState = new StandardLineFollowingState(lineFollowThread);
 	}
 
@@ -46,6 +49,9 @@ public class CheckForGapState extends LineFollowingState {
 			turnedEnough = (totalTurningDeg == targetTotalTurningDeg);
 		}
 		
+		BrickScreen.clearScreen();
+		BrickScreen.displayString("1111111", 0, 0);
+		
 		if (black) {
 			// rotated far enough, but the robot still only detects black => gap found
 			
@@ -56,6 +62,9 @@ public class CheckForGapState extends LineFollowingState {
 			// otherwise it could see grey or white due to inaccurate turning
 			drive.travelFwd(0.5f);
 		}
+		
+		BrickScreen.clearScreen();
+		BrickScreen.displayString("22222222", 0, 0);
 	}
 	
 	/**
