@@ -14,8 +14,8 @@ private Robot robot;
 private float maxSpeed;
 
 
-private final float WHITE_THRESH = 0.7f; //TODO parameter need adjustement
-private final float BLACK_THRESH = 0.2f;
+private final float WHITE_THRESH = 0.78f; //TODO parameter need adjustement
+private final float BLACK_THRESH = 0.14f;
 private final float US_THRESH = 1.0f; // TODO calibrate 
 public final float GREY = ((WHITE_THRESH+BLACK_THRESH)/2);
 
