@@ -9,8 +9,9 @@ public class GapState extends LineFollowingState {
 	private final int RIGHT = 1;
 	private final int TO_START = 2;
 	private final int NOT_FOUND = 3;
+	private final int GAP_SIZE = 18;
 	
-	private final int STEP_SIZE = 0;
+	private final int STEP_SIZE = 3;
 	private final int QUARTER = 90;
 	private final int HALF = 2 * QUARTER;
 	private Drive drive;
@@ -18,7 +19,6 @@ public class GapState extends LineFollowingState {
 	private int arcSize;
 	private int stepSize;
 	private int searchState;
-	private boolean firstTime;
 	
 	public GapState(LineFollowingThread thread) {
 		super(thread);
@@ -26,17 +26,12 @@ public class GapState extends LineFollowingState {
 		stepSize = STEP_SIZE;
 		drive = thread.getRobot().getDrive();
 		degree = 0;
-		firstTime = true;
 		searchState = LEFT;
 	}
 
 	@Override
     public void grey() {
-
-		
-
 		// TODO
-		firstTime = true;
 		degree = 0;
 		searchState = LEFT;
 		nextState = new StandardLineFollowingState(lineFollowThread);
@@ -47,11 +42,8 @@ public class GapState extends LineFollowingState {
     protected void entry() {
         //Feststellen ob zum ersten Mal betreten
     	//Beim ersten Mal erstmal geradeaus fahren + Fullstop?
-    	if(!firstTime){
-    	} else {
-    		firstTime = false;
-        	drive.travelFwd(0);    		
-    	}
+        drive.travelFwd(GAP_SIZE);
+        travelSearchAlgorithm();
     	//TODO: Wenn Gap überfahren und zurück auf Linie, checken auf welcher Seite der Linie
     	//Kann eventuell von hier übergeben werden
     }
@@ -69,40 +61,23 @@ public class GapState extends LineFollowingState {
     public void travelHalfCircles(){
     	//Viertelkreis fahren in stepSize
     	//Prüfen was besser inPlace oder turnSingleChain  
-		if (Math.abs(degree) < arcSize){
-			drive.turnInPlace(stepSize);
+		while(degree < arcSize){
 			degree += STEP_SIZE;
-		} else {
-			setSearchState();
-    	}
-    }
-    
-    public void setSearchState(){
-    	switch (searchState) {
-    		case LEFT:
-    			//Zuerst Linkschwenk 90°
-    			searchState = RIGHT;
-    			arcSize = HALF;
-    			break;
-    		case RIGHT:
-    			//Dann Rechtsschwenk 180°
-    			searchState = TO_START;
-    			arcSize = QUARTER;
-    			break;
-    		case TO_START:
-    			//Zurück zum Ausgang 90°
-    			searchState = NOT_FOUND;
-    			return;
-    		default:
-    			//ERROR
-    			break;
-    	}
-    	//Reset
+			drive.turnInPlace(stepSize);
+		}
+		//Zurück drehen
+		drive.turnInPlace(-arcSize);
+		//Andere Richtung
+		stepSize = -STEP_SIZE;
 		degree = 0;
-		//Richtungsänderung
-		stepSize = -stepSize;
+		while(degree < arcSize){
+			degree += STEP_SIZE;
+			drive.turnInPlace(stepSize);
+		}
+		//Zurück drehen
+		drive.turnInPlace(arcSize);
     }
-    
+        
     public void travelZigZag(){
     	
     }
