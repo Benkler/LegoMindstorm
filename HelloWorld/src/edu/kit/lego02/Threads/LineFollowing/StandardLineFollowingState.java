@@ -45,8 +45,8 @@ public class StandardLineFollowingState extends LineFollowingState {
         float error = lineFollowThread.GREY -sensorValue;
         float controlValue = lineFollowThread.Kp * error;       
         
-        BrickScreen.clearScreen();
-        BrickScreen.displayFloat(controlValue  , 0, 0);
+        //BrickScreen.clearScreen();
+        //BrickScreen.displayFloat(controlValue  , 0, 0);
         
         float rightSpeed = lineFollowThread.Tp + controlValue;
         float leftSpeed = lineFollowThread.Tp - controlValue;

@@ -64,6 +64,7 @@ public final float Kp = (Tp/(WHITE_THRESH-GREY)) * 1.3f;
                 if(robot.getSensorValues().getUltrasonicValue() < US_THRESH) {
                 	BrickScreen.displayString("OBSTACLE", 0, 0);
                 	obstacleDetected();
+                	continue;
                 }
                
                 if(isBlack(sensorValue)){
