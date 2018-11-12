@@ -51,9 +51,9 @@ public class StandardLineFollowingState extends LineFollowingState {
         float rightSpeed = lineFollowThread.Tp + controlValue;
         float leftSpeed = lineFollowThread.Tp - controlValue;
         
-        if(rightSpeed -20  < 0) rightSpeed = (rightSpeed-20)*2.0f; //TODO adjustment
+       // if(rightSpeed -15  < 0) rightSpeed = (rightSpeed-15)*3.0f; //TODO adjustment
         
-        if(leftSpeed -20  < 0) leftSpeed = (leftSpeed-20)*2.0f;
+       // if(leftSpeed -15  < 0) leftSpeed = (leftSpeed-15)*3.0f;
         
       
        

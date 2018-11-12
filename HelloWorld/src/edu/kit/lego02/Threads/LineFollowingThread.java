@@ -14,8 +14,8 @@ private Robot robot;
 private float maxSpeed;
 
 
-private final float WHITE_THRESH = 0.78f; //TODO parameter need adjustement
-private final float BLACK_THRESH = 0.14f;
+private final float WHITE_THRESH = 0.7f; //TODO parameter need adjustement
+private final float BLACK_THRESH = 0.2f;
 public final float GREY = ((WHITE_THRESH+BLACK_THRESH)/2);
 
 /*
@@ -64,17 +64,20 @@ public final float Kp = (Tp/(WHITE_THRESH-GREY)) * 1.3f;
  
                
                 if(isBlack(sensorValue)){
-                   //black();
                     BrickScreen.displayString("BLACK", 0, 0);
-                    robot.getDrive().stopMotors();
-                    break;
+                    black();
+                    BrickScreen.displayString("after black", 0, 0);
+                    
+                    //robot.getDrive().stopMotors();
+         
                     
                 }else if(isWhite(sensorValue)){
-                   // white();
+                	BrickScreen.displayString("WHITE", 0, 0);
+                    white();
+
                     
-                    BrickScreen.displayString("WHITE", 0, 0);
-                    robot.getDrive().stopMotors();
-                    break;
+                    //robot.getDrive().stopMotors();
+                    
                 }else{
                     grey();
                 }
@@ -131,6 +134,7 @@ public final float Kp = (Tp/(WHITE_THRESH-GREY)) * 1.3f;
     	currentState.blue();
     	currentState.changeState();
     }
+    
     
     
 }
