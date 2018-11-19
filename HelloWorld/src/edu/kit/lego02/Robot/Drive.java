@@ -117,7 +117,7 @@ public class Drive {
         //leftMotor.startSynchronization();
         //rightMotor.startSynchronization();
         rightMotor.rotate(-angleVal, true); // immediate return
-        leftMotor.rotate(angleVal, false); // return when rotation finished
+        leftMotor.rotate(angleVal, true); // return when rotation finished
         //leftMotor.endSynchronization();
         //rightMotor.endSynchronization();
 
@@ -138,7 +138,7 @@ public class Drive {
         //leftMotor.startSynchronization();
         //rightMotor.startSynchronization();
         rightMotor.rotate(angleVal, true); // immediate return
-        leftMotor.rotate(-angleVal, false); // return when rotation finished
+        leftMotor.rotate(-angleVal, true); // return when rotation finished
         //leftMotor.endSynchronization();
         //rightMotor.endSynchronization();
 

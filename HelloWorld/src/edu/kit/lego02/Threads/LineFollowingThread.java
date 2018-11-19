@@ -18,7 +18,7 @@ private float maxSpeed;
 
 
 
-private final float WHITE_THRESH = 0.78f; //TODO parameter need adjustement
+private final float WHITE_THRESH = 0.6f; //TODO parameter need adjustement
 private final float BLACK_THRESH = 0.14f;
 private final float US_THRESH = 0.33f; // TODO calibrate 
 public final float GREY = ((WHITE_THRESH+BLACK_THRESH)/2);
