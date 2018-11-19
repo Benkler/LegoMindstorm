@@ -9,8 +9,8 @@ public class Drive {
 
     private static final Port LEFT_MOTOR_PORT = MotorPort.A;
     private static final Port RIGHT_MOTOR_PORT = MotorPort.B;
-    
-    //--------------Values
+
+    // --------------Values
     private final float WHEEL_DIAM = 3.6f;
     private final float TRACK_WIDTH = 19.0f;
 
@@ -35,36 +35,35 @@ public class Drive {
         return leftMotor.getSpeed();
     }
 
-    
     /**
-     * Change Motor speed.
-     * Positive value is forward movement
-     * Negative value is backward movement
+     * Change Motor speed. Positive value is forward movement Negative value is
+     * backward movement
+     * 
      * @param leftSpeed
      * @param rightSpeed
      */
     public void changeMotorSpeed(float leftSpeed, float rightSpeed) {
-        leftSpeed = -leftSpeed; //We installed the motor Block in the other direction
+        leftSpeed = -leftSpeed; // We installed the motor Block in the other
+                                // direction
         rightSpeed = -rightSpeed;
         leftMotor.startSynchronization();
         rightMotor.startSynchronization();
-        
-        if(leftSpeed < 0){
+
+        if (leftSpeed < 0) {
             leftMotor.setSpeed(-leftSpeed);
             leftMotor.backward();
-        }else{
+        } else {
             leftMotor.setSpeed(leftSpeed);
             leftMotor.forward();
         }
-        
-        if(rightSpeed < 0){
+
+        if (rightSpeed < 0) {
             rightMotor.setSpeed(-rightSpeed);
             rightMotor.backward();
-        }else{
+        } else {
             rightMotor.setSpeed(rightSpeed);
             rightMotor.forward();
         }
-
 
         leftMotor.endSynchronization();
         rightMotor.endSynchronization();
@@ -78,9 +77,10 @@ public class Drive {
     public float getRightSpeed() {
         return rightMotor.getSpeed();
     }
- 
+
     /**
      * Turn Left with only one Chain Moving
+     * 
      * @param angle
      * @throws IllegalArgumentException
      */
@@ -93,6 +93,7 @@ public class Drive {
 
     /**
      * Turn right with only one chain moving
+     * 
      * @param angle
      * @throws IllegalArgumentException
      */
@@ -104,77 +105,90 @@ public class Drive {
     }
 
     /**
-     * Turn left in place means that both chains are moving (in opposite direction)
+     * Turn left in place means that both chains are moving (in opposite
+     * direction)
+     * 
      * @param angle
      */
     public void turnLeftInPlace(float angle) {
-        int angleVal = (int) (6.15f* angle);  //TODO needs adjustment
-                //rightMotor.forward();
-                //leftMotor.backward();
-                rightMotor.rotate(-angleVal, true); //immediate return
-                leftMotor.rotate(angleVal, false); //return when rotation finished
-                
-                //leftMotor.forward();
-                
-                
+        int angleVal = (int) (6.15f * angle); // TODO needs adjustment
+        // rightMotor.forward();
+        // leftMotor.backward();
+        //leftMotor.startSynchronization();
+        //rightMotor.startSynchronization();
+        rightMotor.rotate(-angleVal, true); // immediate return
+        leftMotor.rotate(angleVal, false); // return when rotation finished
+        //leftMotor.endSynchronization();
+        //rightMotor.endSynchronization();
+
+        // leftMotor.forward();
+
     }
 
     /**
-     * Turn right in place means that both chains are moving (in opposite direction)
+     * Turn right in place means that both chains are moving (in opposite
+     * direction)
+     * 
      * @param angle
      */
     public void turnRightInPlace(float angle) {
         int angleVal = (int) (6.15f * angle);
-        //rightMotor.backward();
-        //leftMotor.forward();
-        rightMotor.rotate( angleVal, true); //immediate return
-        leftMotor.rotate(-angleVal, false); //return when rotation finished
-        
-        //rightMotor.forward();
+        // rightMotor.backward();
+        // leftMotor.forward();
+        //leftMotor.startSynchronization();
+        //rightMotor.startSynchronization();
+        rightMotor.rotate(angleVal, true); // immediate return
+        leftMotor.rotate(-angleVal, false); // return when rotation finished
+        //leftMotor.endSynchronization();
+        //rightMotor.endSynchronization();
+
+        // rightMotor.forward();
 
     }
-    
+
     /**
      * Turn in place
-     * @param (angle < 0) ==> turnLeft ;   (angle >= 0) ==> turnRight
-     *         
+     * 
+     * @param (angle
+     *            < 0) ==> turnLeft ; (angle >= 0) ==> turnRight
+     * 
      */
-    public void turnInPlace(float angle){
-        
-        if(angle <0){
+    public void turnInPlace(float angle) {
+
+        if (angle < 0) {
             turnLeftInPlace(angle);
-        }else{
+        } else {
             turnRightInPlace(angle);
         }
     }
 
     /**
      * Travel forward in centimeter
+     * 
      * @param distance
      */
     public void travelFwd(float distance) {
-    	distance = distance * 1.1f;
+        distance = distance * 1.1f;
         pilot.travel(-distance);
 
     }
 
     /**
      * Travel backward in centimeter
+     * 
      * @param distance
      */
     public void travelBwd(float distance) {
-    	distance = distance * 1.1f;
+        distance = distance * 1.1f;
         pilot.travel(distance);
     }
- 
+
     /**
      * Motor full stop
      */
     public void stopMotors() {
         pilot.stop();
-        
+
     }
-    
-    
 
 }

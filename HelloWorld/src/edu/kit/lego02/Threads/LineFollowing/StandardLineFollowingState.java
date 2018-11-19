@@ -45,20 +45,12 @@ public class StandardLineFollowingState extends LineFollowingState {
         float error = lineFollowThread.GREY -sensorValue;
         float controlValue = lineFollowThread.Kp * error;       
         
-        //BrickScreen.clearScreen();
-        //BrickScreen.displayFloat(controlValue  , 0, 0);
+        
         
         float rightSpeed = lineFollowThread.Tp + controlValue;
         float leftSpeed = lineFollowThread.Tp - controlValue;
         
-       // if(rightSpeed -15  < 0) rightSpeed = (rightSpeed-15)*3.0f; //TODO adjustment
-        
-       // if(leftSpeed -15  < 0) leftSpeed = (leftSpeed-15)*3.0f;
-        
-      
-       
-
-         
+ 
        drive.changeMotorSpeed(leftSpeed, rightSpeed);
     }
 	

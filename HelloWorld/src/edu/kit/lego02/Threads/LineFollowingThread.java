@@ -50,10 +50,10 @@ public final float Kp = (Tp/(WHITE_THRESH-GREY)) * 1.3f;
 
     @Override
     public void run() {
-    	for (int i = 0; i < 90; i++) {
-			robot.getDrive().turnRightInPlace(3);
-		}
-    	System.exit(0);
+//    	for (int i = 0; i < 90; i++) {
+//			robot.getDrive().turnRightInPlace(3);
+//		}
+//    	System.exit(0);
     	
 //    	while (true) {
 //    		BrickScreen.displayFloat(robot.getSensorValues().getUltrasonicValue(), 0, 0);

@@ -29,7 +29,7 @@ public class CornerState extends LineFollowingState {
         
         drive.stopMotors();
         
-        drive.travelFwd(0.5f);
+       // drive.travelFwd(0.5f);
         
         boolean white = true;
         while(white) {
