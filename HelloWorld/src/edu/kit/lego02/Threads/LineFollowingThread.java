@@ -54,30 +54,18 @@ public final float Kp = (Tp/(WHITE_THRESH-GREY)) * 1.3f;
 
     @Override
     public void run() {
-//    	for (int i = 0; i < 90; i++) {
-//			robot.getDrive().turnRightInPlace(3);
-//		}
-//    	System.exit(0);
-    	
-//    	while (true) {
-//    		BrickScreen.displayFloat(robot.getSensorValues().getUltrasonicValue(), 0, 0);
-//    		try {
-//				Thread.sleep(300);
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//    	}
+
     	
         BrickScreen.show("Line Following Running");
-        //robot.getDrive().changeMotorSpeed(maxSpeed*0.3f, maxSpeed*0.3f);
+      
         
         
        
 
         try {
             while (true) {
-              if(Thread.currentThread().isInterrupted()){
+              if(Thread.interrupted()){
+                  
                   BrickScreen.clearScreen();
                   return;
               }
@@ -112,8 +100,7 @@ public final float Kp = (Tp/(WHITE_THRESH-GREY)) * 1.3f;
 
             }
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+           
         }
     }
 
