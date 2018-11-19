@@ -104,10 +104,10 @@ public abstract class LineFollowingState {
 	public void changeState() {
 		//if (nextState != this) {
 			this.exit();
-			nextState.entry();
-			lineFollowThread.setCurrentState(nextState);
 			BrickScreen.clearScreen();
 			BrickScreen.displayString(nextState.getClass().getSimpleName(), 0, 0);
+			nextState.entry();
+			lineFollowThread.setCurrentState(nextState);
 		//}
 	}
 }
