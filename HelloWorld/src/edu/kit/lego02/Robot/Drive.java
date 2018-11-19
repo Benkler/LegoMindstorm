@@ -187,7 +187,9 @@ public class Drive {
      * Motor full stop
      */
     public void stopMotors() {
-        pilot.stop();
+       // pilot.stop();
+      rightMotor.stop(true);
+      leftMotor.stop();
 
     }
 
