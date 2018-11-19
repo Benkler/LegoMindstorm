@@ -37,7 +37,7 @@ public class Menu extends TextMenu {
                 
                 //stops running routine 
                 controller.enterPressed();
-
+                BrickScreen.clearScreen();
                 switch (this.select()) {
 
                 case MENU_ITEM_LINE_FOLLOWING:

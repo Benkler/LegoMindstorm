@@ -3,6 +3,7 @@ package edu.kit.lego02.Threads;
 import edu.kit.lego02.Robot.Robot;
 import edu.kit.lego02.Threads.LineFollowing.LineFollowingState;
 import edu.kit.lego02.Threads.LineFollowing.StandardLineFollowingState;
+import edu.kit.lego02.control.Controller;
 import edu.kit.lego02.userIO.BrickScreen;
 import lejos.hardware.motor.EV3LargeRegulatedMotor;
 
@@ -12,6 +13,9 @@ private LineFollowingState currentState = new StandardLineFollowingState(this);
 private float sensorValue;
 private Robot robot;
 private float maxSpeed;
+
+
+
 
 
 private final float WHITE_THRESH = 0.78f; //TODO parameter need adjustement
@@ -37,7 +41,7 @@ public final float Kp = (Tp/(WHITE_THRESH-GREY)) * 1.3f;
     public LineFollowingThread(Robot robot) {
         this.robot = robot;
         this.maxSpeed = robot.getDrive().getMaxSpeed();
-        
+    
     }
     
     public float getSensorValue(){
@@ -73,7 +77,10 @@ public final float Kp = (Tp/(WHITE_THRESH-GREY)) * 1.3f;
 
         try {
             while (true) {
-                
+              if(Thread.currentThread().isInterrupted()){
+                  BrickScreen.clearScreen();
+                  return;
+              }
                 sensorValue = robot.getSensorValues().getColorValue();
                 
                 if(robot.getSensorValues().getUltrasonicValue() < US_THRESH) {
