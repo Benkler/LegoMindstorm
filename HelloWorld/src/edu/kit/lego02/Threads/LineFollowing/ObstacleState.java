@@ -19,7 +19,7 @@ public class ObstacleState extends LineFollowingState {
         drive.turnRightInPlace(100.f);
         drive.travelFwd(20);
         drive.turnLeftInPlace(70);
-        drive.travelFwd(30);
+        drive.travelFwd(40);
         drive.turnLeftInPlace(70);
         
         //drive forward until you hit grey
