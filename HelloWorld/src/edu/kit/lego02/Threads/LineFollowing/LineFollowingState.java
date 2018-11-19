@@ -106,6 +106,7 @@ public abstract class LineFollowingState {
 			this.exit();
 			nextState.entry();
 			lineFollowThread.setCurrentState(nextState);
+			BrickScreen.clearScreen();
 			BrickScreen.displayString(nextState.getClass().getSimpleName(), 0, 0);
 		//}
 	}
