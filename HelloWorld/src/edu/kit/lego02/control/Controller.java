@@ -26,7 +26,7 @@ public class Controller {
         // init Robot etc...
         this.robot = new Robot();
 
-        // TODO starte Menü als Thread?!?!
+        // TODO starte Menï¿½ als Thread?!?!
         menu.startUserInput();
 
     }
@@ -43,7 +43,7 @@ public class Controller {
 
             break;
         case BRIDGE:
-            routineThread = new Thread(new BridgeThread());
+            routineThread = new Thread(new BridgeThread(robot));
             routineThread.start();
             break;
 
