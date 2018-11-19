@@ -53,7 +53,7 @@ public class Controller {
             break;
 
         case OBSTACLE_SHIFTING:
-            routineThread = new Thread(new ObstacleShiftingThread());
+            routineThread = new Thread(new ObstacleShiftingThread(robot));
             routineThread.start();
             break;
 
