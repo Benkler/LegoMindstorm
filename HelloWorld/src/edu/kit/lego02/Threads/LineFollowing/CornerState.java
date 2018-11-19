@@ -33,6 +33,9 @@ public class CornerState extends LineFollowingState {
         
         boolean white = true;
         while(white) {
+            if(Thread.currentThread().isInterrupted()){
+                return;
+            }
         	drive.turnRightInPlace(TURNING_DEGREE); // might want to use turnInPlace here
         	white = lineFollowThread.isWhite(robot.getSensorValues().getColorValue());
         }

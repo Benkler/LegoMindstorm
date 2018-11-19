@@ -7,6 +7,7 @@ import edu.kit.lego02.Threads.ColorSearchThread;
 import edu.kit.lego02.Threads.LineFollowingThread;
 import edu.kit.lego02.Threads.ObstacleShiftingThread;
 import edu.kit.lego02.Threads.ParkourThread;
+import edu.kit.lego02.userIO.BrickScreen;
 import edu.kit.lego02.userIO.Menu;
 
 public class Controller {
@@ -14,6 +15,7 @@ public class Controller {
     Menu menu = null;
     Thread routineThread = null;
     Robot robot = null;
+   
     
     public Controller() {
         
@@ -38,6 +40,7 @@ public class Controller {
         switch (state) {
         case LINE_FOLLOWING:
             //do lineFOllowing
+           
             routineThread =  new Thread(new LineFollowingThread(robot));
             
             routineThread.start();
@@ -71,9 +74,15 @@ public class Controller {
 
 
 
+ 
+  
     public void enterPressed() {
         // VIelleicht hier noch RobotReset falls Motoren weiter drehen
-        routineThread = null;
+       if(routineThread == null){
+           return;
+       }
+        routineThread.interrupt();
+        BrickScreen.clearScreen();
     }
     
 

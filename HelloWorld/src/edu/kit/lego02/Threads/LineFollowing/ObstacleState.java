@@ -18,7 +18,7 @@ public class ObstacleState extends LineFollowingState {
         // TODO calibrate all the parameters
         drive.turnRightInPlace(100.f);
         drive.travelFwd(20);
-        drive.turnLeftInPlace(90);
+        drive.turnLeftInPlace(70);
         drive.travelFwd(30);
         drive.turnLeftInPlace(70);
         
