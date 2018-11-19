@@ -19,8 +19,8 @@ public class ObstacleState extends LineFollowingState {
         drive.turnRightInPlace(100.f);
         drive.travelFwd(20);
         drive.turnLeftInPlace(70);
-        drive.travelFwd(40);
-        drive.turnLeftInPlace(70);
+        drive.travelFwd(35);
+        drive.turnLeftInPlace(80);
         
         //drive forward until you hit grey
         while(!isGrey(robot.getSensorValues().getColorValue())) {
