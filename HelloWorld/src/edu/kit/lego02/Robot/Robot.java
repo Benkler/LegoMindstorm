@@ -81,8 +81,11 @@ public class Robot {
      * 				>0  : right orientation
      * 				<0	: left orientation
      */
-    public void adjustUSAngle(int angle) {
-    	// TODO implement
+    public void adjustUSAngle(int angle) throws IllegalArgumentException {
+    	if ( angle > 90 || angle < -90) {
+    		throw new IllegalArgumentException("Error, ultrasound angle is out of bounds.");
+    	}
+    	ultraSonicMotor.rotate(currentUSAngle + angle);
     }
     
     public int getColorID() {
