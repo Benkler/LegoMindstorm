@@ -43,6 +43,8 @@ public class Robot {
     
     private final Drive drive =  new Drive();
     
+    private int currentUSAngle;
+    
     
     public Robot() {
         
@@ -55,11 +57,12 @@ public class Robot {
        SensorWrapper touchLeft = new SensorWrapper(leftTouchSensor, "Touch");
        SensorWrapper touchRight = new SensorWrapper(rightTouchSensor, "Touch");
        SensorWrapper ultrasonic = new SensorWrapper(ultrasonicSensor, "Distance");
+       SensorWrapper colorId = new SensorWrapper(colorSensor, "Color ID");
        
-       this.sensorValueThread = new SensorValuesThread(touchLeft, touchRight, color, ultrasonic);
+       this.sensorValueThread = new SensorValuesThread(touchLeft, touchRight, color, ultrasonic, colorId);
        new Thread(sensorValueThread).start();
        
-       
+       currentUSAngle = 0;
        
        
                 
@@ -71,7 +74,18 @@ public class Robot {
         return sensorValueThread;
     }
     
+    /**
+     * Rotates US sensor to the given angle. 
+     * @param angle Target angle of the sensor. 
+     * 				0 	: middle
+     * 				>0  : right orientation
+     * 				<0	: left orientation
+     */
+    public void adjustUSAngle(int angle) {
+    	// TODO implement
+    }
     
-    
-
+    public int getColorID() {
+    	return colorSensor.getColorID();
+    }
 }

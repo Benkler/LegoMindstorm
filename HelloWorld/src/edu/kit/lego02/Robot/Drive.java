@@ -172,6 +172,17 @@ public class Drive {
         pilot.travel(-distance);
 
     }
+    
+    /**
+     * Travel forward in centimeter, return immediately.
+     * @param distance
+     */
+    public void travelFwdAsynchronous(float distance) {
+    	float calibrationFactor = 1f; // TODO adjust
+    	int angle = (int) (calibrationFactor * distance);
+    	rightMotor.rotate(angle, true);
+    	leftMotor.rotate(angle, true);
+    }
 
     /**
      * Travel backward in centimeter
