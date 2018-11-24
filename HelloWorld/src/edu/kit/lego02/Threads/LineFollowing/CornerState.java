@@ -32,8 +32,8 @@ public class CornerState extends LineFollowingState {
        // drive.travelFwd(0.5f);
         
         boolean white = true;
-        drive.turnRightInPlace(90);
-        drive.travelFwd(10.f);
+        drive.turnRightInPlace();
+        
         while(white) {
             if(Thread.currentThread().isInterrupted()){
                 return;

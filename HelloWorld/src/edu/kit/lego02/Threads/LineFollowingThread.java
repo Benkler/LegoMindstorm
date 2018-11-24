@@ -19,14 +19,14 @@ private float maxSpeed;
 
 
 private final float WHITE_THRESH = 0.6f; //TODO parameter need adjustement
-private final float BLACK_THRESH = 0.14f;
+private final float BLACK_THRESH = 0.20f;
 private final float US_THRESH = 0.33f; // TODO calibrate 
 public final float GREY = ((WHITE_THRESH+BLACK_THRESH)/2);
 
 /*
  * Target power level ==> Max speed for Robot on line
  */
-public final float Tp = 220f;
+public final float Tp = 150f;
 
 /*
  * Constant for P controller
@@ -122,6 +122,9 @@ public final float Kp = (Tp/(WHITE_THRESH-GREY)) * 1.3f;
         return sensorValue < BLACK_THRESH;
     }
     
+    public boolean isGrey(float sensorVaue){
+        return !isBlack(sensorVaue) && ! isWhite(sensorVaue);
+    }
 
     private void grey() {
            currentState.grey();

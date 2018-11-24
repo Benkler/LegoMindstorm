@@ -17,13 +17,14 @@ public class Drive {
     private DifferentialPilot pilot;
     private EV3LargeRegulatedMotor rightMotor;
     private EV3LargeRegulatedMotor leftMotor;
-    private float maxSpeed;
+    public  final float maxSpeed = 150f;
+   
 
     public Drive() {
         this.rightMotor = new EV3LargeRegulatedMotor(RIGHT_MOTOR_PORT);
         this.leftMotor = new EV3LargeRegulatedMotor(LEFT_MOTOR_PORT);
         this.pilot = new DifferentialPilot(WHEEL_DIAM, TRACK_WIDTH, leftMotor, rightMotor);
-        this.maxSpeed = rightMotor.getMaxSpeed();
+       
 
     }
 
@@ -112,8 +113,7 @@ public class Drive {
      */
     public void turnLeftInPlace(float angle) {
         int angleVal = (int) (6.15f * angle); // TODO needs adjustment
-        // rightMotor.forward();
-        // leftMotor.backward();
+       
         //leftMotor.startSynchronization();
         //rightMotor.startSynchronization();
         rightMotor.rotate(-angleVal, true); // immediate return
@@ -160,6 +160,15 @@ public class Drive {
         } else {
             turnRightInPlace(angle);
         }
+    }
+    
+    public void turnLeftInPlace(){
+        
+        changeMotorSpeed(-60, 60);
+    }
+    
+    public  void turnRightInPlace(){
+        changeMotorSpeed(60, -60);
     }
 
     /**
