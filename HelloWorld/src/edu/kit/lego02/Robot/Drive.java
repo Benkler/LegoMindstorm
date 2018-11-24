@@ -116,6 +116,16 @@ public class Drive {
        
         
         rightMotor.rotate(-angleVal, true); // immediate return
+        leftMotor.rotate(angleVal, false); // return when rotation finished
+        
+
+    }
+    
+    public void turnLeftInPlaceImmediate(float angle) {
+        int angleVal = (int) (6.15f * angle); // TODO needs adjustment
+       
+        
+        rightMotor.rotate(-angleVal, true); // immediate return
         leftMotor.rotate(angleVal, true); // return when rotation finished
         
 
@@ -128,6 +138,15 @@ public class Drive {
      * @param angle
      */
     public void turnRightInPlace(float angle) {
+        int angleVal = (int) (6.15f * angle);
+     
+        rightMotor.rotate(angleVal, true); // immediate return
+        leftMotor.rotate(-angleVal, false); // return when rotation finished
+        
+
+    }
+    
+    public void turnRightInPlaceImmediate(float angle) {
         int angleVal = (int) (6.15f * angle);
      
         rightMotor.rotate(angleVal, true); // immediate return
