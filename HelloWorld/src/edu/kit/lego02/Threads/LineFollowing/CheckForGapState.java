@@ -36,7 +36,7 @@ public class CheckForGapState extends LineFollowingState {
         /*
          * With immediate return
          */
-		drive.turnLeftInPlace(100);
+		drive.turnLeftInPlaceImmediate(100);
 		
 		
 		while(drive.getRightSpeed() != 0 ){
@@ -54,15 +54,6 @@ public class CheckForGapState extends LineFollowingState {
 			
 			drive.turnRightInPlace(100);
 			
-			while(drive.getRightSpeed() != 0 ){
-	            if(Thread.currentThread().isInterrupted()){
-	                return;
-	                //wait until move completed
-	            }
-
-	        }
-	        
-		
 			drive.travelFwd(0.5f);
 		
 		
