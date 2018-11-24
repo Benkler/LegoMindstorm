@@ -3,103 +3,62 @@ package edu.kit.lego02.Threads;
 import edu.kit.lego02.Robot.Robot;
 import edu.kit.lego02.Threads.LineFollowing.LineFollowingState;
 import edu.kit.lego02.Threads.LineFollowing.StandardLineFollowingState;
-import edu.kit.lego02.control.Controller;
 import edu.kit.lego02.userIO.BrickScreen;
-import lejos.hardware.motor.EV3LargeRegulatedMotor;
+
 
 public class LineFollowingThread implements Runnable {
-    
-private LineFollowingState currentState = new StandardLineFollowingState(this);
-private float sensorValue;
-private Robot robot;
-private float maxSpeed;
 
+    private LineFollowingState currentState = new StandardLineFollowingState(this);
+    private float sensorValue;
+    private Robot robot;
 
+    private final float WHITE_THRESH = 0.6f; // TODO parameter need adjustement
+    private final float BLACK_THRESH = 0.20f;
+    private final float US_THRESH = 0.33f; // TODO calibrate
+    public final float GREY = ((WHITE_THRESH + BLACK_THRESH) / 2);
 
+    /*
+     * Target power level ==> Max speed for Robot on line
+     */
+    public final float Tp = 150f;
 
-
-private final float WHITE_THRESH = 0.6f; //TODO parameter need adjustement
-private final float BLACK_THRESH = 0.20f;
-private final float US_THRESH = 0.33f; // TODO calibrate 
-public final float GREY = ((WHITE_THRESH+BLACK_THRESH)/2);
-
-/*
- * Target power level ==> Max speed for Robot on line
- */
-public final float Tp = 150f;
-
-/*
- * Constant for P controller
- */
-public final float Kp = (Tp/(WHITE_THRESH-GREY)) * 1.3f;
-
-
-
-
-    
+    /*
+     * Constant for P controller
+     */
+    public final float Kp = (Tp / (WHITE_THRESH - GREY)) * 1.3f;
 
     public LineFollowingThread(Robot robot) {
         this.robot = robot;
-        this.maxSpeed = robot.getDrive().getMaxSpeed();
-    
-    }
-    
-    public float getSensorValue(){
-        return sensorValue;
-    }
 
-    public Robot getRobot() {
-        return robot;
     }
 
     @Override
     public void run() {
 
-    	
         BrickScreen.show("Line Following Running");
-      
-        
-        
-       
 
         try {
             while (true) {
-              if(Thread.interrupted()){
-                  
-                  BrickScreen.clearScreen();
-                  return;
-              }
-                sensorValue = robot.getSensorValues().getColorValue();
-                
-//                if(robot.getSensorValues().getUltrasonicValue() < US_THRESH) {
-//                	obstacleDetected();
-//                	continue;
-//                }
-               
-                if(isBlack(sensorValue)){
-                    //BrickScreen.displayString("BLACK", 0, 0);
-                    black();
-                    
-                    //robot.getDrive().stopMotors();
-         
-                    
-                }else if(isWhite(sensorValue)){
-                	//BrickScreen.displayString("WHITE", 0, 0);
-                    white();
+                if (Thread.interrupted()) {
 
-                    
-                    //robot.getDrive().stopMotors();
-                    
-                }else{
+                    BrickScreen.clearScreen();
+                    return;
+                }
+                sensorValue = robot.getSensorValues().getColorValue();
+
+                if (isBlack(sensorValue)) {
+                    black();
+                } else if (isWhite(sensorValue)) {
+                    white();
+                } else {
                     grey();
                 }
-                
-                Thread.sleep(5); //TODO wie schnell regeln?
 
+                Thread.sleep(5); // TODO wie schnell regeln?
 
             }
         } catch (InterruptedException e) {
-           
+
         }
     }
 
@@ -110,48 +69,54 @@ public final float Kp = (Tp/(WHITE_THRESH-GREY)) * 1.3f;
     public void setCurrentState(LineFollowingState currentState) {
         this.currentState = currentState;
     }
-    
- 
-    public boolean isWhite(float sensorValue){
-       
+
+    public boolean isWhite(float sensorValue) {
+
         return sensorValue > WHITE_THRESH;
     }
-    
-    
-    public boolean isBlack(float sensorValue){
+
+    public boolean isBlack(float sensorValue) {
         return sensorValue < BLACK_THRESH;
     }
-    
-    public boolean isGrey(float sensorVaue){
-        return !isBlack(sensorVaue) && ! isWhite(sensorVaue);
+
+    public boolean isGrey(float sensorVaue) {
+        return !isBlack(sensorVaue) && !isWhite(sensorVaue);
+    }
+
+    public float getSensorValue() {
+        return sensorValue;
+    }
+
+    public Robot getRobot() {
+        return robot;
     }
 
     private void grey() {
-           currentState.grey();
-           currentState.changeState();
+        currentState.grey();
+        currentState.changeState();
     }
-    
-    private void black(){
+
+    private void black() {
         currentState.black();
         currentState.changeState();
     }
-    
+
     private void white() {
         currentState.white();
         currentState.changeState();
-        
+
     }
-    
+
     private void blue() {
-    	currentState.blue();
-    	currentState.changeState();
+        currentState.blue();
+        currentState.changeState();
     }
-    
+
     private void obstacleDetected() {
-    	currentState.obstacleDetected();
-    	currentState.changeState();
+        currentState.obstacleDetected();
+        currentState.changeState();
     }
-    
+
 }
 
 // }

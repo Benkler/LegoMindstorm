@@ -114,14 +114,10 @@ public class Drive {
     public void turnLeftInPlace(float angle) {
         int angleVal = (int) (6.15f * angle); // TODO needs adjustment
        
-        //leftMotor.startSynchronization();
-        //rightMotor.startSynchronization();
+        
         rightMotor.rotate(-angleVal, true); // immediate return
         leftMotor.rotate(angleVal, true); // return when rotation finished
-        //leftMotor.endSynchronization();
-        //rightMotor.endSynchronization();
-
-        // leftMotor.forward();
+        
 
     }
 
@@ -133,16 +129,10 @@ public class Drive {
      */
     public void turnRightInPlace(float angle) {
         int angleVal = (int) (6.15f * angle);
-        // rightMotor.backward();
-        // leftMotor.forward();
-        //leftMotor.startSynchronization();
-        //rightMotor.startSynchronization();
+     
         rightMotor.rotate(angleVal, true); // immediate return
         leftMotor.rotate(-angleVal, true); // return when rotation finished
-        //leftMotor.endSynchronization();
-        //rightMotor.endSynchronization();
-
-        // rightMotor.forward();
+        
 
     }
 
@@ -164,11 +154,11 @@ public class Drive {
     
     public void turnLeftInPlace(){
         
-        changeMotorSpeed(-60, 60);
+        changeMotorSpeed(-80, 80);
     }
     
     public  void turnRightInPlace(){
-        changeMotorSpeed(60, -60);
+        changeMotorSpeed(80, -80);
     }
 
     /**
@@ -196,7 +186,7 @@ public class Drive {
      * Motor full stop
      */
     public void stopMotors() {
-       // pilot.stop();
+       
       rightMotor.stop(true);
       leftMotor.stop();
 

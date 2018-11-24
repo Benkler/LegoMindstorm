@@ -17,8 +17,6 @@ public class CheckForGapState extends LineFollowingState {
 	@Override
     public void grey() {
 		// robot drove left corner
-		BrickScreen.clearScreen();
-		BrickScreen.displayString("Called grey() of checkforgapstate", 0, 0);
 		nextState = new StandardLineFollowingState(lineFollowThread);
 	}
 
@@ -35,6 +33,9 @@ public class CheckForGapState extends LineFollowingState {
 		
         drive.stopMotors();
 		
+        /*
+         * With immediate return
+         */
 		drive.turnLeftInPlace(100);
 		
 		
@@ -52,8 +53,16 @@ public class CheckForGapState extends LineFollowingState {
 		
 			
 			drive.turnRightInPlace(100);
-			// drive a bit forward, so that the robot definitely sees black in the following state
-			// otherwise it could see grey or white due to inaccurate turning
+			
+			while(drive.getRightSpeed() != 0 ){
+	            if(Thread.currentThread().isInterrupted()){
+	                return;
+	                //wait until move completed
+	            }
+
+	        }
+	        
+		
 			drive.travelFwd(0.5f);
 		
 		

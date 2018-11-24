@@ -22,7 +22,7 @@ public class GapState extends LineFollowingState {
 	
 	public GapState(LineFollowingThread thread) {
 		super(thread);
-		//TODO: in Superklasse verlegen?
+		
 		stepSize = STEP_SIZE;
 		drive = thread.getRobot().getDrive();
 		degree = 0;
