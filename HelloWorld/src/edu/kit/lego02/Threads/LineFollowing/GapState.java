@@ -57,11 +57,15 @@ public class GapState extends LineFollowingState {
 
             // Turn left until grey found or continue after 90°
             drive.turnLeftInPlaceImmediate(90);
-            checkGreyAndDrive();
+            if(checkGreyAndDrive()){
+                return;
+            }
 
             // Turn right until grey fou8nd
             drive.turnRightInPlaceImmediate(180);
-            checkGreyAndDrive();
+            if(checkGreyAndDrive()){
+                return;
+            }
 
             // turn Back to origin position
             drive.turnLeftInPlace(90);
