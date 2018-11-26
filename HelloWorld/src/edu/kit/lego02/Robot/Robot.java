@@ -85,6 +85,7 @@ public class Robot {
     	if ( angle > 90 || angle < -90) {
     		throw new IllegalArgumentException("Error, ultrasound angle is out of bounds.");
     	}
+    	currentUSAngle = angle;
     	ultraSonicMotor.rotate(currentUSAngle + angle);
     }
     
