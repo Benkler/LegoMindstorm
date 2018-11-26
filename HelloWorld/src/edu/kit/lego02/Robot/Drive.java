@@ -210,5 +210,9 @@ public class Drive {
       leftMotor.stop();
 
     }
+    
+    public void travelArc(double radius, double angle){
+    	pilot.arc(-radius, angle);
+    }
 
 }

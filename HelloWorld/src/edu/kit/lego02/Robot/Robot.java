@@ -75,5 +75,5 @@ public class Robot {
     public SensorMode getColors(){
     	return colorSensor.getRGBMode();
     }
-
+    
 }

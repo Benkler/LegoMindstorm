@@ -23,11 +23,11 @@ public class ObstacleShiftingThread implements Runnable {
     public void run() {
         BrickScreen.show("Obstacle SHifting!!");
         
-        travelToBlueLine();
+//        travelToBlueLine();
 //        travelToUSSignal();
 //        travelToBox();
-//        moveBoxToWall();
-//        moveBoxToCorner();
+        moveBoxToWall();
+        moveBoxToCorner();
 //        leaveArea();
     }
 
@@ -70,11 +70,18 @@ public class ObstacleShiftingThread implements Runnable {
     
     
     private void moveBoxToWall(){
-    	
+    	drive.travelArc(20, 110);
+    	drive.travelFwd(100);
     }
     
     private void moveBoxToCorner(){
-    	
+    	drive.travelBwd(15);
+    	drive.turnRightInPlace(45);
+    	drive.travelBwd(10);
+    	drive.turnRightInPlace(90);
+    	drive.travelFwd(30);
+    	drive.turnRightInPlace(90);
+    	drive.travelFwd(100);
     }
     
     private void leaveArea(){
