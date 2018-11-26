@@ -11,6 +11,7 @@ import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.EV3TouchSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
+import lejos.hardware.sensor.SensorMode;
 import lejos.robotics.navigation.DifferentialPilot;
 
 public class Robot {
@@ -71,7 +72,8 @@ public class Robot {
         return sensorValueThread;
     }
     
-    
-    
+    public SensorMode getColors(){
+    	return colorSensor.getRGBMode();
+    }
 
 }

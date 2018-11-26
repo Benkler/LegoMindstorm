@@ -49,6 +49,7 @@ public class Menu extends TextMenu {
                 case MENU_ITEM_OBSTACLE_SHIFTING:
                     BrickScreen.clearScreen();
                     BrickScreen.show(RobotStates.OBSTACLE_SHIFTING.getStateName());
+                    controller.stateChanged(RobotStates.OBSTACLE_SHIFTING);
                     // fire ObstacleShiftigEvent
                     break;
                 case MENU_ITEM_BRIDGE:
