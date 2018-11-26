@@ -7,24 +7,21 @@ public class SensorValuesThread implements Runnable{
     private SensorWrapper righTouchSensor;
     private SensorWrapper colorSensor;
     private SensorWrapper ultrasonicSensor;
-    private SensorWrapper colorIdSensor;
     
     private float colorValue;
     private float leftTouchValue;
     private float rightTouchValue;
     private float ultrasonicValue;
-    private float colorIdValue;
     
   
     
     public SensorValuesThread(SensorWrapper leftTouchSensor, SensorWrapper righTouchSensor, SensorWrapper colorSensor,
-            SensorWrapper ultrasonicSensor, SensorWrapper colorIdSensor) {
+            SensorWrapper ultrasonicSensor) {
         super();
         this.leftTouchSensor = leftTouchSensor;
         this.righTouchSensor = righTouchSensor;
         this.colorSensor = colorSensor;
         this.ultrasonicSensor = ultrasonicSensor;
-        this.colorIdSensor = colorIdSensor;
     }
 
 
@@ -37,7 +34,6 @@ public class SensorValuesThread implements Runnable{
                 this.leftTouchValue = leftTouchSensor.getSingleSample();
                 this.rightTouchValue = righTouchSensor.getSingleSample();
                 this.ultrasonicValue = ultrasonicSensor.getSingleSample();
-                this.colorIdValue = colorIdSensor.getSingleSample();
                 Thread.sleep(5); //TODO Needs adjustment
             }
         } catch (InterruptedException e) {
@@ -70,12 +66,6 @@ public class SensorValuesThread implements Runnable{
     public float getUltrasonicValue() {
         return ultrasonicValue;
     }
-
-
-
-	public float getColorIdValue() {
-		return colorIdValue;
-	}
 
 
    

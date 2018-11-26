@@ -2,16 +2,14 @@ package edu.kit.lego02.Robot;
 
 import edu.kit.lego02.Sensors.SensorValuesThread;
 import edu.kit.lego02.Sensors.SensorWrapper;
-import lejos.hardware.motor.EV3LargeRegulatedMotor;
 import lejos.hardware.motor.EV3MediumRegulatedMotor;
-import lejos.hardware.motor.Motor;
 import lejos.hardware.port.MotorPort;
 import lejos.hardware.port.Port;
 import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.EV3TouchSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
-import lejos.robotics.navigation.DifferentialPilot;
+import lejos.robotics.SampleProvider;
 
 public class Robot {
     
@@ -43,7 +41,7 @@ public class Robot {
     
     private final Drive drive =  new Drive();
     
-    private int currentUSAngle;
+    private boolean USSensorPointsForward;
     
     
     public Robot() {
@@ -57,12 +55,11 @@ public class Robot {
        SensorWrapper touchLeft = new SensorWrapper(leftTouchSensor, "Touch");
        SensorWrapper touchRight = new SensorWrapper(rightTouchSensor, "Touch");
        SensorWrapper ultrasonic = new SensorWrapper(ultrasonicSensor, "Distance");
-       SensorWrapper colorId = new SensorWrapper(colorSensor, "Color ID");
        
-       this.sensorValueThread = new SensorValuesThread(touchLeft, touchRight, color, ultrasonic, colorId);
+       this.sensorValueThread = new SensorValuesThread(touchLeft, touchRight, color, ultrasonic);
        new Thread(sensorValueThread).start();
        
-       currentUSAngle = 0;
+       USSensorPointsForward = true;
        
        
                 
@@ -74,22 +71,42 @@ public class Robot {
         return sensorValueThread;
     }
     
-    /**
-     * Rotates US sensor to the given angle. 
-     * @param angle Target angle of the sensor. 
-     * 				0 	: middle
-     * 				>0  : right orientation
-     * 				<0	: left orientation
-     */
-    public void adjustUSAngle(int angle) throws IllegalArgumentException {
-    	if ( angle > 90 || angle < -90) {
-    		throw new IllegalArgumentException("Error, ultrasound angle is out of bounds.");
+//    /**
+//     * Rotates US sensor to the given angle. 
+//     * @param angle Target angle of the sensor. 
+//     * 				0 	: middle
+//     * 				>0  : right orientation
+//     * 				<0	: left orientation
+//     */
+//    public void adjustUSAngle(int angle) throws IllegalArgumentException {
+//    	if ( angle > 90 || angle < -90) {
+//    		throw new IllegalArgumentException("Error, ultrasound angle is out of bounds.");
+//    	}
+//    	
+//    	ultraSonicMotor.rotate(angle - currentUSAngle);
+//    	currentUSAngle = angle;
+//    }
+    
+    public void pointUSSensorForward() {
+    	if (!USSensorPointsForward) {
+    		ultraSonicMotor.rotate(-90);
     	}
-    	currentUSAngle = angle;
-    	ultraSonicMotor.rotate(currentUSAngle + angle);
+    }
+    
+    public void pointUSSensorDownward() {
+    	if (USSensorPointsForward) {
+    		ultraSonicMotor.rotate(90);
+    	}
     }
     
     public int getColorID() {
     	return colorSensor.getColorID();
+    }
+    
+    public float getUSValue() {
+    	SampleProvider sampleProvider = ultrasonicSensor.getDistanceMode();
+    	float[] sample = new float[1];
+    	sampleProvider.fetchSample(sample, 0);
+    	return sample[0];
     }
 }
