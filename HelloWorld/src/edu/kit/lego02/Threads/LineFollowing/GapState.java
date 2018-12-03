@@ -6,7 +6,7 @@ import edu.kit.lego02.Threads.LineFollowingThread;
 
 public class GapState extends LineFollowingState {
 
-    private final int GAP_SIZE = 18;
+    private final int GAP_SIZE = 15;
 
     private final int SEARCH_DISTANCE = 2;
 
@@ -31,12 +31,25 @@ public class GapState extends LineFollowingState {
 
     @Override
     protected void entry() {
+        
+        /*
+         * Drive until blue found!
+         */
+        if(lineFollowThread.isAlreadyDoneWithObstacle()){
+            travelUntilBlueFound();
+            return;
+        }
 
         // Distance to drive blind
         drive.travelFwd(GAP_SIZE);
 
         travelSearchAlgorithm();
 
+    }
+
+    private void travelUntilBlueFound() {
+        //TODO implement me
+        
     }
 
     public void travelSearchAlgorithm() {
@@ -55,38 +68,36 @@ public class GapState extends LineFollowingState {
          */
         for (int i = 0; i < 10; i++) {
 
-            // Turn left until grey found or continue after 90°
-            drive.turnLeftInPlaceImmediate(90);
-            if(checkGreyAndDrive()){
-                return;
+            long start = System.currentTimeMillis();
+            drive.turnLeftInPlace();
+            while (System.currentTimeMillis() < start + 1800) {
+                if (Thread.currentThread().isInterrupted()) {
+                    return;
+                }
+                if (lineFollowThread.isGreyCorner(robot.getSensorValues().getColorValue())) {
+                    return;
+                }
             }
 
-            // Turn right until grey fou8nd
-            drive.turnRightInPlaceImmediate(180);
-            if(checkGreyAndDrive()){
-                return;
-            }
+            start = System.currentTimeMillis();
+            drive.turnRightInPlace();
+            while (System.currentTimeMillis() < start + 1900) {
+                if (Thread.currentThread().isInterrupted()) {
+                    return;
+                }
 
-            // turn Back to origin position
-            drive.turnLeftInPlace(90);
+                if (lineFollowThread.isGreyCorner(robot.getSensorValues().getColorValue())) {
+
+                    // TODO hier etwas mehr drehen weil gefunden
+                    return;
+                }
+            }
 
             drive.travelFwd(SEARCH_DISTANCE);
 
         }
-        
-       //TODO  ERROR at this place! Line not found
 
-    }
-
-    private boolean checkGreyAndDrive() {
-        while (drive.getRightSpeed() != 0) {
-            if (Thread.currentThread().isInterrupted()
-                    || lineFollowThread.isGrey(robot.getSensorValues().getColorValue())) {
-                return true;
-            }
-
-        }
-        return false;
+        // TODO ERROR at this place! Line not found
 
     }
 

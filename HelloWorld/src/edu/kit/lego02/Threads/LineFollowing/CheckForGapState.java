@@ -6,60 +6,61 @@ import edu.kit.lego02.Threads.LineFollowingThread;
 import edu.kit.lego02.userIO.BrickScreen;
 
 public class CheckForGapState extends LineFollowingState {
-	
-	private final int TURNING_DEG_INC = 3; // turning degree increment
-	private final int MIN_TOTAL_TURNING_DEGREE = 100;
-	
-	public CheckForGapState(LineFollowingThread thread) {
-		super(thread);
-	}
 
-	@Override
+   
+
+    public CheckForGapState(LineFollowingThread thread) {
+        super(thread);
+    }
+
+    @Override
     public void grey() {
-		// robot drove left corner
-		nextState = new StandardLineFollowingState(lineFollowThread);
-	}
+        // robot drove left corner
+        nextState = new StandardLineFollowingState(lineFollowThread);
+    }
 
-	@Override
+    @Override
     public void black() {
-		// as gap was detected
-		nextState = new GapState(lineFollowThread);
-	}
+        // as gap was detected
+        nextState = new GapState(lineFollowThread);
+    }
+    @Override
+    public void obstacleDetected() {
+        nextState = new ObstacleState(lineFollowThread);
+    }
 
-	@Override
-	protected void entry() {
-		Robot robot = lineFollowThread.getRobot();
+    @Override
+    protected void entry() {
+        Robot robot = lineFollowThread.getRobot();
         Drive drive = robot.getDrive();
-		
+
         drive.stopMotors();
-		
-        /*
-         * With immediate return
-         */
-		drive.turnLeftInPlaceImmediate(100);
-		
-		
-		while(drive.getRightSpeed() != 0 ){
-		    if(Thread.currentThread().isInterrupted()){
+     
+        long start = System.currentTimeMillis();
+        drive.turnLeftInPlace();
+
+        while (System.currentTimeMillis() < start + 2800) {
+            if (Thread.currentThread().isInterrupted()) {
                 return;
             }
-		    
-		    if(lineFollowThread.isGrey(robot.getSensorValues().getColorValue())){
-		        return;
-		    }
-		}
-		
-		
-		
-			
-			drive.turnRightInPlace(100);
-			
-			drive.travelFwd(0.5f);
-		
-		
-		BrickScreen.clearScreen();
-		BrickScreen.displayString("22222222", 0, 0);
-	}
-	
-	
+            if (lineFollowThread.isGreyCorner(robot.getSensorValues().getColorValue())) {
+                //Corner found!
+                return;
+            }
+        }
+
+        start = System.currentTimeMillis();
+        drive.turnRightInPlace();
+        while (System.currentTimeMillis() < start + 3200) {
+            if (Thread.currentThread().isInterrupted()) {
+                return;
+            }
+
+            
+        }
+
+        drive.travelFwd(3.0f);
+
+    }
+
 }

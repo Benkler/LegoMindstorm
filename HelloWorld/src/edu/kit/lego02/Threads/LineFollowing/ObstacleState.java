@@ -21,18 +21,15 @@ public class ObstacleState extends LineFollowingState {
         drive.turnLeftInPlace(70);
         drive.travelFwd(35);
         drive.turnLeftInPlace(80);
+        drive.travelFwd(5);
         
-        //drive forward until you hit grey
-        while(!isGrey(robot.getSensorValues().getColorValue())) {
-        	drive.travelFwd(0.3f);
+        //drive forward until grey found
+        while(!lineFollowThread.isGrey(robot.getSensorValues().getColorValue())){
+            drive.travelFwd(0.3f);
         }
+        
 	}
 	
-	private boolean isGrey(float sensorValue) {
-		return !lineFollowThread.isBlack(sensorValue) 
-    			&& !lineFollowThread.isWhite(sensorValue);
-	}
-
 	@Override
 	public void grey() {
 		// TODO

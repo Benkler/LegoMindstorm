@@ -25,6 +25,11 @@ public class CornerState extends LineFollowingState {
 	    
 	}
 	
+	  @Override
+	    public void obstacleDetected() {
+	        nextState = new ObstacleState(lineFollowThread);
+	    }
+	
     @Override
     public void white() {
         //TODO hier vieleicht Fehlerbehandlung => wieder nach links drehen oder so
@@ -40,10 +45,11 @@ public class CornerState extends LineFollowingState {
     	Robot robot = lineFollowThread.getRobot();
         Drive drive = robot.getDrive();
         
-        drive.stopMotors();
+   
         
-        drive.travelBwd(0.3f);
-       
+       // drive.travelBwd(0.3f); Improve!!!
+        drive.turnRightInPlace(5);
+        
         
         boolean white = true;
 
@@ -54,7 +60,7 @@ public class CornerState extends LineFollowingState {
             if(Thread.currentThread().isInterrupted()){
                 return;
             }
-        	white = lineFollowThread.isWhite(robot.getSensorValues().getColorValue());
+        	white = lineFollowThread.isWhiteCorner(robot.getSensorValues().getColorValue());
         }
     }	
 }
