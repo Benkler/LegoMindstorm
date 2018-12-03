@@ -38,7 +38,6 @@ public class Controller {
             // do lineFOllowing
 
             routineThread = new Thread(new LineFollowingThread(robot));
-
             routineThread.start();
 
             break;

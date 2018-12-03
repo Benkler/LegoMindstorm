@@ -15,19 +15,16 @@ public class StandardLineFollowingState extends LineFollowingState {
 	
 	@Override
 	public void grey() {
-		// TODO
 		nextState = this;
 	}
 	
 	@Override
 	public void white() {
-		// TODO
 		nextState = new CornerState(lineFollowThread); 
 	}
 	
 	@Override
 	public void black() {
-		// TODO
 		nextState = new CheckForGapState(lineFollowThread); 
 	}
 

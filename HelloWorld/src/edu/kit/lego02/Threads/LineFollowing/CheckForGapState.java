@@ -6,75 +6,61 @@ import edu.kit.lego02.Threads.LineFollowingThread;
 import edu.kit.lego02.userIO.BrickScreen;
 
 public class CheckForGapState extends LineFollowingState {
-	
-	private final int TURNING_DEG_INC = 3; // turning degree increment
-	private final int MIN_TOTAL_TURNING_DEGREE = 100;
-	
-	public CheckForGapState(LineFollowingThread thread) {
-		super(thread);
-	}
 
-	@Override
+   
+
+    public CheckForGapState(LineFollowingThread thread) {
+        super(thread);
+    }
+
+    @Override
     public void grey() {
-		// robot drove left corner
-		BrickScreen.clearScreen();
-		BrickScreen.displayString("Called grey() of checkforgapstate", 0, 0);
-		nextState = new StandardLineFollowingState(lineFollowThread);
-	}
+        // robot drove left corner
+        nextState = new StandardLineFollowingState(lineFollowThread);
+    }
 
-	@Override
+    @Override
     public void black() {
-		// as gap was detected
-		nextState = new GapState(lineFollowThread);
-	}
+        // as gap was detected
+        nextState = new GapState(lineFollowThread);
+    }
+    @Override
+    public void obstacleDetected() {
+        nextState = new ObstacleState(lineFollowThread);
+    }
 
-	@Override
-	protected void entry() {
-		Robot robot = lineFollowThread.getRobot();
+    @Override
+    protected void entry() {
+        Robot robot = lineFollowThread.getRobot();
         Drive drive = robot.getDrive();
-		
+
         drive.stopMotors();
-        // turn to the left in incremental steps until either found grey/white OR 
-        // turned far enough and found only black
-		int targetTotalTurningDeg = ceilToIncrement(MIN_TOTAL_TURNING_DEGREE);
-		int totalTurningDeg = 0;
-		boolean turnedEnough = false;
-		boolean black = true;
-		
-		while(black && !turnedEnough) {
-			drive.turnLeftInPlace(TURNING_DEG_INC);
-			totalTurningDeg += TURNING_DEG_INC;
-			
-			black = lineFollowThread.isBlack(robot.getSensorValues().getColorValue());
-			turnedEnough = (totalTurningDeg == targetTotalTurningDeg);
-		}
-		
-		BrickScreen.clearScreen();
-		BrickScreen.displayString("1111111", 0, 0);
-		
-		if (black) {
-			// rotated far enough, but the robot still only detects black => gap found
-			
-			// rotate right to starting position
-			drive.turnRightInPlace(totalTurningDeg);
-			
-			// drive a bit forward, so that the robot definitely sees black in the following state
-			// otherwise it could see grey or white due to inaccurate turning
-			drive.travelFwd(0.5f);
-		}
-		
-		BrickScreen.clearScreen();
-		BrickScreen.displayString("22222222", 0, 0);
-	}
-	
-	/**
-	 * Rounds n up to the nearest multiple of the turning degree increment.
-	 * @param n Number to round up.
-	 * @return n rounded up to the nearest multiple of the turning degree increment.
-	 */
-	private int ceilToIncrement(int n) {
-	    return (n + (TURNING_DEG_INC - 1)) / TURNING_DEG_INC * TURNING_DEG_INC;
-	}
-	
-	
+     
+        long start = System.currentTimeMillis();
+        drive.turnLeftInPlace();
+
+        while (System.currentTimeMillis() < start + 2800) {
+            if (Thread.currentThread().isInterrupted()) {
+                return;
+            }
+            if (lineFollowThread.isGreyCorner(robot.getSensorValues().getColorValue())) {
+                //Corner found!
+                return;
+            }
+        }
+
+        start = System.currentTimeMillis();
+        drive.turnRightInPlace();
+        while (System.currentTimeMillis() < start + 3200) {
+            if (Thread.currentThread().isInterrupted()) {
+                return;
+            }
+
+            
+        }
+
+        drive.travelFwd(3.0f);
+
+    }
+
 }

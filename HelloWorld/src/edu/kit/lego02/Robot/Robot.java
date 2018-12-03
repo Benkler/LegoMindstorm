@@ -11,6 +11,8 @@ import lejos.hardware.sensor.EV3TouchSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
 import lejos.robotics.Color;
 import lejos.robotics.SampleProvider;
+import lejos.hardware.sensor.SensorMode;
+import lejos.robotics.navigation.DifferentialPilot;
 
 public class Robot {
     
@@ -33,6 +35,7 @@ public class Robot {
     
     //-------------------Sensors
     private final EV3ColorSensor colorSensor = new EV3ColorSensor(COLOR_SENSOR_PORT);
+    
     private final EV3TouchSensor leftTouchSensor = new EV3TouchSensor(LEFT_TOUCH_SENSOR_PORT);
     private final EV3TouchSensor rightTouchSensor = new EV3TouchSensor(RIGHT_TOUCH_SENSOR_PORT);
     private final EV3UltrasonicSensor  ultrasonicSensor = new EV3UltrasonicSensor(ULTRASONIC_SENSOR_PORT);
@@ -51,7 +54,6 @@ public class Robot {
         //TODO  auch final?!?!
        
        this.ultraSonicMotor = new EV3MediumRegulatedMotor(ULTRASONIC_MOTOR_PORT);
-       
        SensorWrapper color = new SensorWrapper(colorSensor, "Red");
        SensorWrapper touchLeft = new SensorWrapper(leftTouchSensor, "Touch");
        SensorWrapper touchRight = new SensorWrapper(rightTouchSensor, "Touch");
@@ -72,22 +74,6 @@ public class Robot {
         return sensorValueThread;
     }
     
-//    /**
-//     * Rotates US sensor to the given angle. 
-//     * @param angle Target angle of the sensor. 
-//     * 				0 	: middle
-//     * 				>0  : right orientation
-//     * 				<0	: left orientation
-//     */
-//    public void adjustUSAngle(int angle) throws IllegalArgumentException {
-//    	if ( angle > 90 || angle < -90) {
-//    		throw new IllegalArgumentException("Error, ultrasound angle is out of bounds.");
-//    	}
-//    	
-//    	ultraSonicMotor.rotate(angle - currentUSAngle);
-//    	currentUSAngle = angle;
-//    }
-    
     public void pointUSSensorForward() {
     	if (!USSensorPointsForward) {
     		USSensorPointsForward = true;
@@ -102,25 +88,17 @@ public class Robot {
     	}
     }
     
-    public int getColorID() {
-    	return colorSensor.getColorID();
-    }
-    
-//    public void setColorSensorToAmbient() {
-//    	colorSensor.setCurrentMode("Ambient");
+//    public float getAmbient() {
+//    	colorSensor.setFloodlight(Color.NONE);
+//    	float[] sampleArray = new float[1];
+//    	colorSensor.getAmbientMode().fetchSample(sampleArray, 0);
+//    	return sampleArray[0];
 //    }
     
-    public float getAmbient() {
-    	colorSensor.setFloodlight(Color.NONE);
-    	float[] sampleArray = new float[1];
-    	colorSensor.getAmbientMode().fetchSample(sampleArray, 0);
-    	return sampleArray[0];
-    }
-    
-    public float getUSValue() {
-    	SampleProvider sampleProvider = ultrasonicSensor.getDistanceMode();
-    	float[] sample = new float[1];
-    	sampleProvider.fetchSample(sample, 0);
-    	return sample[0];
-    }
+//    public float getUSValue() {
+//    	SampleProvider sampleProvider = ultrasonicSensor.getDistanceMode();
+//    	float[] sample = new float[1];
+//    	sampleProvider.fetchSample(sample, 0);
+//    	return sample[0];
+//    }
 }

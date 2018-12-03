@@ -17,13 +17,14 @@ public class Drive {
     private DifferentialPilot pilot;
     private EV3LargeRegulatedMotor rightMotor;
     private EV3LargeRegulatedMotor leftMotor;
-    private float maxSpeed;
+    public  final float maxSpeed = 150f;
+   
 
     public Drive() {
         this.rightMotor = new EV3LargeRegulatedMotor(RIGHT_MOTOR_PORT);
         this.leftMotor = new EV3LargeRegulatedMotor(LEFT_MOTOR_PORT);
         this.pilot = new DifferentialPilot(WHEEL_DIAM, TRACK_WIDTH, leftMotor, rightMotor);
-        this.maxSpeed = rightMotor.getMaxSpeed();
+       
 
     }
 
@@ -112,17 +113,19 @@ public class Drive {
      */
     public void turnLeftInPlace(float angle) {
         int angleVal = (int) (6.15f * angle); // TODO needs adjustment
-        // rightMotor.forward();
-        // leftMotor.backward();
-        //leftMotor.startSynchronization();
-        //rightMotor.startSynchronization();
+       
+        
         rightMotor.rotate(-angleVal, true); // immediate return
         leftMotor.rotate(angleVal, false); // return when rotation finished
-        //leftMotor.endSynchronization();
-        //rightMotor.endSynchronization();
 
-        // leftMotor.forward();
-
+    }
+    
+    public void turnLeftInPlaceImmediate(float angle) {
+        int angleVal = (int) (6.15f * angle); // TODO needs adjustment
+       
+        
+        rightMotor.rotate(-angleVal, true); // immediate return
+        leftMotor.rotate(angleVal, true); 
     }
 
     /**
@@ -133,16 +136,17 @@ public class Drive {
      */
     public void turnRightInPlace(float angle) {
         int angleVal = (int) (6.15f * angle);
-        // rightMotor.backward();
-        // leftMotor.forward();
-        //leftMotor.startSynchronization();
-        //rightMotor.startSynchronization();
+     
         rightMotor.rotate(angleVal, true); // immediate return
         leftMotor.rotate(-angleVal, false); // return when rotation finished
-        //leftMotor.endSynchronization();
-        //rightMotor.endSynchronization();
-
-        // rightMotor.forward();
+    }
+    
+    public void turnRightInPlaceImmediate(float angle) {
+        int angleVal = (int) (6.15f * angle);
+     
+        rightMotor.rotate(angleVal, true); // immediate return
+        leftMotor.rotate(-angleVal, true); 
+        
 
     }
 
@@ -160,6 +164,15 @@ public class Drive {
         } else {
             turnRightInPlace(angle);
         }
+    }
+    
+    public void turnLeftInPlace(){
+        
+        changeMotorSpeed(-200, 200);
+    }
+    
+    public  void turnRightInPlace(){
+        changeMotorSpeed(200, -200);
     }
 
     /**
@@ -198,10 +211,14 @@ public class Drive {
      * Motor full stop
      */
     public void stopMotors() {
-       // pilot.stop();
+       
       rightMotor.stop(true);
       leftMotor.stop();
 
+    }
+    
+    public void travelArc(double radius, double angle){
+    	pilot.arc(-radius, angle);
     }
 
 }

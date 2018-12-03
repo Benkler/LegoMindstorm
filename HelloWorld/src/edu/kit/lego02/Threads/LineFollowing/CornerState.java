@@ -6,7 +6,6 @@ import edu.kit.lego02.Threads.LineFollowingThread;
 
 public class CornerState extends LineFollowingState {
 	
-	private final int TURNING_DEGREE = 3;
 
 	public CornerState(LineFollowingThread thread) {
 		super(thread);
@@ -14,9 +13,28 @@ public class CornerState extends LineFollowingState {
 	
 	@Override
     public void grey() {
-		// TODO
+		
 		nextState = new StandardLineFollowingState(lineFollowThread);
 	}
+	
+
+	@Override
+	public void black() {
+	    super.black();
+	    //TODO hier vieleicht Fehlerbehandlung => wieder nach links drehen oder so
+	    
+	}
+	
+	  @Override
+	    public void obstacleDetected() {
+	        nextState = new ObstacleState(lineFollowThread);
+	    }
+	
+    @Override
+    public void white() {
+        //TODO hier vieleicht Fehlerbehandlung => wieder nach links drehen oder so
+        super.white();
+    }
 	
 	/**
 	 * Strategy: Drive forward a little bit, then rotate right until the robot doesn't see white anymore. 
@@ -27,19 +45,22 @@ public class CornerState extends LineFollowingState {
     	Robot robot = lineFollowThread.getRobot();
         Drive drive = robot.getDrive();
         
-        drive.stopMotors();
+   
         
-        drive.travelBwd(0.3f);
-       // drive.travelFwd(0.5f);
+       // drive.travelBwd(0.3f); Improve!!!
+        drive.turnRightInPlace(5);
+        
         
         boolean white = true;
-        drive.turnRightInPlace(90);
+
+        drive.turnRightInPlace();
+        
+
         while(white) {
             if(Thread.currentThread().isInterrupted()){
                 return;
             }
-        	//drive.turnRightInPlace(TURNING_DEGREE); // might want to use turnInPlace here
-        	white = lineFollowThread.isWhite(robot.getSensorValues().getColorValue());
+        	white = lineFollowThread.isWhiteCorner(robot.getSensorValues().getColorValue());
         }
     }	
 }

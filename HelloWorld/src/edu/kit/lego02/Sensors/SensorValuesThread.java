@@ -1,6 +1,7 @@
 package edu.kit.lego02.Sensors;
 
 import lejos.hardware.sensor.SensorMode;
+import java.util.ArrayList;
 
 public class SensorValuesThread implements Runnable{
 
@@ -11,6 +12,7 @@ public class SensorValuesThread implements Runnable{
     private SensorWrapper ultrasonicSensor;
     
     private float colorValue;
+    private float[] colorValueArray;
     private float leftTouchValue;
     private float rightTouchValue;
     private float ultrasonicValue;
@@ -33,6 +35,7 @@ public class SensorValuesThread implements Runnable{
         try {
             while(true){
                 this.colorValue = colorSensor.getSingleSample();
+                this.colorValueArray = colorSensor.getSampleArray();
                 this.leftTouchValue = leftTouchSensor.getSingleSample();
                 this.rightTouchValue = righTouchSensor.getSingleSample();
                 this.ultrasonicValue = ultrasonicSensor.getSingleSample();
@@ -44,13 +47,23 @@ public class SensorValuesThread implements Runnable{
         }
         
     }
-
+    
+    public void setColorMode(String mode){
+    	this.colorSensor.setColorMode(mode);
+    }
+    
+    public ArrayList<String> getAvailableColorModes (){
+    	return colorSensor.getAvailableModes();
+    }
 
 
     public float getColorValue() {
         return colorValue;
     }
 
+    public float[] getColorValueArray() {
+        return colorValueArray;
+    }
 
 
     public float getLeftTouchValue() {
@@ -69,9 +82,8 @@ public class SensorValuesThread implements Runnable{
         return ultrasonicValue;
     }
 
-    public void setColorSensorMode(String modeName) {
-    	colorSensor.setMode(modeName);
-    }
-   
 
+    public void setColorSensorMode(String modeName) {
+    	colorSensor.setColorMode(modeName);
+    }
 }

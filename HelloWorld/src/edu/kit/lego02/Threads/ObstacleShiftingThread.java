@@ -1,13 +1,21 @@
 package edu.kit.lego02.Threads;
 
+import java.util.ArrayList;
+
 import edu.kit.lego02.Robot.Drive;
 import edu.kit.lego02.Robot.Robot;
 import edu.kit.lego02.userIO.BrickScreen;
+import lejos.hardware.sensor.SensorMode;
+import lejos.robotics.Color;
 
 public class ObstacleShiftingThread implements Runnable {
 	
 	Robot robot;
 	Drive drive;
+	
+	private final int BLUE = 2;
+	private final float COLOR_BLUE = 0.08f;
+	private final float DIST_THRESH = 0.1f;
 	
 	public ObstacleShiftingThread(Robot robot) {
 		this.robot = robot;
@@ -16,12 +24,68 @@ public class ObstacleShiftingThread implements Runnable {
 
     @Override
     public void run() {
-        BrickScreen.show("Obstacle SHifting");
+        BrickScreen.show("Obstacle SHifting!!");
         
-        drive.turnRightInPlace(45);
-        
-        //control for finding the box
-        
+        travelToStart();
+        travelToBoxSignal();
+//        moveBoxToWall();
+//        moveBoxToCorner();
+//        leaveArea();
     }
 
+    private void travelToStart(){
+		BrickScreen.clearScreen();
+		robot.getSensorValues().setColorMode("RGB");
+		float[] colorArray = new float[robot.getSensorValues().getColorValueArray().length];
+    	//drive.turnLeftInPlace(20);
+    	//drive.travelFwd(200);
+    	try{
+	    	//while(!(blue > COLOR_BLUE)){
+	    	while(true){
+	    		Thread.sleep(5);
+	    		BrickScreen.clearScreen();
+	    		for(int i = 0; i < colorArray.length; i++){
+		    		BrickScreen.show(i + " : " + colorArray[i]);	    			
+	    		}
+	    	}
+	    	//drive.stopMotors();
+    		//BrickScreen.show("Vorwärts");
+    	} catch(InterruptedException e){
+    	}
+    	drive.travelFwd(50);	
+    }
+    
+    private void travelToBoxSignal(){ 
+    	float distance = robot.getSensorValues().getUltrasonicValue();    	
+    	drive.turnRightInPlace();    	
+    	try{    		
+	    	while(distance > 60f){
+	        	distance = robot.getSensorValues().getUltrasonicValue();
+	    	    Thread.sleep(5);
+	    	}
+    	} catch(InterruptedException e){
+    		
+    	}
+    	drive.stopMotors();
+    }    
+    
+    private void moveBoxToWall(){
+    	//drive.travelArc(10, 140);
+    	//drive.stopMotors();
+    	drive.travelFwd(200);
+    }
+    
+    private void moveBoxToCorner(){
+    	drive.travelBwd(15);
+    	drive.turnRightInPlace(45);
+    	drive.travelBwd(10);
+    	drive.turnRightInPlace(90);
+    	drive.travelFwd(30);
+    	drive.turnRightInPlace(90);
+    	drive.travelFwd(100);
+    }
+    
+    private void leaveArea(){
+    	
+    }
 }
