@@ -1,5 +1,7 @@
 package edu.kit.lego02.Sensors;
 
+import lejos.hardware.sensor.SensorMode;
+
 public class SensorValuesThread implements Runnable{
 
     
@@ -67,7 +69,9 @@ public class SensorValuesThread implements Runnable{
         return ultrasonicValue;
     }
 
-
+    public void setColorSensorMode(String modeName) {
+    	colorSensor.setMode(modeName);
+    }
    
 
 }

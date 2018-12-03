@@ -9,15 +9,18 @@ public class SensorWrapper {
         
         private SensorMode mode;
         private float[] samples;
+        private BaseSensor sensor;
 
         public SensorWrapper(BaseSensor sensor, String mode) {
             this.mode = sensor.getMode(mode);
             this.samples = new float[this.mode.sampleSize()];
+            this.sensor = sensor;
         }
         
         public SensorWrapper(BaseSensor sensor, int mode) {
             this.mode = sensor.getMode(mode);
             this.samples = new float[this.mode.sampleSize()];
+            this.sensor = sensor;
         }
         
         public float getSingleSample()
@@ -30,6 +33,8 @@ public class SensorWrapper {
             return this.samples;
         }
     
-        
+        public void setMode(String modeName) {
+        	this.mode = sensor.getMode(modeName);
+        }
 
 }

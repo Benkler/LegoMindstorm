@@ -9,6 +9,7 @@ import lejos.hardware.port.SensorPort;
 import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.EV3TouchSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
+import lejos.robotics.Color;
 import lejos.robotics.SampleProvider;
 
 public class Robot {
@@ -89,18 +90,31 @@ public class Robot {
     
     public void pointUSSensorForward() {
     	if (!USSensorPointsForward) {
-    		ultraSonicMotor.rotate(-90);
+    		USSensorPointsForward = true;
+    		ultraSonicMotor.rotate(90);
     	}
     }
     
     public void pointUSSensorDownward() {
     	if (USSensorPointsForward) {
-    		ultraSonicMotor.rotate(90);
+    		USSensorPointsForward = false;
+    		ultraSonicMotor.rotate(-90);
     	}
     }
     
     public int getColorID() {
     	return colorSensor.getColorID();
+    }
+    
+//    public void setColorSensorToAmbient() {
+//    	colorSensor.setCurrentMode("Ambient");
+//    }
+    
+    public float getAmbient() {
+    	colorSensor.setFloodlight(Color.NONE);
+    	float[] sampleArray = new float[1];
+    	colorSensor.getAmbientMode().fetchSample(sampleArray, 0);
+    	return sampleArray[0];
     }
     
     public float getUSValue() {
