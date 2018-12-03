@@ -70,10 +70,6 @@ public class Robot {
     }
     public SensorValuesThread getSensorValues() {
         return sensorValueThread;
-    }
-    
-    public SensorMode getColors(){
-    	return colorSensor.getRGBMode();
-    }
+    }    
     
 }

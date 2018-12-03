@@ -1,17 +1,20 @@
 package edu.kit.lego02.Threads;
 
+import java.util.ArrayList;
+
 import edu.kit.lego02.Robot.Drive;
 import edu.kit.lego02.Robot.Robot;
 import edu.kit.lego02.userIO.BrickScreen;
 import lejos.hardware.sensor.SensorMode;
+import lejos.robotics.Color;
 
 public class ObstacleShiftingThread implements Runnable {
 	
 	Robot robot;
 	Drive drive;
-
+	
 	private final int BLUE = 2;
-	private final float COLOR_BLUE = 0.1f;
+	private final float COLOR_BLUE = 0.08f;
 	private final float DIST_THRESH = 0.1f;
 	
 	public ObstacleShiftingThread(Robot robot) {
@@ -23,55 +26,53 @@ public class ObstacleShiftingThread implements Runnable {
     public void run() {
         BrickScreen.show("Obstacle SHifting!!");
         
-//        travelToBlueLine();
-//        travelToUSSignal();
-//        travelToBox();
-        moveBoxToWall();
-        moveBoxToCorner();
+        travelToStart();
+        travelToBoxSignal();
+//        moveBoxToWall();
+//        moveBoxToCorner();
 //        leaveArea();
     }
 
-    private void travelToBlueLine(){
+    private void travelToStart(){
 		BrickScreen.clearScreen();
-		SensorMode colors = robot.getColors();
-		float[] colorArray = new float[3];
-		colors.fetchSample(colorArray, 0);
-		float blue = colorArray[BLUE];
-    	drive.turnLeftInPlace(15);
-    	drive.travelFwd(100);
+		robot.getSensorValues().setColorMode("RGB");
+		float[] colorArray = new float[robot.getSensorValues().getColorValueArray().length];
+    	//drive.turnLeftInPlace(20);
+    	//drive.travelFwd(200);
     	try{
-	    	while(!(blue > 100)){
+	    	//while(!(blue > COLOR_BLUE)){
+	    	while(true){
 	    		Thread.sleep(5);
-	    		colors.fetchSample(colorArray, 0);
-	    		blue = colorArray[BLUE];
 	    		BrickScreen.clearScreen();
-	    		BrickScreen.show("Blau: " + blue);
+	    		for(int i = 0; i < colorArray.length; i++){
+		    		BrickScreen.show(i + " : " + colorArray[i]);	    			
+	    		}
+	    	}
+	    	//drive.stopMotors();
+    		//BrickScreen.show("Vorwärts");
+    	} catch(InterruptedException e){
+    	}
+    	drive.travelFwd(50);	
+    }
+    
+    private void travelToBoxSignal(){ 
+    	float distance = robot.getSensorValues().getUltrasonicValue();    	
+    	drive.turnRightInPlace();    	
+    	try{    		
+	    	while(distance > 60f){
+	        	distance = robot.getSensorValues().getUltrasonicValue();
+	    	    Thread.sleep(5);
 	    	}
     	} catch(InterruptedException e){
     		
     	}
-    }
-    
-    private void travelToUSSignal(){
-    	drive.turnRightInPlace(45);
-    	drive.travelFwd(100);
-    	try{    		
-	    	while(true){
-	    		Thread.sleep(5);
-	    	}
-    	} catch(InterruptedException e){
-    		
-    	}    	
-    }
-
-    private void travelToBox(){
-    	
-    }
-    
+    	drive.stopMotors();
+    }    
     
     private void moveBoxToWall(){
-    	drive.travelArc(20, 110);
-    	drive.travelFwd(100);
+    	//drive.travelArc(10, 140);
+    	//drive.stopMotors();
+    	drive.travelFwd(200);
     }
     
     private void moveBoxToCorner(){
