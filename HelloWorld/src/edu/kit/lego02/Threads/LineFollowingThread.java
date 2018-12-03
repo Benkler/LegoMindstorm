@@ -14,21 +14,18 @@ public class LineFollowingThread implements Runnable {
 
     private final float WHITE_THRESH = 0.74f; // TODO parameter need adjustement
     private final float BLACK_THRESH = 0.18f;
-    private final float US_THRESH = 0.20f; // TODO calibrate
-    public boolean isAlreadyDoneWithObstacle() {
-        return alreadyDoneWithObstacle;
-    }
-
+    private final float US_THRESH = 0.15f; // TODO calibrate
     public final float GREY = ((WHITE_THRESH + BLACK_THRESH) / 2);
     private final float BLACK_THRESH_CORNER = 0.25f;
     private final float WHITE_THRESH_CORNER = 0.70f;
+    private final float TOUCH_PRESSED = 1.0f;
     
     private boolean alreadyDoneWithObstacle = false;
 
-    /*
+    /*s
      * Target power level ==> Max speed for Robot on line
      */
-    public final float Tp = 190f;
+    public final float Tp = 220f;
 
     /*
      * Constant for P controller
@@ -84,8 +81,12 @@ public class LineFollowingThread implements Runnable {
         this.currentState = currentState;
     }
 
+    public boolean isAlreadyDoneWithObstacle() {
+        return alreadyDoneWithObstacle;
+    }
+
     public boolean isObstacle(){
-        if(robot.getSensorValues().getUltrasonicValue()<US_THRESH){
+        if(robot.getSensorValues().getLeftTouchValue()==TOUCH_PRESSED){
             
             
             //check obstacle value for more than one cycle!

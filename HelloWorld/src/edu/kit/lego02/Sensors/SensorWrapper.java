@@ -12,6 +12,7 @@ public class SensorWrapper {
 
         public SensorWrapper(BaseSensor sensor, String mode) {
             this.mode = sensor.getMode(mode);
+           
             this.samples = new float[this.mode.sampleSize()];
         }
         

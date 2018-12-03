@@ -16,8 +16,9 @@ public class ObstacleState extends LineFollowingState {
         Drive drive = robot.getDrive();
         
         // TODO calibrate all the parameters
+        drive.travelBwd(5);
         drive.turnRightInPlace(100.f);
-        drive.travelFwd(20);
+        drive.travelFwd(25);
         drive.turnLeftInPlace(70);
         drive.travelFwd(35);
         drive.turnLeftInPlace(80);
