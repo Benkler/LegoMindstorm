@@ -126,7 +126,7 @@ public class Drive {
        
         
         rightMotor.rotate(-angleVal, true); // immediate return
-        leftMotor.rotate(angleVal, true); // return when rotation finished
+        leftMotor.rotate(angleVal, true); 
         
 
     }
@@ -150,7 +150,7 @@ public class Drive {
         int angleVal = (int) (6.15f * angle);
      
         rightMotor.rotate(angleVal, true); // immediate return
-        leftMotor.rotate(-angleVal, true); // return when rotation finished
+        leftMotor.rotate(-angleVal, true); 
         
 
     }
@@ -173,11 +173,11 @@ public class Drive {
     
     public void turnLeftInPlace(){
         
-        changeMotorSpeed(-80, 80);
+        changeMotorSpeed(-200, 200);
     }
     
     public  void turnRightInPlace(){
-        changeMotorSpeed(80, -80);
+        changeMotorSpeed(200, -200);
     }
 
     /**

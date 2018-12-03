@@ -35,6 +35,7 @@ public class Robot {
     
     //-------------------Sensors
     private final EV3ColorSensor colorSensor = new EV3ColorSensor(COLOR_SENSOR_PORT);
+    
     private final EV3TouchSensor leftTouchSensor = new EV3TouchSensor(LEFT_TOUCH_SENSOR_PORT);
     private final EV3TouchSensor rightTouchSensor = new EV3TouchSensor(RIGHT_TOUCH_SENSOR_PORT);
     private final EV3UltrasonicSensor  ultrasonicSensor = new EV3UltrasonicSensor(ULTRASONIC_SENSOR_PORT);
@@ -51,7 +52,6 @@ public class Robot {
         //TODO  auch final?!?!
        
        this.ultraSonicMotor = new EV3MediumRegulatedMotor(ULTRASONIC_MOTOR_PORT);
-       
        SensorWrapper color = new SensorWrapper(colorSensor, "Red");
        SensorWrapper touchLeft = new SensorWrapper(leftTouchSensor, "Touch");
        SensorWrapper touchRight = new SensorWrapper(rightTouchSensor, "Touch");
