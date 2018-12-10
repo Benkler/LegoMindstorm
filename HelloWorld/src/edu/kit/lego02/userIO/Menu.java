@@ -55,7 +55,7 @@ public class Menu extends TextMenu {
                 case MENU_ITEM_BRIDGE:
                     BrickScreen.clearScreen();
                     BrickScreen.show(RobotStates.BRIDGE.getStateName());
-                    // fire BridgeEvent
+                    controller.stateChanged(RobotStates.BRIDGE);
                     break;
 
                 case MENU_ITEM_COLOR_SEARCH:

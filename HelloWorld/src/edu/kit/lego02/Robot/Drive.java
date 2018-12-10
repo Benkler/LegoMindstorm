@@ -117,7 +117,6 @@ public class Drive {
         
         rightMotor.rotate(-angleVal, true); // immediate return
         leftMotor.rotate(angleVal, false); // return when rotation finished
-        
 
     }
     
@@ -126,9 +125,7 @@ public class Drive {
        
         
         rightMotor.rotate(-angleVal, true); // immediate return
-        leftMotor.rotate(angleVal, true); // return when rotation finished
-        
-
+        leftMotor.rotate(angleVal, true); 
     }
 
     /**
@@ -142,15 +139,13 @@ public class Drive {
      
         rightMotor.rotate(angleVal, true); // immediate return
         leftMotor.rotate(-angleVal, false); // return when rotation finished
-        
-
     }
     
     public void turnRightInPlaceImmediate(float angle) {
         int angleVal = (int) (6.15f * angle);
      
         rightMotor.rotate(angleVal, true); // immediate return
-        leftMotor.rotate(-angleVal, true); // return when rotation finished
+        leftMotor.rotate(-angleVal, true); 
         
 
     }
@@ -173,11 +168,11 @@ public class Drive {
     
     public void turnLeftInPlace(){
         
-        changeMotorSpeed(-80, 80);
+        changeMotorSpeed(-200, 200);
     }
     
     public  void turnRightInPlace(){
-        changeMotorSpeed(80, -80);
+        changeMotorSpeed(200, -200);
     }
 
     /**
@@ -189,6 +184,17 @@ public class Drive {
         distance = distance * 1.1f;
         pilot.travel(-distance);
 
+    }
+    
+    /**
+     * Travel forward in centimeter, return immediately.
+     * @param distance
+     */
+    public void travelFwdAsynchronous(float distance) {
+    	float calibrationFactor = 1f; // TODO adjust
+    	int angle = (int) (calibrationFactor * distance);
+    	rightMotor.rotate(angle, true);
+    	leftMotor.rotate(angle, true);
     }
 
     /**
