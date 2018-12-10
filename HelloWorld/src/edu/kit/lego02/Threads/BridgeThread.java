@@ -12,30 +12,42 @@ public class BridgeThread implements Runnable {
 	// 0.4f
 	// not corners: 0.05f
 	// corners: 0.06f
-	private static final float US_TARGET_VALUE = 0.055f;	
+	private static float usTargetValue;
+	private static final float US_TARGET_VALUE_FIRST_PART =  0.065f;
+	private static final float US_TARGET_VALUE_SECOND_PART =  0.055f;
+	private static final int SWITCHING_TIME = 30000;
 	// Proportional factor for P-control:
 	private static final float KP = 130f;				// TODO adjust
 	private static final float BASE_SPEED = 150f;
+	
+	
 	
 	private static final float US_WALL_THRESH = 0.01f;		// TODO adjust
 	
 	public BridgeThread(Robot robot) {
 		this.robot = robot;
 		this.drive = robot.getDrive();
+		usTargetValue = US_TARGET_VALUE_FIRST_PART;
 	}
 	
     @Override
     public void run() {
 //    	printSensorValues();
     	 	
+    	
+    	
     	robot.pointUSSensorDownward();
+    	
     	crossControlled();
     }
     
     private void crossControlled() {
     	
     	BrickScreen.clearScreen();
-    	BrickScreen.displayString(" Cross controlled", 0, 0);
+    	//BrickScreen.displayString(" Cross controlled", 0, 0);
+    	
+    	Thread timerThread = new Thread(new Timer(SWITCHING_TIME, this));
+    	//timerThread.start();
     	
     	float controlDiff;
     	float speedChange;
@@ -43,27 +55,32 @@ public class BridgeThread implements Runnable {
     	float rightMotorSpeed;
     	while (robot.getSensorValues().getUltrasonicValue() > US_WALL_THRESH) {
     		
-    		controlDiff = robot.getSensorValues().getUltrasonicValue() - US_TARGET_VALUE;
+    		controlDiff = robot.getSensorValues().getUltrasonicValue() - usTargetValue;
     		// controlDiff >0 : turn right
     		// controlDiff <0 : turn left
     		if (controlDiff >= 0) { 
-    			speedChange = 	KP;
+    			leftMotorSpeed = BASE_SPEED + KP;
+    			rightMotorSpeed = BASE_SPEED - KP/2;
+    			//speedChange = 	KP;
     		} else {	// US sensor is looking over the edge.
-    			speedChange = - KP;
+    			leftMotorSpeed = BASE_SPEED - KP/2;
+    			rightMotorSpeed = BASE_SPEED + KP;
+    			//speedChange = - KP;
     		}
     		
-    		leftMotorSpeed = BASE_SPEED +  speedChange;
-    		rightMotorSpeed = BASE_SPEED -  speedChange;
+    		//leftMotorSpeed = BASE_SPEED +  speedChange;
+    		//rightMotorSpeed = BASE_SPEED -  speedChange;
     		
-    		BrickScreen.clearScreen();
-    		BrickScreen.show((int) leftMotorSpeed + "   " + (int) rightMotorSpeed);
+    		//BrickScreen.clearScreen();
+    		//BrickScreen.show((int) leftMotorSpeed + "   " + (int) rightMotorSpeed);
     		
     		drive.changeMotorSpeed(leftMotorSpeed, rightMotorSpeed);	
     		
-    		if(Thread.currentThread().isInterrupted()){
+    		if (Thread.currentThread().isInterrupted()){
     			drive.stopMotors();
                 return;
             }
+    		
     	}
     }
     
@@ -79,6 +96,11 @@ public class BridgeThread implements Runnable {
 			}
     	}
 	}
+    
+    public void signalTimeout() {
+    	usTargetValue = US_TARGET_VALUE_SECOND_PART;
+    	BrickScreen.show("SWITCHING##############");
+    }
     
 //  private void handleCorner() {
 //	BrickScreen.displayString("Corner", 0, 0);
