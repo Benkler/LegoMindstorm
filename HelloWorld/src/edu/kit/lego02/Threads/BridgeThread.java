@@ -12,12 +12,13 @@ public class BridgeThread implements Runnable {
 	// 0.4f
 	// not corners: 0.05f
 	// corners: 0.06f
+	// semi-working: 0.065f
 	private static float usTargetValue;
-	private static final float US_TARGET_VALUE_FIRST_PART =  0.065f;
+	private static final float US_TARGET_VALUE_FIRST_PART =  0.06f;
 	private static final float US_TARGET_VALUE_SECOND_PART =  0.055f;
 	private static final int SWITCHING_TIME = 30000;
 	// Proportional factor for P-control:
-	private static final float KP = 130f;				// TODO adjust
+	private static final float KP = 180f;				// TODO adjust
 	private static final float BASE_SPEED = 150f;
 	
 	
@@ -41,7 +42,6 @@ public class BridgeThread implements Runnable {
     }
     
     private void crossControlled() {
-    	
     	BrickScreen.clearScreen();
     	BrickScreen.show(" Cross controlled");
     	
@@ -92,7 +92,6 @@ public class BridgeThread implements Runnable {
     }
     
     private void executeStartSequence() {
-    	
     	BrickScreen.clearScreen();
     	BrickScreen.show("Start sequence");
     	
@@ -109,7 +108,6 @@ public class BridgeThread implements Runnable {
     }
     
     private void executeEndSequence() {
-    	
     	BrickScreen.clearScreen();
     	BrickScreen.show("End sequence");
     	
@@ -117,7 +115,6 @@ public class BridgeThread implements Runnable {
     	drive.turnRightInPlace(25);
     	drive.travelFwd(8);
     	drive.turnLeftInPlace(25);
-    	
     	
     	// Find blue line
 //    	drive.travelFwdAsynchronous(50);
@@ -144,19 +141,4 @@ public class BridgeThread implements Runnable {
     	usTargetValue = US_TARGET_VALUE_SECOND_PART;
     	BrickScreen.show("SWITCHING##############");
     }
-    
-//  private void handleCorner() {
-//	BrickScreen.displayString("Corner", 0, 0);
-//	drive.travelBwd(5);
-//	drive.turnLeftInPlace(80);
-//}
-    
-//    private void crossHardcoded() {
-//       drive.travelFwd(50);
-//       drive.turnLeftInPlace(90);
-//       drive.travelFwd(100);
-//       drive.turnLeftInPlace(90);
-//       drive.travelFwd(50);
-//    }
-
 }
