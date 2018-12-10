@@ -9,13 +9,10 @@ public class BridgeThread implements Runnable {
 	Robot robot;
 	Drive drive;
 		
-	private static final float US_TARGET_VALUE = 0.04f;	
+	private static final float US_TARGET_VALUE = 0.03f;	
 	// Proportional factor for P-control:
-	private static final float KP = 1000f;				// TODO adjust
-	private static final float BASE_SPEED = 220f;
-	// Used as control difference if the US sensor looks over the edge of the bridge:
-	private static final float SUBSTITUTE_CONTROL_DIFF = -0.01f;
-	
+	private static final float KP = 100f;				// TODO adjust
+	private static final float BASE_SPEED = 200f;
 	
 	private static final float US_WALL_THRESH = 0.01f;		// TODO adjust
 	
@@ -38,7 +35,7 @@ public class BridgeThread implements Runnable {
     	BrickScreen.displayString(" Cross controlled", 0, 0);
     	
     	float controlDiff;
-    	float scaledControlDiff;
+    	float speedChange;
     	while (robot.getSensorValues().getUltrasonicValue() > US_WALL_THRESH) {
     		
     		if(Thread.currentThread().isInterrupted()){
@@ -52,15 +49,15 @@ public class BridgeThread implements Runnable {
     		controlDiff = robot.getSensorValues().getUltrasonicValue() - US_TARGET_VALUE;
     		// controlDiff >0 : turn right
     		// controlDiff <0 : turn left
-    		if (controlDiff < 0) { // US sensor is looking over the edge.
-    			controlDiff = SUBSTITUTE_CONTROL_DIFF;
+    		if (controlDiff >= 0) { // US sensor is looking over the edge.
+    			speedChange = 	KP;
+    		} else {
+    			speedChange = - KP;
     		}
     		
-    		scaledControlDiff = KP * controlDiff;
-    		
     		drive.changeMotorSpeed(
-    				BASE_SPEED + scaledControlDiff, 
-    				BASE_SPEED - scaledControlDiff);		
+    				BASE_SPEED + speedChange, 
+    				BASE_SPEED - speedChange);		
     	}
     }
     
