@@ -3,6 +3,7 @@ package edu.kit.lego02.Sensors;
 import java.util.ArrayList;
 
 import lejos.hardware.sensor.BaseSensor;
+import lejos.hardware.sensor.EV3ColorSensor;
 import lejos.hardware.sensor.SensorMode;
 
 public class SensorWrapper {
@@ -36,9 +37,17 @@ public class SensorWrapper {
         }
         
         public void setColorMode(String mode){
-        	this.mode = sensor.getMode(mode);
+        	this.mode = ((EV3ColorSensor) sensor).getRGBMode();
         }
-    
+
+        public void setRGB(){
+        	this.mode = ((EV3ColorSensor) sensor).getRGBMode();
+        }
+
+        public int getColorMode(){
+        	return sensor.getCurrentMode();
+        }
+
         public ArrayList<String>  getAvailableModes(){
         	return sensor.getAvailableModes();
         }

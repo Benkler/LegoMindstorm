@@ -34,24 +34,30 @@ public class ObstacleShiftingThread implements Runnable {
     }
 
     private void travelToStart(){
-		robot.getSensorValues().setColorMode("RGB");
-		float[] colorArray = new float[robot.getSensorValues().getColorValueArray().length];
+		BrickScreen.show("" + robot.getSensorValues().getColorMode());
+		robot.getSensorValues().setRGB();
+
+		//float[] colorArray = new float[robot.getSensorValues().getColorValueArray().length];
+		BrickScreen.show("" + robot.getSensorValues().getColorMode());
     	//drive.turnLeftInPlace(20);
     	//drive.travelFwd(200);
-    	try{
+/*    	try{
 	    	//while(!(blue > COLOR_BLUE)){
 	    	while(true){
 	    		Thread.sleep(5);
-	    		BrickScreen.clearScreen();
+	    		robot.getSensorValues().setColorMode("RGB");
+	    		BrickScreen.show("" + robot.getSensorValues().getColorMode());
+	    		colorArray = robot.getSensorValues().getColorValueArray();
+	    		//BrickScreen.clearScreen();
 	    		for(int i = 0; i < colorArray.length; i++){
-		    		BrickScreen.show(i + " : " + colorArray[i]);	    			
+		    		//BrickScreen.show(i + " : " + colorArray[i]);	    			
 	    		}
 	    	}
 	    	//drive.stopMotors();
     		//BrickScreen.show("Vorwärts");
     	} catch(InterruptedException e){
     	}
-    	drive.travelFwd(50);	
+    	drive.travelFwd(50);*/	
     }
     
     private void travelToBoxSignal(){
