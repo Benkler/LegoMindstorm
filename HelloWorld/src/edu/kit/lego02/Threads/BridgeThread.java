@@ -9,10 +9,13 @@ public class BridgeThread implements Runnable {
 	Robot robot;
 	Drive drive;
 		
-	private static final float US_TARGET_VALUE = 0.03f;	
+	// 0.4f
+	// not corners: 0.05f
+	// corners: 0.06f
+	private static final float US_TARGET_VALUE = 0.055f;	
 	// Proportional factor for P-control:
-	private static final float KP = 100f;				// TODO adjust
-	private static final float BASE_SPEED = 200f;
+	private static final float KP = 130f;				// TODO adjust
+	private static final float BASE_SPEED = 150f;
 	
 	private static final float US_WALL_THRESH = 0.01f;		// TODO adjust
 	
@@ -36,28 +39,31 @@ public class BridgeThread implements Runnable {
     	
     	float controlDiff;
     	float speedChange;
+    	float leftMotorSpeed;
+    	float rightMotorSpeed;
     	while (robot.getSensorValues().getUltrasonicValue() > US_WALL_THRESH) {
+    		
+    		controlDiff = robot.getSensorValues().getUltrasonicValue() - US_TARGET_VALUE;
+    		// controlDiff >0 : turn right
+    		// controlDiff <0 : turn left
+    		if (controlDiff >= 0) { 
+    			speedChange = 	KP;
+    		} else {	// US sensor is looking over the edge.
+    			speedChange = - KP;
+    		}
+    		
+    		leftMotorSpeed = BASE_SPEED +  speedChange;
+    		rightMotorSpeed = BASE_SPEED -  speedChange;
+    		
+    		BrickScreen.clearScreen();
+    		BrickScreen.show((int) leftMotorSpeed + "   " + (int) rightMotorSpeed);
+    		
+    		drive.changeMotorSpeed(leftMotorSpeed, rightMotorSpeed);	
     		
     		if(Thread.currentThread().isInterrupted()){
     			drive.stopMotors();
                 return;
             }
-    		
-    		//BrickScreen.clearScreen();
-    		//BrickScreen.displayString("" + robot.getSensorValues().getUltrasonicValue(), 0, 0);
-    		
-    		controlDiff = robot.getSensorValues().getUltrasonicValue() - US_TARGET_VALUE;
-    		// controlDiff >0 : turn right
-    		// controlDiff <0 : turn left
-    		if (controlDiff >= 0) { // US sensor is looking over the edge.
-    			speedChange = 	KP;
-    		} else {
-    			speedChange = - KP;
-    		}
-    		
-    		drive.changeMotorSpeed(
-    				BASE_SPEED + speedChange, 
-    				BASE_SPEED - speedChange);		
     	}
     }
     
