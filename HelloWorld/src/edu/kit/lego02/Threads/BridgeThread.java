@@ -17,7 +17,7 @@ public class BridgeThread implements Runnable {
 	private static final float US_TARGET_VALUE_FIRST_PART =  0.06f;
 	private static final float US_TARGET_VALUE_SECOND_PART =  0.055f;
 	private static final int SWITCHING_TIME = 30000;
-	// Proportional factor for P-control:
+	// Proportional factor for P-control: (try 130 if it doesnt work)
 	private static final float KP = 180f;				// TODO adjust
 	private static final float BASE_SPEED = 150f;
 	
