@@ -74,12 +74,17 @@ public class Controller {
         }
         try {
             routineThread.interrupt();
+            while(routineThread.isAlive()){
+                
+            };
+            
             routineThread = null;
         } catch (Exception e) {
-            // TODO: handle exception
+            BrickScreen.clearScreen();
+            BrickScreen.displayString("Exception in Controller", 0, 0);
         }
 
-        BrickScreen.clearScreen();
+      //  BrickScreen.clearScreen();
     }
 
 }

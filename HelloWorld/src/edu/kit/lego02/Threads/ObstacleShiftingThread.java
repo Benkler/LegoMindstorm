@@ -27,22 +27,25 @@ public class ObstacleShiftingThread implements Runnable {
         BrickScreen.show("Obstacle SHifting!!");
         
         travelToStart();
-        travelToBoxSignal();
+//        travelToBoxSignal();
 //        moveBoxToWall();
 //        moveBoxToCorner();
 //        leaveArea();
     }
 
     private void travelToStart(){
-		BrickScreen.clearScreen();
-		robot.getSensorValues().setColorMode("RGB");
-		float[] colorArray = new float[robot.getSensorValues().getColorValueArray().length];
+		BrickScreen.show("" + robot.getSensorValues().getColorMode());
+		robot.getSensorValues().setRGB();
+
+		float[] colorArray;
+		BrickScreen.show("" + robot.getSensorValues().getColorMode());
     	//drive.turnLeftInPlace(20);
     	//drive.travelFwd(200);
     	try{
 	    	//while(!(blue > COLOR_BLUE)){
 	    	while(true){
 	    		Thread.sleep(5);
+	    		colorArray = robot.getSensorValues().getColorValueArray();
 	    		BrickScreen.clearScreen();
 	    		for(int i = 0; i < colorArray.length; i++){
 		    		BrickScreen.show(i + " : " + colorArray[i]);	    			
@@ -55,11 +58,13 @@ public class ObstacleShiftingThread implements Runnable {
     	drive.travelFwd(50);	
     }
     
-    private void travelToBoxSignal(){ 
+    private void travelToBoxSignal(){
+    	float lastDistance = 0f; 
     	float distance = robot.getSensorValues().getUltrasonicValue();    	
+    	drive.turnRightInPlace(90);    	
     	drive.turnRightInPlace();    	
     	try{    		
-	    	while(distance > 60f){
+	    	while(isSinkingDistance(distance, lastDistance)){
 	        	distance = robot.getSensorValues().getUltrasonicValue();
 	    	    Thread.sleep(5);
 	    	}
@@ -67,7 +72,15 @@ public class ObstacleShiftingThread implements Runnable {
     		
     	}
     	drive.stopMotors();
+    	//Korrekturbewegung
     }    
+    
+    private boolean isSinkingDistance(float distance, float lastDistance){
+    	if (distance > 40 || lastDistance - distance > 0){
+    		return true;
+    	}
+    	return false;
+    }
     
     private void moveBoxToWall(){
     	//drive.travelArc(10, 140);
