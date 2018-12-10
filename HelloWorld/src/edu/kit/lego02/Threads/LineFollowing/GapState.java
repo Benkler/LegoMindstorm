@@ -3,6 +3,7 @@ package edu.kit.lego02.Threads.LineFollowing;
 import edu.kit.lego02.Robot.Drive;
 import edu.kit.lego02.Robot.Robot;
 import edu.kit.lego02.Threads.LineFollowingThread;
+import edu.kit.lego02.userIO.BrickScreen;
 
 public class GapState extends LineFollowingState {
 
@@ -48,7 +49,13 @@ public class GapState extends LineFollowingState {
     }
 
     private void travelUntilBlueFound() {
-        //TODO implement me
+        robot.getDrive().stopMotors();
+        BrickScreen.clearScreen();
+        BrickScreen.displayString("FINISH", 0, 0);
+        long time = System.currentTimeMillis();
+        while(System.currentTimeMillis() < time + 5000){
+            //Entfernen wieder!!!!
+        }
         
     }
 

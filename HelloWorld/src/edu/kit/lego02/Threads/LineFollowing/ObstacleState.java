@@ -17,12 +17,12 @@ public class ObstacleState extends LineFollowingState {
         
         // TODO calibrate all the parameters
         drive.travelBwd(5);
-        drive.turnRightInPlace(100.f);
-        drive.travelFwd(25);
-        drive.turnLeftInPlace(70);
-        drive.travelFwd(35);
+        drive.turnRightInPlace(90.f);
+        drive.travelFwd(20);
+        drive.turnLeftInPlace(90);
+        drive.travelFwd(40);
         drive.turnLeftInPlace(80);
-        drive.travelFwd(5);
+        drive.travelFwd(15);
         
         //drive forward until grey found
         while(!lineFollowThread.isGrey(robot.getSensorValues().getColorValue())){
