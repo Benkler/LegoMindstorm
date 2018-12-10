@@ -25,7 +25,7 @@ public class LineFollowingThread implements Runnable {
     /*s
      * Target power level ==> Max speed for Robot on line
      */
-    public final float Tp = 220f;
+    public final float Tp = 200f;
 
     /*
      * Constant for P controller
@@ -41,6 +41,7 @@ public class LineFollowingThread implements Runnable {
     public void run() {
 
         BrickScreen.show("Line Following Running");
+        robot.getSensorValues().setColorMode("Red");
 
         try {
             while (true) {
@@ -86,7 +87,7 @@ public class LineFollowingThread implements Runnable {
     }
 
     public boolean isObstacle(){
-        if(robot.getSensorValues().getLeftTouchValue()==TOUCH_PRESSED){
+        if(robot.getSensorValues().getLeftTouchValue()==TOUCH_PRESSED || robot.getSensorValues().getRightTouchValue() == TOUCH_PRESSED){
             
             
             //check obstacle value for more than one cycle!
