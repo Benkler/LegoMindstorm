@@ -36,8 +36,7 @@ public class BridgeThread implements Runnable {
     	 	
     	
     	
-    	robot.pointUSSensorDownward();
-    	
+    	robot.pointUSSensorDownward();  	
     	crossControlled();
     }
     
@@ -76,6 +75,14 @@ public class BridgeThread implements Runnable {
     		
     		drive.changeMotorSpeed(leftMotorSpeed, rightMotorSpeed);	
     		
+    		if (robot.getSensorValues().getLeftTouchValue()  > 0.9f 
+    		 || robot.getSensorValues().getRightTouchValue() > 0.9f) {
+    			BrickScreen.clearScreen();
+    			BrickScreen.show("TouchSensor activated");
+    			drive.stopMotors();
+    			return;
+    		}
+    		
     		if (Thread.currentThread().isInterrupted()){
     			drive.stopMotors();
                 return;
@@ -87,7 +94,8 @@ public class BridgeThread implements Runnable {
     private void printSensorValues() {
 		while(true) {
     		BrickScreen.clearScreen();
-    		BrickScreen.displayString("" + robot.getSensorValues().getUltrasonicValue(), 0, 1);
+    		BrickScreen.displayString("" + robot.getSensorValues().getLeftTouchValue() + 
+    				"     " +  robot.getSensorValues().getRightTouchValue(), 0, 1);
     		try {
 				Thread.sleep(200);
 			} catch (InterruptedException e) {
