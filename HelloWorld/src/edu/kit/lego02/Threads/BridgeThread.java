@@ -33,17 +33,17 @@ public class BridgeThread implements Runnable {
     @Override
     public void run() {
 //    	printSensorValues();
-    	 	
     	
-    	
-    	robot.pointUSSensorDownward();  	
+    	robot.pointUSSensorDownward();
+    	executeStartSequence();
     	crossControlled();
+    	executeEndSequence();
     }
     
     private void crossControlled() {
     	
     	BrickScreen.clearScreen();
-    	//BrickScreen.displayString(" Cross controlled", 0, 0);
+    	BrickScreen.show(" Cross controlled");
     	
     	Thread timerThread = new Thread(new Timer(SWITCHING_TIME, this));
     	//timerThread.start();
@@ -77,8 +77,8 @@ public class BridgeThread implements Runnable {
     		
     		if (robot.getSensorValues().getLeftTouchValue()  > 0.9f 
     		 || robot.getSensorValues().getRightTouchValue() > 0.9f) {
-    			BrickScreen.clearScreen();
-    			BrickScreen.show("TouchSensor activated");
+    			//BrickScreen.clearScreen();
+    			//BrickScreen.show("TouchSensor activated");
     			drive.stopMotors();
     			return;
     		}
@@ -89,6 +89,41 @@ public class BridgeThread implements Runnable {
             }
     		
     	}
+    }
+    
+    private void executeStartSequence() {
+    	
+    	BrickScreen.clearScreen();
+    	BrickScreen.show("Start sequence");
+    	
+    	drive.travelFwd(13);
+    	drive.turnLeftInPlace(30);
+    	
+//    	drive.changeMotorSpeed(100, 100);
+//    	while (true) {
+//    		if (robot.getSensorValues().getUltrasonicValue() >= usTargetValue) {
+//    			drive.travelBwd(3);
+//    			return;
+//    		}
+//    	}
+    }
+    
+    private void executeEndSequence() {
+    	
+    	BrickScreen.clearScreen();
+    	BrickScreen.show("End sequence");
+    	
+    	drive.travelBwd(8);
+    	drive.turnRightInPlace(25);
+    	drive.travelFwd(8);
+    	drive.turnLeftInPlace(25);
+    	
+    	
+    	// Find blue line
+//    	drive.travelFwdAsynchronous(50);
+//    	while(true) {
+//    		// TODO check for blue line via color sensor
+//    	}
     }
     
     private void printSensorValues() {
