@@ -33,7 +33,10 @@ public class SensorWrapper {
         }
         
         public float[] getSampleArray() {
-            return this.samples;
+        	float[] temp = new float[3]; 
+        	
+            this.mode.fetchSample(temp, 0);
+            return temp;
         }
         
         public void setColorMode(String mode){
@@ -42,6 +45,7 @@ public class SensorWrapper {
 
         public void setRGB(){
         	this.mode = ((EV3ColorSensor) sensor).getRGBMode();
+        	this.getSampleArray();
         }
 
         public int getColorMode(){

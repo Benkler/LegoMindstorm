@@ -35,8 +35,6 @@ public class SensorValuesThread implements Runnable{
     public void run() {
         try {
             while(true){
-                //this.colorValue = colorSensor.getSingleSample();
-                //this.colorValueArray = colorSensor.getSampleArray();
                 this.leftTouchValue = leftTouchSensor.getSingleSample();
                 this.rightTouchValue = righTouchSensor.getSingleSample();
                 this.ultrasonicValue = ultrasonicSensor.getSingleSample();
@@ -67,11 +65,11 @@ public class SensorValuesThread implements Runnable{
 
 
     public float getColorValue() {
-        return colorValue;
+    	return colorSensor.getSingleSample();    	
     }
 
     public float[] getColorValueArray() {
-        return colorValueArray;
+    	return colorSensor.getSampleArray();
     }
 
 
