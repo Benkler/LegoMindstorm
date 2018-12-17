@@ -33,40 +33,34 @@ public class Menu extends TextMenu {
             int buttonID = Button.waitForAnyPress();
 
             if (buttonID == Button.ID_ENTER) {
-                
-                
-                //stops running routine 
+
+                // stops running routine
                 controller.enterPressed();
                 BrickScreen.clearScreen();
                 switch (this.select()) {
 
                 case MENU_ITEM_LINE_FOLLOWING:
-                    BrickScreen.clearScreen();
-                    BrickScreen.show(RobotStates.LINE_FOLLOWING.getStateName());
+
                     controller.stateChanged(RobotStates.LINE_FOLLOWING);
                     // fire LineFOllowingEvent
                     break;
                 case MENU_ITEM_OBSTACLE_SHIFTING:
-                    BrickScreen.clearScreen();
-                    BrickScreen.show(RobotStates.OBSTACLE_SHIFTING.getStateName());
+
                     controller.stateChanged(RobotStates.OBSTACLE_SHIFTING);
                     // fire ObstacleShiftigEvent
                     break;
                 case MENU_ITEM_BRIDGE:
-                    BrickScreen.clearScreen();
-                    BrickScreen.show(RobotStates.BRIDGE.getStateName());
+
                     controller.stateChanged(RobotStates.BRIDGE);
                     break;
 
                 case MENU_ITEM_COLOR_SEARCH:
-                    BrickScreen.clearScreen();
-                    BrickScreen.show(RobotStates.COLOR_SEARCH.getStateName());
-                    // fire ColoSearchEvent
+
+                    controller.stateChanged(RobotStates.COLOR_SEARCH);
                     break;
                 case MENU_ITEM_PARKOUR:
-                    BrickScreen.clearScreen();
-                    BrickScreen.show(RobotStates.PARKOUR.getStateName());
-                    // fire Parcour Event
+
+                    controller.stateChanged(RobotStates.PARKOUR);
                     break;
                 default:
                     // catch error
