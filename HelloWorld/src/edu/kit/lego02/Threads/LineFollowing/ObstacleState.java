@@ -10,29 +10,39 @@ public class ObstacleState extends LineFollowingState {
 		super(thread);
 	}
 
+	private Robot robot;
 	@Override
 	protected void entry() {
-		Robot robot = lineFollowThread.getRobot();
+		 robot = lineFollowThread.getRobot();
         Drive drive = robot.getDrive();
         
         // TODO calibrate all the parameters
-        drive.turnRightInPlace(100.f);
+        drive.travelBwd(5);
+        drive.turnRightInPlace(90.f);
         drive.travelFwd(20);
-        drive.turnLeftInPlace(70);
-        drive.travelFwd(35);
+        drive.turnLeftInPlace(90);
+        drive.travelFwd(40);
         drive.turnLeftInPlace(80);
+        drive.travelFwd(15);
         
-        //drive forward until you hit grey
-        while(!isGrey(robot.getSensorValues().getColorValue())) {
-        	drive.travelFwd(0.3f);
+        drive.changeMotorSpeed(150, 150);
+        
+        //drive forward until grey found
+        while(true){
+            
+            if(checkIfWhite()){
+                drive.stopMotors();
+                return;
+            }
+            
         }
+        
 	}
 	
-	private boolean isGrey(float sensorValue) {
-		return !lineFollowThread.isBlack(sensorValue) 
-    			&& !lineFollowThread.isWhite(sensorValue);
+	private boolean checkIfWhite(){
+	    return !lineFollowThread.isGrey(robot.getSensorValues().getColorValue());
 	}
-
+	
 	@Override
 	public void grey() {
 		// TODO

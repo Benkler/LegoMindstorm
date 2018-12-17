@@ -1,5 +1,6 @@
 package edu.kit.lego02.Sensors;
 
+import lejos.hardware.sensor.SensorMode;
 import java.util.ArrayList;
 
 import lejos.hardware.sensor.EV3ColorSensor;
@@ -42,7 +43,7 @@ public class SensorValuesThread implements Runnable{
             }
         } catch (InterruptedException e) {
             
-            e.printStackTrace();
+           // e.printStackTrace();
         }
         
     }
@@ -89,4 +90,8 @@ public class SensorValuesThread implements Runnable{
         return ultrasonicValue;
     }
 
+
+    public void setColorSensorMode(String modeName) {
+    	colorSensor.setColorMode(modeName);
+    }
 }

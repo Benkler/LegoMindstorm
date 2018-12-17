@@ -12,20 +12,25 @@ public class LineFollowingThread implements Runnable {
     private float sensorValue;
     private Robot robot;
 
-    private final float WHITE_THRESH = 0.6f; // TODO parameter need adjustement
-    private final float BLACK_THRESH = 0.20f;
-    private final float US_THRESH = 0.33f; // TODO calibrate
+    private final float WHITE_THRESH = 0.74f; // TODO parameter need adjustement
+    private final float BLACK_THRESH = 0.18f;
+    private final float US_THRESH = 0.15f; // TODO calibrate
     public final float GREY = ((WHITE_THRESH + BLACK_THRESH) / 2);
+    private final float BLACK_THRESH_CORNER = 0.25f;
+    private final float WHITE_THRESH_CORNER = 0.70f;
+    private final float TOUCH_PRESSED = 1.0f;
+    
+    private boolean alreadyDoneWithObstacle = false;
 
-    /*
+    /*s
      * Target power level ==> Max speed for Robot on line
      */
-    public final float Tp = 150f;
+    public final float Tp = 200f;
 
     /*
      * Constant for P controller
      */
-    public final float Kp = (Tp / (WHITE_THRESH - GREY)) * 1.3f;
+    public final float Kp = (Tp / (WHITE_THRESH - GREY)) * 1.2f;
 
     public LineFollowingThread(Robot robot) {
         this.robot = robot;
@@ -36,6 +41,7 @@ public class LineFollowingThread implements Runnable {
     public void run() {
 
         BrickScreen.show("Line Following Running");
+        robot.getSensorValues().setColorMode("Red");
 
         try {
             while (true) {
@@ -44,6 +50,12 @@ public class LineFollowingThread implements Runnable {
                     BrickScreen.clearScreen();
                     return;
                 }
+                
+                if(isObstacle() && !alreadyDoneWithObstacle){
+                    alreadyDoneWithObstacle = true;
+                    obstacleDetected();
+                }
+                
                 sensorValue = robot.getSensorValues().getColorValue();
 
                 if (isBlack(sensorValue)) {
@@ -70,9 +82,37 @@ public class LineFollowingThread implements Runnable {
         this.currentState = currentState;
     }
 
+    public boolean isAlreadyDoneWithObstacle() {
+        return alreadyDoneWithObstacle;
+    }
+
+    public boolean isObstacle(){
+        if(robot.getSensorValues().getLeftTouchValue()==TOUCH_PRESSED || robot.getSensorValues().getRightTouchValue() == TOUCH_PRESSED){
+            
+            
+            //check obstacle value for more than one cycle!
+            return true;
+        }
+        return false;
+    }
+    
     public boolean isWhite(float sensorValue) {
 
         return sensorValue > WHITE_THRESH;
+    }
+    
+    public boolean isWhiteCorner(float sensorValue){
+        
+        return sensorValue > WHITE_THRESH_CORNER;
+    }
+    
+    public boolean isBlackCorner(float sensorValue){
+        
+        return sensorValue < BLACK_THRESH_CORNER;
+    }
+    
+    public boolean isGreyCorner(float sensorVaue) {
+        return !isBlackCorner(sensorVaue) && !isWhiteCorner(sensorVaue);
     }
 
     public boolean isBlack(float sensorValue) {
