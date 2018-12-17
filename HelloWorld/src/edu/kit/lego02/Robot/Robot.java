@@ -45,7 +45,10 @@ public class Robot {
     
     private final Drive drive =  new Drive();
     
-    private boolean USSensorPointsForward;
+    private static final int US_FWD_ANGLE = 90;
+    private static final int US_SKEW_ANGLE = 30;
+    private static final int US_DWD_ANGLE = 0;
+    private static int usAngle = US_DWD_ANGLE;
     
     
     public Robot() {
@@ -73,8 +76,6 @@ public class Robot {
        this.sensorValueThread = new SensorValuesThread(touchLeft, touchRight, color, ultrasonic);
        new Thread(sensorValueThread).start();
        
-       USSensorPointsForward = true;
-       
        
                 
     }
@@ -86,30 +87,18 @@ public class Robot {
     }
     
     public void pointUSSensorForward() {
-    	if (!USSensorPointsForward) {
-    		USSensorPointsForward = true;
-    		ultraSonicMotor.rotate(-90);
-    	}
+    	ultraSonicMotor.rotate(computeUltraSonicMotorInput(US_FWD_ANGLE));
+    }
+    
+    public void pointUSSenorSkew() {
+    	ultraSonicMotor.rotate(computeUltraSonicMotorInput(US_SKEW_ANGLE));
     }
     
     public void pointUSSensorDownward() {
-    	if (USSensorPointsForward) {
-    		USSensorPointsForward = false;
-    		ultraSonicMotor.rotate(90);
-    	}
+    	ultraSonicMotor.rotate(computeUltraSonicMotorInput(US_DWD_ANGLE));
     }
     
-//    public float getAmbient() {
-//    	colorSensor.setFloodlight(Color.NONE);
-//    	float[] sampleArray = new float[1];
-//    	colorSensor.getAmbientMode().fetchSample(sampleArray, 0);
-//    	return sampleArray[0];
-//    }
-    
-//    public float getUSValue() {
-//    	SampleProvider sampleProvider = ultrasonicSensor.getDistanceMode();
-//    	float[] sample = new float[1];
-//    	sampleProvider.fetchSample(sample, 0);
-//    	return sample[0];
-//    }
+    private int computeUltraSonicMotorInput(int targetAngle) {
+    	return - usAngle +  targetAngle;
+    }
 }
