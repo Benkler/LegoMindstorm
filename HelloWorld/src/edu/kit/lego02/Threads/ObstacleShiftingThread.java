@@ -42,27 +42,14 @@ public class ObstacleShiftingThread implements Runnable {
 		colorArray = robot.getSensorValues().getColorValueArray();
 		float blue = colorArray[BLUE];
     	while(!(blue > COLOR_BLUE)){
-    		BrickScreen.clearScreen();
-        	BrickScreen.show("" + blue);
-        	BrickScreen.show("" + COLOR_BLUE);
-        	BrickScreen.show("" + (blue > COLOR_BLUE));        	
     		blue = (robot.getSensorValues().getColorValueArray())[BLUE];
     	}
-    	BrickScreen.show("Found");
     	drive.stopMotors();
-    	int count = 0;
-    	try {
-	    	while(true) {
-	    		Thread.sleep(5);
-	    		count = count + 1;
-	    		BrickScreen.clearScreen();
-	    		BrickScreen.show("" + count);
-	    	}    		
-    	} catch(InterruptedException e) {
-    		e.printStackTrace();	
-    	}
     }
     
+    private void moveAlongBox() {
+    	robot.getSensorValues().getUltrasonicValue();
+    }
     private void travelToBoxSignal(){
     	float lastDistance = 0f; 
     	float distance = robot.getSensorValues().getUltrasonicValue();    	
