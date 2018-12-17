@@ -15,7 +15,7 @@ public class ObstacleShiftingThread implements Runnable {
 	
 	private final int BLUE = 2;
 	private final float COLOR_BLUE = 0.09f;
-	private final float DIST_THRESH = 5000.0f;
+	private final float DIST_THRESH = 0.35f;
 	
 	public ObstacleShiftingThread(Robot robot) {
 		this.robot = robot;
@@ -27,6 +27,7 @@ public class ObstacleShiftingThread implements Runnable {
         BrickScreen.show("Obstacle SHifting!!");
         
         travelToStart();
+        moveAlongBox();
 //        travelToBoxSignal();
 //        moveBoxToWall();
 //        moveBoxToCorner();
@@ -38,7 +39,7 @@ public class ObstacleShiftingThread implements Runnable {
 
 		float[] colorArray;
     	drive.turnLeftInPlace(20);
-    	drive.changeMotorSpeed(400, 400);
+    	drive.changeMotorSpeed(800, 800);
 		colorArray = robot.getSensorValues().getColorValueArray();
 		float blue = colorArray[BLUE];
     	while(!(blue > COLOR_BLUE)){
@@ -49,15 +50,19 @@ public class ObstacleShiftingThread implements Runnable {
     
     private void moveAlongBox() {
     	
-    	robot.getDrive().turnRightInPlaceImmediate(180);
+    	robot.getDrive().turnRightInPlace(180);
     	robot.pointUSSensorForward();
-    	drive.changeMotorSpeed(200, 200);
+    	drive.travelBwd(30);
+    	drive.changeMotorSpeed(-500, -500);
     	BrickScreen.clearScreen();
     	BrickScreen.show("" + robot.getSensorValues().getUltrasonicValue());
     	while(robot.getSensorValues().getUltrasonicValue() > DIST_THRESH) {    		
     	}
     	drive.stopMotors();
-    	
+    	drive.travelBwd(9);
+    	drive.turnLeftInPlace(90);
+    	drive.changeMotorSpeed(300, 300);    	
+ 
     }
     private void travelToBoxSignal(){
     	float lastDistance = 0f; 
