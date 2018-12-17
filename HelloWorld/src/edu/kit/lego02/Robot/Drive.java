@@ -168,11 +168,11 @@ public class Drive {
     
     public void turnLeftInPlace(){
         
-        changeMotorSpeed(-200, 200);
+        changeMotorSpeed(-250, 250);
     }
     
     public  void turnRightInPlace(){
-        changeMotorSpeed(200, -200);
+        changeMotorSpeed(250, -250);
     }
 
     /**

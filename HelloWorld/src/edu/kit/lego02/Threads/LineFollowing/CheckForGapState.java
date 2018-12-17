@@ -37,11 +37,10 @@ public class CheckForGapState extends LineFollowingState {
         
      
         long start = System.currentTimeMillis();
-        //drive.travelFwd(0.2f);
-       // drive.turnLeftInPlace();
+       
         
         //turn left
-        drive.changeMotorSpeed(-170, 200);
+        drive.changeMotorSpeed(-220, 250); //we do not use drive.turnLeftInPlace as we need to do a little turn
       
         while (System.currentTimeMillis() < start + 2800) {
             if (Thread.currentThread().isInterrupted()) {
@@ -55,10 +54,10 @@ public class CheckForGapState extends LineFollowingState {
 
         start = System.currentTimeMillis();
         
-        //drive.turnRightInPlace();
+        
         
         //turn right
-        drive.changeMotorSpeed(200, -170);
+        drive.changeMotorSpeed(250, -220);
         while (System.currentTimeMillis() < start + 3100) {
             if (Thread.currentThread().isInterrupted()) {
                 return;
