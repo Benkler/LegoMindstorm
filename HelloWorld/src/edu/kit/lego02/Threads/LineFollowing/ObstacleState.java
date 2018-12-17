@@ -10,9 +10,10 @@ public class ObstacleState extends LineFollowingState {
 		super(thread);
 	}
 
+	private Robot robot;
 	@Override
 	protected void entry() {
-		Robot robot = lineFollowThread.getRobot();
+		 robot = lineFollowThread.getRobot();
         Drive drive = robot.getDrive();
         
         // TODO calibrate all the parameters
@@ -24,11 +25,22 @@ public class ObstacleState extends LineFollowingState {
         drive.turnLeftInPlace(80);
         drive.travelFwd(15);
         
+        drive.changeMotorSpeed(150, 150);
+        
         //drive forward until grey found
-        while(!lineFollowThread.isGrey(robot.getSensorValues().getColorValue())){
-            drive.travelFwd(0.3f);
+        while(true){
+            
+            if(checkIfWhite()){
+                drive.stopMotors();
+                return;
+            }
+            
         }
         
+	}
+	
+	private boolean checkIfWhite(){
+	    return !lineFollowThread.isGrey(robot.getSensorValues().getColorValue());
 	}
 	
 	@Override

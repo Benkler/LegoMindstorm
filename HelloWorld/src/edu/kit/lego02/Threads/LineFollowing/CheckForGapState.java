@@ -39,6 +39,7 @@ public class CheckForGapState extends LineFollowingState {
         long start = System.currentTimeMillis();
         drive.turnLeftInPlace();
 
+        drive.travelFwd(0.2f);
         while (System.currentTimeMillis() < start + 2800) {
             if (Thread.currentThread().isInterrupted()) {
                 return;

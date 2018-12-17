@@ -182,6 +182,7 @@ public class Drive {
      */
     public void travelFwd(float distance) {
         distance = distance * 1.1f;
+       // this.stopMotors();
         pilot.travel(-distance);
 
     }

@@ -41,7 +41,7 @@ public class SensorWrapper {
         }
         
         public void setColorMode(String mode){
-        	this.mode = ((EV3ColorSensor) sensor).getRGBMode();
+        	this.mode = this.sensor.getMode(mode);
         }
 
 
