@@ -14,16 +14,10 @@ public class BridgeThread implements Runnable {
 	// corners: 0.06f
 	// semi-working: 0.065f
 	private static float usTargetValue;
-	private static final float US_TARGET_VALUE_FIRST_PART =  0.06f;
-	private static final float US_TARGET_VALUE_SECOND_PART =  0.055f;
-	private static final int SWITCHING_TIME = 30000;
+	private static final float US_TARGET_VALUE_FIRST_PART =  0.055f;
 	// Proportional factor for P-control: (try 130 if it doesnt work)
 	private static final float KP = 180f;				// TODO adjust
 	private static final float BASE_SPEED = 150f;
-	
-	
-	
-	private static final float US_WALL_THRESH = 0.01f;		// TODO adjust
 	
 	public BridgeThread(Robot robot) {
 		this.robot = robot;
@@ -45,14 +39,10 @@ public class BridgeThread implements Runnable {
     	BrickScreen.clearScreen();
     	BrickScreen.show(" Cross controlled");
     	
-    	Thread timerThread = new Thread(new Timer(SWITCHING_TIME, this));
-    	//timerThread.start();
-    	
     	float controlDiff;
-    	float speedChange;
     	float leftMotorSpeed;
     	float rightMotorSpeed;
-    	while (robot.getSensorValues().getUltrasonicValue() > US_WALL_THRESH) {
+    	while (true) {
     		
     		controlDiff = robot.getSensorValues().getUltrasonicValue() - usTargetValue;
     		// controlDiff >0 : turn right
@@ -60,25 +50,15 @@ public class BridgeThread implements Runnable {
     		if (controlDiff >= 0) { 
     			leftMotorSpeed = BASE_SPEED + KP;
     			rightMotorSpeed = BASE_SPEED - KP/2;
-    			//speedChange = 	KP;
     		} else {	// US sensor is looking over the edge.
     			leftMotorSpeed = BASE_SPEED - KP/2;
     			rightMotorSpeed = BASE_SPEED + KP;
-    			//speedChange = - KP;
     		}
-    		
-    		//leftMotorSpeed = BASE_SPEED +  speedChange;
-    		//rightMotorSpeed = BASE_SPEED -  speedChange;
-    		
-    		//BrickScreen.clearScreen();
-    		//BrickScreen.show((int) leftMotorSpeed + "   " + (int) rightMotorSpeed);
     		
     		drive.changeMotorSpeed(leftMotorSpeed, rightMotorSpeed);	
     		
     		if (robot.getSensorValues().getLeftTouchValue()  > 0.9f 
     		 || robot.getSensorValues().getRightTouchValue() > 0.9f) {
-    			//BrickScreen.clearScreen();
-    			//BrickScreen.show("TouchSensor activated");
     			drive.stopMotors();
     			return;
     		}
@@ -136,9 +116,4 @@ public class BridgeThread implements Runnable {
 			}
     	}
 	}
-    
-    public void signalTimeout() {
-    	usTargetValue = US_TARGET_VALUE_SECOND_PART;
-    	BrickScreen.show("SWITCHING##############");
-    }
 }

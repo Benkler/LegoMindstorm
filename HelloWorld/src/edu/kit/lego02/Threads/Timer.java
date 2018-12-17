@@ -19,7 +19,7 @@ public class Timer implements Runnable {
 			e.printStackTrace();
 		}
 		
-		caller.signalTimeout();
+		//caller.signalTimeout();
 	}
 
 }
