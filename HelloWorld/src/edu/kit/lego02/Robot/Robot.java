@@ -90,7 +90,7 @@ public class Robot {
     	ultraSonicMotor.rotate(computeUltraSonicMotorInput(US_FWD_ANGLE));
     }
     
-    public void pointUSSenorSkew() {
+    public void pointUSSensorSkew() {
     	ultraSonicMotor.rotate(computeUltraSonicMotorInput(US_SKEW_ANGLE));
     }
     
@@ -99,6 +99,6 @@ public class Robot {
     }
     
     private int computeUltraSonicMotorInput(int targetAngle) {
-    	return - usAngle +  targetAngle;
+    	return usAngle - targetAngle;
     }
 }

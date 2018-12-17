@@ -35,7 +35,7 @@ public class BridgeThread implements Runnable {
     public void run() {
 //    	printSensorValues();
     	
-//    	robot.pointUSSensorDownward();
+    	robot.pointUSSensorSkew();
 //    	executeStartSequence();
     	crossControlled();
 //    	executeEndSequence();
@@ -70,8 +70,7 @@ public class BridgeThread implements Runnable {
     			drive.stopMotors();
     			robot.pointUSSensorForward();
                 return;
-            }
-    		
+            }    		
     	}
     }
     
