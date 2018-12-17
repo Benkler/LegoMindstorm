@@ -52,8 +52,19 @@ public class Robot {
         
        
         //TODO  auch final?!?!
+       try {
+    	   this.ultraSonicMotor = new EV3MediumRegulatedMotor(ULTRASONIC_MOTOR_PORT);
+       } catch (IllegalArgumentException e) {
+    	   try {
+			Thread.sleep(5);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+    	   ultraSonicMotor.close();
+    	   this.ultraSonicMotor = new EV3MediumRegulatedMotor(ULTRASONIC_MOTOR_PORT);
+       }
        
-       this.ultraSonicMotor = new EV3MediumRegulatedMotor(ULTRASONIC_MOTOR_PORT);
        SensorWrapper color = new SensorWrapper(colorSensor, "Red");
        SensorWrapper touchLeft = new SensorWrapper(leftTouchSensor, "Touch");
        SensorWrapper touchRight = new SensorWrapper(rightTouchSensor, "Touch");
@@ -77,14 +88,14 @@ public class Robot {
     public void pointUSSensorForward() {
     	if (!USSensorPointsForward) {
     		USSensorPointsForward = true;
-    		ultraSonicMotor.rotate(90);
+    		ultraSonicMotor.rotate(-90);
     	}
     }
     
     public void pointUSSensorDownward() {
     	if (USSensorPointsForward) {
     		USSensorPointsForward = false;
-    		ultraSonicMotor.rotate(-90);
+    		ultraSonicMotor.rotate(90);
     	}
     }
     

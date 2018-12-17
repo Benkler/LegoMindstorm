@@ -16,10 +16,12 @@ public class BridgeThread implements Runnable {
 	private static float usTargetValue;
 	private static final float US_TARGET_VALUE_FIRST_PART =  0.055f;
 	// Proportional factor for P-control: (try 130 if it doesnt work)
-	private static final float KP = 200f;				// TODO adjust
-	private static final float BASE_SPEED = 220f;
+	private static final float KP = 180f;				// TODO adjust
+	private static final float BASE_SPEED = 150f;
 	
 	private static final float blackTapeTresh = 0.06f;
+	
+	private static boolean beforeFirstCorner = true;
 	
 	public BridgeThread(Robot robot) {
 		this.robot = robot;
@@ -40,13 +42,12 @@ public class BridgeThread implements Runnable {
     
     private void crossControlled() {
     	BrickScreen.clearScreen();
-    	//BrickScreen.show(" Cross controlled");
-    	
-    	boolean beforeFirstCorner = true;
+    	BrickScreen.show(" Cross controlled");
     	
     	float controlDiff;
     	float leftMotorSpeed;
     	float rightMotorSpeed;
+    	
     	while (true) {
     		
     		controlDiff = robot.getSensorValues().getUltrasonicValue() - usTargetValue;
@@ -62,21 +63,7 @@ public class BridgeThread implements Runnable {
     		
     		drive.changeMotorSpeed(leftMotorSpeed, rightMotorSpeed);
     		
-    		if (beforeFirstCorner) {
-    			if (robot.getSensorValues().getColorValue() < blackTapeTresh) {
-    				BrickScreen.show("################");
-    				drive.travelFwd(17f);
-    				drive.turnLeftInPlace(90);
-    				drive.travelFwd(20f);
-    				beforeFirstCorner = false;
-    			}
-    		} else {
-    			if (robot.getSensorValues().getLeftTouchValue()  > 0.9f 
-    					|| robot.getSensorValues().getRightTouchValue() > 0.9f) {
-    				drive.stopMotors();
-    				return;
-    			}
-    		}
+    		checkForStateChange();
     		
     		if (Thread.currentThread().isInterrupted()){
     			drive.stopMotors();
@@ -87,20 +74,51 @@ public class BridgeThread implements Runnable {
     	}
     }
     
+    private void checkForStateChange() {
+    	if (beforeFirstCorner) {
+			if (robot.getSensorValues().getColorValue() < blackTapeTresh) {
+				BrickScreen.clearScreen();
+				BrickScreen.show("################");
+				
+				executeFirstCornerSequence();
+				beforeFirstCorner = false;
+			}
+		} else {
+			if (robot.getSensorValues().getLeftTouchValue()  > 0.9f 
+					|| robot.getSensorValues().getRightTouchValue() > 0.9f) {
+				drive.stopMotors();
+				return;
+			}
+		}
+    }
+    
+    private void executeFirstCornerSequence() {
+    	drive.travelFwd(17f);
+		drive.turnLeftInPlace(90);
+		drive.travelFwd(20f);
+		drive.turnLeftInPlace(20);
+		findEdge();
+    }
+    
     private void executeStartSequence() {
     	BrickScreen.clearScreen();
     	BrickScreen.show("Start sequence");
     	
     	drive.travelFwd(16);
-    	drive.turnLeftInPlace(30);
+    	drive.turnLeftInPlace(20);
+    	findEdge();
+    }
+    
+    private void findEdge() {
+    	drive.stopMotors();
+    	drive.changeMotorSpeed(150, 150);
     	
-//    	drive.changeMotorSpeed(100, 100);
-//    	while (true) {
-//    		if (robot.getSensorValues().getUltrasonicValue() >= usTargetValue) {
-//    			drive.travelBwd(3);
-//    			return;
-//    		}
-//    	}
+    	while (true) {
+    		if (robot.getSensorValues().getUltrasonicValue() >= usTargetValue) {
+    			drive.stopMotors();
+    			return;
+    		}
+    	}
     }
     
     private void executeEndSequence() {
