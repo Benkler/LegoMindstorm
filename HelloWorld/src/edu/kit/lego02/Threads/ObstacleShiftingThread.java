@@ -15,7 +15,7 @@ public class ObstacleShiftingThread implements Runnable {
 	
 	private final int BLUE = 2;
 	private final float COLOR_BLUE = 0.09f;
-	private final float DIST_THRESH = 0.1f;
+	private final float DIST_THRESH = 5000.0f;
 	
 	public ObstacleShiftingThread(Robot robot) {
 		this.robot = robot;
@@ -48,7 +48,16 @@ public class ObstacleShiftingThread implements Runnable {
     }
     
     private void moveAlongBox() {
-    	robot.getSensorValues().getUltrasonicValue();
+    	
+    	robot.getDrive().turnRightInPlaceImmediate(180);
+    	robot.pointUSSensorForward();
+    	drive.changeMotorSpeed(200, 200);
+    	BrickScreen.clearScreen();
+    	BrickScreen.show("" + robot.getSensorValues().getUltrasonicValue());
+    	while(robot.getSensorValues().getUltrasonicValue() > DIST_THRESH) {    		
+    	}
+    	drive.stopMotors();
+    	
     }
     private void travelToBoxSignal(){
     	float lastDistance = 0f; 
