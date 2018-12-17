@@ -16,13 +16,16 @@ public class BridgeThread implements Runnable {
 	private static float usTargetValue;
 	private static final float US_TARGET_VALUE_FIRST_PART =  0.055f;
 	// Proportional factor for P-control: (try 130 if it doesnt work)
-	private static final float KP = 180f;				// TODO adjust
-	private static final float BASE_SPEED = 150f;
+	private static final float KP = 200f;				// TODO adjust
+	private static final float BASE_SPEED = 220f;
+	
+	private static final float blackTapeTresh = 0.06f;
 	
 	public BridgeThread(Robot robot) {
 		this.robot = robot;
 		this.drive = robot.getDrive();
 		usTargetValue = US_TARGET_VALUE_FIRST_PART;
+		robot.getSensorValues().setColorMode("Red");
 	}
 	
     @Override
@@ -37,7 +40,9 @@ public class BridgeThread implements Runnable {
     
     private void crossControlled() {
     	BrickScreen.clearScreen();
-    	BrickScreen.show(" Cross controlled");
+    	//BrickScreen.show(" Cross controlled");
+    	
+    	boolean beforeFirstCorner = true;
     	
     	float controlDiff;
     	float leftMotorSpeed;
@@ -55,16 +60,27 @@ public class BridgeThread implements Runnable {
     			rightMotorSpeed = BASE_SPEED + KP;
     		}
     		
-    		drive.changeMotorSpeed(leftMotorSpeed, rightMotorSpeed);	
+    		drive.changeMotorSpeed(leftMotorSpeed, rightMotorSpeed);
     		
-    		if (robot.getSensorValues().getLeftTouchValue()  > 0.9f 
-    		 || robot.getSensorValues().getRightTouchValue() > 0.9f) {
-    			drive.stopMotors();
-    			return;
+    		if (beforeFirstCorner) {
+    			if (robot.getSensorValues().getColorValue() < blackTapeTresh) {
+    				BrickScreen.show("################");
+    				drive.travelFwd(17f);
+    				drive.turnLeftInPlace(90);
+    				drive.travelFwd(20f);
+    				beforeFirstCorner = false;
+    			}
+    		} else {
+    			if (robot.getSensorValues().getLeftTouchValue()  > 0.9f 
+    					|| robot.getSensorValues().getRightTouchValue() > 0.9f) {
+    				drive.stopMotors();
+    				return;
+    			}
     		}
     		
     		if (Thread.currentThread().isInterrupted()){
     			drive.stopMotors();
+    			robot.pointUSSensorForward();
                 return;
             }
     		
@@ -75,7 +91,7 @@ public class BridgeThread implements Runnable {
     	BrickScreen.clearScreen();
     	BrickScreen.show("Start sequence");
     	
-    	drive.travelFwd(13);
+    	drive.travelFwd(16);
     	drive.turnLeftInPlace(30);
     	
 //    	drive.changeMotorSpeed(100, 100);
@@ -106,8 +122,7 @@ public class BridgeThread implements Runnable {
     private void printSensorValues() {
 		while(true) {
     		BrickScreen.clearScreen();
-    		BrickScreen.displayString("" + robot.getSensorValues().getLeftTouchValue() + 
-    				"     " +  robot.getSensorValues().getRightTouchValue(), 0, 1);
+    		BrickScreen.displayString("" + robot.getSensorValues().getColorValue(), 0, 1);
     		try {
 				Thread.sleep(200);
 			} catch (InterruptedException e) {
