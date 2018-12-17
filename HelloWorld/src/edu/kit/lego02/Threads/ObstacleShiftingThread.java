@@ -14,7 +14,7 @@ public class ObstacleShiftingThread implements Runnable {
 	Drive drive;
 	
 	private final int BLUE = 2;
-	private final float COLOR_BLUE = 0.08f;
+	private final float COLOR_BLUE = 0.09f;
 	private final float DIST_THRESH = 0.1f;
 	
 	public ObstacleShiftingThread(Robot robot) {
@@ -34,28 +34,33 @@ public class ObstacleShiftingThread implements Runnable {
     }
 
     private void travelToStart(){
-		BrickScreen.show("" + robot.getSensorValues().getColorMode());
 		robot.getSensorValues().setRGB();
 
 		float[] colorArray;
-		BrickScreen.show("" + robot.getSensorValues().getColorMode());
-    	//drive.turnLeftInPlace(20);
-    	//drive.travelFwd(200);
-    	try{
-	    	//while(!(blue > COLOR_BLUE)){
-	    	while(true){
-	    		Thread.sleep(5);
-	    		colorArray = robot.getSensorValues().getColorValueArray();
-	    		BrickScreen.clearScreen();
-	    		for(int i = 0; i < colorArray.length; i++){
-		    		BrickScreen.show(i + " : " + colorArray[i]);	    			
-	    		}
-	    	}
-	    	//drive.stopMotors();
-    		//BrickScreen.show("Vorwärts");
-    	} catch(InterruptedException e){
+    	drive.turnLeftInPlace(20);
+    	drive.changeMotorSpeed(400, 400);
+		colorArray = robot.getSensorValues().getColorValueArray();
+		float blue = colorArray[BLUE];
+    	while(!(blue > COLOR_BLUE)){
+    		BrickScreen.clearScreen();
+        	BrickScreen.show("" + blue);
+        	BrickScreen.show("" + COLOR_BLUE);
+        	BrickScreen.show("" + (blue > COLOR_BLUE));        	
+    		blue = (robot.getSensorValues().getColorValueArray())[BLUE];
     	}
-    	drive.travelFwd(50);	
+    	BrickScreen.show("Found");
+    	drive.stopMotors();
+    	int count = 0;
+    	try {
+	    	while(true) {
+	    		Thread.sleep(5);
+	    		count = count + 1;
+	    		BrickScreen.clearScreen();
+	    		BrickScreen.show("" + count);
+	    	}    		
+    	} catch(InterruptedException e) {
+    		e.printStackTrace();	
+    	}
     }
     
     private void travelToBoxSignal(){
