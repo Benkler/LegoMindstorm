@@ -14,8 +14,8 @@ public class BridgeThread implements Runnable {
 	// corners: 0.06f
 	// semi-working: 0.065f
 	private static float usTargetValue;
-	//0.055f
-	private static final float US_TARGET_VALUE_FIRST_PART =  0.065f;
+	//higher than 0.15f
+	private static final float US_TARGET_VALUE_FIRST_PART =  0.18f;
 	// Proportional factor for P-control: (try 130 if it doesnt work)
 	private static final float KP = 180f;				// TODO adjust
 	private static final float BASE_SPEED = 150f;
