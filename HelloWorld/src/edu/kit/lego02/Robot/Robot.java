@@ -86,6 +86,13 @@ public class Robot {
         return sensorValueThread;
     }
     
+    public float getUltrasonicValue() { 
+    	SampleProvider sp = ultrasonicSensor.getDistanceMode();
+    	float [] sample = new float[sp.sampleSize()];
+    	sp.fetchSample(sample, 0);
+        return sample[0];
+    }
+    
     public void pointUSSensorForward() {
     	ultraSonicMotor.rotate(computeUltraSonicMotorInput(US_FWD_ANGLE));
     }
