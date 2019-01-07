@@ -34,12 +34,14 @@ public class CheckForGapState extends LineFollowingState {
         Robot robot = lineFollowThread.getRobot();
         Drive drive = robot.getDrive();
 
-        drive.stopMotors();
+        
      
         long start = System.currentTimeMillis();
-        drive.turnLeftInPlace();
-
-        drive.travelFwd(0.2f);
+       
+        
+        //turn left
+        drive.changeMotorSpeed(-220, 250); //we do not use drive.turnLeftInPlace as we need to do a little turn
+      
         while (System.currentTimeMillis() < start + 2800) {
             if (Thread.currentThread().isInterrupted()) {
                 return;
@@ -51,8 +53,12 @@ public class CheckForGapState extends LineFollowingState {
         }
 
         start = System.currentTimeMillis();
-        drive.turnRightInPlace();
-        while (System.currentTimeMillis() < start + 3200) {
+        
+        
+        
+        //turn right
+        drive.changeMotorSpeed(250, -220);
+        while (System.currentTimeMillis() < start + 3100) {
             if (Thread.currentThread().isInterrupted()) {
                 return;
             }

@@ -42,6 +42,9 @@ public class LineFollowingThread implements Runnable {
 
         BrickScreen.show("Line Following Running");
         robot.getSensorValues().setColorMode("Red");
+        
+       
+        
 
         try {
             while (true) {

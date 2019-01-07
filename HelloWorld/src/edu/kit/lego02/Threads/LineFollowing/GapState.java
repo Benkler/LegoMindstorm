@@ -32,14 +32,14 @@ public class GapState extends LineFollowingState {
 
     @Override
     protected void entry() {
-        
+
         /*
          * Drive until blue found!
          */
-        if(lineFollowThread.isAlreadyDoneWithObstacle()){
-            travelUntilBlueFound();
-            return;
-        }
+        // if(lineFollowThread.isAlreadyDoneWithObstacle()){
+        // travelUntilBlueFound();
+        // return;
+        // }
 
         // Distance to drive blind
         drive.travelFwd(GAP_SIZE);
@@ -53,19 +53,32 @@ public class GapState extends LineFollowingState {
         BrickScreen.clearScreen();
         BrickScreen.displayString("FINISH", 0, 0);
         long time = System.currentTimeMillis();
-        while(System.currentTimeMillis() < time + 5000){
-            //Entfernen wieder!!!!
+        while (System.currentTimeMillis() < time + 5000) {
+            // Entfernen wieder!!!!
         }
-        
+
     }
 
     public void travelSearchAlgorithm() {
-        // Wahlweise Suche in Halbkreisen, ZickZack, ZickZackBögen,
-        // Schlangenlinie
+        
+        //Already on line
+       if(lineFollowThread.isWhite(robot.getSensorValues().getColorValue())){
+           
+           //Just get to the right edge of the line
+           drive.turnRightInPlace();
+           while(lineFollowThread.isWhite(robot.getSensorValues().getColorValue())){
+               if (Thread.currentThread().isInterrupted()) {
+                   return;
+               }
+           }
+           //Right Edge found! No search algorithm needed
+          return; 
+       }
+        
+        
+        //Not on Line: We need travel Search algorithm
         travelHalfCircles();
-        // travelZigZag();
-        // travelZigZagArcs();
-        // travelSinuousLines();
+       
     }
 
     public void travelHalfCircles() {
@@ -76,6 +89,11 @@ public class GapState extends LineFollowingState {
         for (int i = 0; i < 10; i++) {
 
             long start = System.currentTimeMillis();
+
+            /*
+             * Search while driving left
+             */
+
             drive.turnLeftInPlace();
             while (System.currentTimeMillis() < start + 1800) {
                 if (Thread.currentThread().isInterrupted()) {
@@ -86,20 +104,48 @@ public class GapState extends LineFollowingState {
                 }
             }
 
+            /*
+             * Search while driving right
+             */
             start = System.currentTimeMillis();
             drive.turnRightInPlace();
-            while (System.currentTimeMillis() < start + 1900) {
+            while (System.currentTimeMillis() < start + 3800) {
                 if (Thread.currentThread().isInterrupted()) {
                     return;
                 }
 
+                /*
+                 * Need to cross line as we need to drive on the right edge
+                 */
                 if (lineFollowThread.isGreyCorner(robot.getSensorValues().getColorValue())) {
 
-                    // TODO hier etwas mehr drehen weil gefunden
+                    /*
+                     * Drive as long as on white line!
+                     */
+                    while (lineFollowThread.isWhite(robot.getSensorValues().getColorValue())) {
+                        if (Thread.currentThread().isInterrupted()) {
+                            // Return as soon as Line was crossed
+                            return;
+                        }
+
+                    }
                     return;
                 }
             }
 
+            /*
+             * Get Back to origin position
+             */
+            start = System.currentTimeMillis();
+            drive.turnLeftInPlace();
+            while (System.currentTimeMillis() < start + 1800) {
+                if (Thread.currentThread().isInterrupted()) {
+                    return;
+                }
+
+            }
+
+            //Drive a bit forward and do half cirlce again
             drive.travelFwd(SEARCH_DISTANCE);
 
         }
@@ -108,14 +154,5 @@ public class GapState extends LineFollowingState {
 
     }
 
-    public void travelZigZag() {
-
-    }
-
-    public void travelZigZagArcs() {
-    }
-
-    public void travelSinuousLines() {
-    }
-
+   
 }
