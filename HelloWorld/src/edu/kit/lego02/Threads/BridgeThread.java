@@ -9,13 +9,13 @@ public class BridgeThread implements Runnable {
 	Robot robot;
 	Drive drive;
 		
-	// 0.2f
+	// last: 0.067f
 	// measured: 0.067f
 	// zu weit rechts -> größer
-	private static float usTargetValue =  0.15f;
+	private static float usTargetValue =  0.08f;
 	// Proportional factor for P-control: (try 130 if it doesnt work)
 	private static final float KP = 180f;				// TODO adjust
-	private static final float BASE_SPEED = 150f;
+	private static final float BASE_SPEED = 100f;
 	
 	private static final float blackTapeTresh = 0.06f;
 	
@@ -60,12 +60,12 @@ public class BridgeThread implements Runnable {
     		if (controlDiff < 0) { 
     			// turn right
     			leftMotorSpeed = BASE_SPEED + KP;
-    			rightMotorSpeed = BASE_SPEED - KP/2;
+    			rightMotorSpeed = BASE_SPEED - KP/2; //KP/2
     			//BrickScreen.displayString("RIGHT " + controlDiff, 0, 1);
     		} else {	
     			// turn left
-    			leftMotorSpeed = BASE_SPEED - KP/2;
-    			rightMotorSpeed = BASE_SPEED + KP;
+    			leftMotorSpeed = BASE_SPEED - KP/2; //KP/2
+    			rightMotorSpeed = BASE_SPEED + KP; 
     			//BrickScreen.displayString("LEFT " +  controlDiff, 0, 1);
     		}
     		
@@ -74,7 +74,7 @@ public class BridgeThread implements Runnable {
     		//checkForStateChange();
     		
     		try {
-				Thread.sleep(100);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				drive.stopMotors();
     			robot.pointUSSensorForward();
