@@ -39,6 +39,7 @@ public class SensorValuesThread implements Runnable{
                 this.leftTouchValue = leftTouchSensor.getSingleSample();
                 this.rightTouchValue = righTouchSensor.getSingleSample();
                 this.ultrasonicValue = ultrasonicSensor.getSingleSample();
+                
                 Thread.sleep(5); //TODO Needs adjustment
             }
         } catch (InterruptedException e) {

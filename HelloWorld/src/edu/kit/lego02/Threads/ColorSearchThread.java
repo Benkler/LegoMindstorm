@@ -13,7 +13,6 @@ public class ColorSearchThread implements Runnable {
     private float[] colorArray;
     private boolean whiteFound = false;
     private boolean redFound = false;
-    private boolean corner = true;
 
     private boolean lastTurnWasLeft = false;
     private int Kp = 150;
@@ -25,7 +24,7 @@ public class ColorSearchThread implements Runnable {
      */
     private float startUSVal;
     private final float TOUCH_PRESSED = 1.0f;
-   
+
     private final int GREEN = 1;
     private final int RED = 0;
     private final float COLORRED = 0.15f;
@@ -43,7 +42,7 @@ public class ColorSearchThread implements Runnable {
         BrickScreen.show("Color Search Running");
 
         robot.getSensorValues().setRGB();
-        initUSSensor();
+
         colorSearch();
 
         finish();
@@ -52,7 +51,14 @@ public class ColorSearchThread implements Runnable {
 
     private void initUSSensor() {
         robot.pointUSSensorForward();
+        long time = System.currentTimeMillis();
 
+        while (System.currentTimeMillis() < time + 1000) {
+            // do nothing;
+            // Robot should wait so that sensor thread can read some US sensor
+            // Values
+            // No idea why, but instant turning and measuring did not work
+        }
 
     }
 
@@ -63,6 +69,7 @@ public class ColorSearchThread implements Runnable {
     }
 
     private void colorSearch() {
+        initUSSensor();
 
         while (!allColorsFound()) {
             if (Thread.interrupted()) {
@@ -70,7 +77,6 @@ public class ColorSearchThread implements Runnable {
                 BrickScreen.clearScreen();
                 return;
             }
-            drive.changeMotorSpeed(400, 400);
             driveTillWallFound();
             if (allColorsFound())
                 return;
@@ -81,80 +87,116 @@ public class ColorSearchThread implements Runnable {
     }
 
     private void regulateDirection() {
-        
-        float sensorValue = robot.getSensorValues().getUltrasonicValue();
-        float error =  startUSVal - sensorValue;
-        float controlValue = this.Kp * error;       
+
+        float sensorValue = robot.getSensorValues().getUltrasonicValue() * 100; // in
+                                                                                // cm
+        float error = startUSVal - sensorValue; // error in cm
         BrickScreen.clearScreen();
-        BrickScreen.displayFloat(sensorValue, 0, 0);
-        
-        if(error < 0){
-            //BrickScreen.clearScreen();
-            //BrickScreen.displayFloat(sensorValue, 0, 0);
-            drive.changeMotorSpeed(380, 420);
-        }else{
-            //BrickScreen.clearScreen();
-            //BrickScreen.displayString("Right", 0, 0);
-            drive.changeMotorSpeed(420, 380);
+        BrickScreen.displayFloat(error, 0, 0);
+
+        // In case Sensor touches the wall
+        if (sensorValue == Float.POSITIVE_INFINITY) {
+            if (lastTurnWasLeft) { // right wall on the way back to entry site
+                drive.changeMotorSpeed(590, 490);
+            } else { // right wall on the way back to entry site
+                drive.changeMotorSpeed(490, 590);
+            }
+            return;
         }
-        
-        
-        
+
+        if (error < 0) {
+            drive.changeMotorSpeed(490, 590);
+        } else {
+            drive.changeMotorSpeed(590, 490);
+        }
 
     }
-    
-    private void initCurrentUSSensorValue(){
-        
-        
+
+    /*
+     * Init current Distance to wall by calculate average of (max.) 50 valid
+     * values
+     */
+    private float initCurrentUSSensorValue() {
+        float temp = 0;
+        int counterForValidValues = 0;
+        for (int i = 0; i < 50; i++) {
+            float currentVal = robot.getSensorValues().getUltrasonicValue();
+            if (currentVal == Float.POSITIVE_INFINITY) {
+                continue; // try to avoid sensor errors
+            }
+            temp += currentVal;
+            counterForValidValues++;
+        }
+        temp = temp / counterForValidValues; // get average
+        temp = temp * 100; // get in cm
+
+        // if(temp < 5) return 5; // we always want to be at least 5 cm away
+        // from wall
+        // return temp;
+        return temp < 5 ? 5 : temp;
+
     }
 
+    /*
+     * Drive straight but first take sample to get orientation
+     */
     private void driveTillWallFound() {
-        
-       startUSVal = robot.getSensorValues().getUltrasonicValue();
-       
+
+        startUSVal = initCurrentUSSensorValue();
+
         while (true) {
             if (Thread.interrupted()) {
-
                 BrickScreen.clearScreen();
                 return;
             }
 
             regulateDirection();
+            checkForColor();
+            if (allColorsFound()) {
+                return;
+            }
 
             if (wallTouched()) {
                 drive.stopMotors();
-                Sound.twoBeeps();
                 return;
             }
-            if (isWhite()) {
-                drive.stopMotors();
 
-                // BEEEP
-                Sound.beep();
+        }
 
-                // Wait for 2 seconds
-                long currentTime = System.currentTimeMillis();
-                while (System.currentTimeMillis() < currentTime + 20);
-                    
+    }
 
-                whiteFound = true;
-                if (allColorsFound())
-                    return;
+    /*
+     * Check for color
+     */
+    private void checkForColor() {
+
+        if (!whiteFound && isWhite()) {
+            drive.stopMotors();
+            // BEEEP
+            Sound.twoBeeps();
+
+            // Wait for 2 seconds
+            long currentTime = System.currentTimeMillis();
+            while (System.currentTimeMillis() < currentTime + 1000){
+                //do nothing
             }
+             
+            whiteFound = true;
+        }
 
-            if (isRed()) {
-                // BEEP
-                Sound.beep();
+        if (!redFound && isRed()) {
+            drive.stopMotors();
+            // BEEP
+            Sound.twoBeeps();
 
-                // Wait for 2 seconds
-                long currentTime = System.currentTimeMillis();
-                while (System.currentTimeMillis() < currentTime + 20)
-                    ;
-
-                redFound = true;
-                if (allColorsFound())
-                    return;
+            // Wait for 2 seconds
+            long currentTime = System.currentTimeMillis();
+            while (System.currentTimeMillis() < currentTime + 1000){
+                //do nothing
             }
+                
+            redFound = true;
+
         }
 
     }
@@ -177,23 +219,18 @@ public class ColorSearchThread implements Runnable {
     private void turnLeft180() {
         // Tail of the robot would touch the wall when turning in th corner
 
-        if (corner) {
-            // Get little bit more distance to wall before turning
-            drive.travelBwd(6);
-            drive.turnRightInPlace(15);
-            drive.travelBwd(4);
-            drive.turnLeftInPlace(15);
-
-            drive.turnLeftInPlace(85);
-            drive.travelFwd(1);
-            drive.turnLeftInPlace(85);
-            corner = false;
-        } else {
-            drive.travelBwd(5);
-            drive.turnLeftInPlace(85);
-            drive.travelFwd(5);
-            drive.turnLeftInPlace(85);
+        drive.travelBwd(5);
+        drive.turnLeftInPlace(80);
+        checkForColor();
+        if (allColorsFound()) {
+            return;
         }
+        drive.travelFwd(5);
+        checkForColor();
+        if (allColorsFound()) {
+            return;
+        }
+        drive.turnLeftInPlace(76);
 
         lastTurnWasLeft = true;
 
@@ -201,9 +238,17 @@ public class ColorSearchThread implements Runnable {
 
     private void turnRight180() {
         drive.travelBwd(5);
-        drive.turnRightInPlace(85);
+        drive.turnRightInPlace(80);
+        checkForColor();
+        if (allColorsFound()) {
+            return;
+        }
         drive.travelFwd(5);
-        drive.turnRightInPlace(85);
+        checkForColor();
+        if (allColorsFound()) {
+            return;
+        }
+        drive.turnRightInPlace(76);
         lastTurnWasLeft = false;
     }
 
