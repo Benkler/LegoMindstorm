@@ -12,9 +12,10 @@ public class BridgeThread implements Runnable {
 	Drive drive;
 		
 	// last: 0.08f
+	// also ok: 0.16f
 	// measured: 0.067f
 	// zu weit rechts -> größer
-	private static float usTargetValue =  0.12f;
+	private static float usTargetValue =  0.22f;
 	// Proportional factor for P-control: (try 130 if it doesnt work)
 	private static final float KP = 180f;				// TODO adjust
 	private static final float KI = 0.25f;	// between 0 and 1!
@@ -31,7 +32,6 @@ public class BridgeThread implements Runnable {
 	public BridgeThread(Robot robot) {
 		this.robot = robot;
 		this.drive = robot.getDrive();
-		//robot.getSensorValues().setColorMode("Red");
 	}
 	
     @Override
