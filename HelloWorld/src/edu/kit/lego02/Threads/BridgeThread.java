@@ -11,14 +11,15 @@ public class BridgeThread implements Runnable {
 	Robot robot;
 	Drive drive;
 		
-	// last: 0.067f
+	// last: 0.08f
 	// measured: 0.067f
 	// zu weit rechts -> größer
-	private static float usTargetValue =  0.08f;
+	private static float usTargetValue =  0.12f;
 	// Proportional factor for P-control: (try 130 if it doesnt work)
 	private static final float KP = 180f;				// TODO adjust
-	private static final float BASE_SPEED = 100f;
-	private static final int CONTROL_DIFF_HIST_SIZE = 20;
+	private static final float KI = 0.25f;	// between 0 and 1!
+	private static final float BASE_SPEED = 120f;
+	private static final int CONTROL_DIFF_HIST_SIZE = 120;
 	
 	private static final float blackTapeTresh = 0.06f;
 	
@@ -58,32 +59,27 @@ public class BridgeThread implements Runnable {
     	while (!endReached) {
     		
     		usValue = robot.getUltrasonicValue();
-    		controlDiff = usTargetValue - usValue;
-    		controlDiffHistory.addLast(new Float(Math.signum(controlDiff)));
+    		controlDiff = Math.signum(usTargetValue - usValue);
+    		controlDiffHistory.addLast(new Float(controlDiff));
     		if (controlDiffHistory.size() > CONTROL_DIFF_HIST_SIZE) {
     			controlDiffHistory.removeFirst();
     		}
-    		controlDiff = getHistoryAvg();
-    		motorSpeedShift = KP * controlDiff;
+    		motorSpeedShift = KP * ((1f - KI) * controlDiff + KI * getHistoryAvg());
     		
     		// controlDiff <0 : turn right
     		// controlDiff >=0 : turn left
     		//BrickScreen.clearScreen();
     		BrickScreen.displayString("US " + usValue + " CD " + controlDiff , 0, 1);
     		
-    		if (controlDiff < 0) { 
+    		if (motorSpeedShift < 0) { 
     			// turn right
-    			
     			leftMotorSpeed = BASE_SPEED - motorSpeedShift;
-    			rightMotorSpeed = BASE_SPEED + (motorSpeedShift /*/ 2f*/); //KP/2
-    			//BrickScreen.displayString("RIGHT " + controlDiff, 0, 1);
+    			rightMotorSpeed = BASE_SPEED + (motorSpeedShift /*/ 2f*/);
     			
     		} else {	
     			// turn left
-    			
-    			leftMotorSpeed = BASE_SPEED - (motorSpeedShift /*/ 2f*/); //KP/2
+    			leftMotorSpeed = BASE_SPEED - (motorSpeedShift /*/ 2f*/);
     			rightMotorSpeed = BASE_SPEED + motorSpeedShift; 
-    			//BrickScreen.displayString("LEFT " +  controlDiff, 0, 1);
     		}
     		
     		drive.changeMotorSpeed(leftMotorSpeed, rightMotorSpeed);
@@ -91,7 +87,7 @@ public class BridgeThread implements Runnable {
     		//checkForStateChange();
     		
     		try {
-				Thread.sleep(50);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				drive.stopMotors();
     			robot.pointUSSensorForward();
