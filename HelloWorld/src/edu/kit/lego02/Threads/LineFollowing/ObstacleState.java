@@ -29,8 +29,10 @@ public class ObstacleState extends LineFollowingState {
         
         //drive forward until grey found
         while(true){
-            
-            if(checkIfWhite()){
+            if (Thread.currentThread().isInterrupted()) {
+                return;
+            }
+            if(lineFollowThread.isGrey(robot.getSensorValues().getColorValue())){
                 drive.stopMotors();
                 return;
             }
@@ -39,9 +41,7 @@ public class ObstacleState extends LineFollowingState {
         
 	}
 	
-	private boolean checkIfWhite(){
-	    return !lineFollowThread.isGrey(robot.getSensorValues().getColorValue());
-	}
+	
 	
 	@Override
 	public void grey() {

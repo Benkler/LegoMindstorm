@@ -47,7 +47,8 @@ public class Controller {
             break;
 
         case COLOR_SEARCH:
-            routineThread = new Thread(new ColorSearchThread());
+            
+            routineThread = new Thread(new ColorSearchThread(robot));
             routineThread.start();
             break;
 
