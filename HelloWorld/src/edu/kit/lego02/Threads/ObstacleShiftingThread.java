@@ -33,9 +33,8 @@ public class ObstacleShiftingThread implements Runnable {
         
         travelToWall();
         travelToBox();
-//        moveBoxToWall();
-//        moveBoxToCorner();
-//        leaveArea();
+        moveBoxToCorner();
+        leaveArea();
     }
 
     private void travelToWall(){
@@ -74,12 +73,15 @@ public class ObstacleShiftingThread implements Runnable {
         	adistance = robot.getSensorValues().getUltrasonicValue() * 100;
     	}
     	drive.stopMotors();
-    	drive.travelFwd(17);
+    	drive.travelFwd(18);
     	drive.turnLeftInPlace(85); //260 Batterie
-    	//drive.travelFwd(70);
-    	while (!(robot.getSensorValues().getLeftTouchValue() == 1)){
-        	drive.changeMotorSpeed(400, 400);
-    	}
+    }
+    private void moveBoxToCorner(){	//drive.travelFwd(70);
+    	
+    	//while (!(robot.getSensorValues().getLeftTouchValue() == 1)){
+        //	drive.changeMotorSpeed(400, 400);
+    	//}
+    	drive.travelFwd(70);
     	drive.travelBwd(7);
     	drive.turnRightInPlace(85);//85 Batterie
     	drive.travelBwd(30);
@@ -89,60 +91,21 @@ public class ObstacleShiftingThread implements Runnable {
     	}
     	drive.travelBwd(3);
     	drive.turnRightInPlace(85); //85 Batterie
-    	distance = 4.0f;
+    	float distance = 4.0f;
+    	float difference;
     	while (!(robot.getSensorValues().getLeftTouchValue() == 1)){
         	difference = (robot.getSensorValues().getUltrasonicValue() * 100) - distance; //meter to centimeter
     		driveAlongWall(300.0f, difference);
-        	adistance = robot.getSensorValues().getUltrasonicValue() * 100;
     	}
+    }
+    private void leaveArea(){
     	drive.travelBwd(8);
     	drive.turnRightInPlace(85); //85 Batterie
     	drive.travelFwd(30);
     	drive.turnLeftInPlace(85);//85 Batterie
     	drive.travelFwd(35);
-    	/*for(int i = 0; i < 20; i++){
-    		distance += robot.getSensorValues().getUltrasonicValue();
-    	}
-    	distance = distance * 5;
-    	while (!(robot.getSensorValues().getLeftTouchValue() == 1)){
-        	difference = (robot.getSensorValues().getUltrasonicValue() * 100) - distance; //meter to centimeter
-    		driveAlongWall(300.0f, difference);
-        	adistance = robot.getSensorValues().getUltrasonicValue() * 100;
-    	}*/
     }
-    
-    private void moveBoxToWall(){
-    	float distance = 0;
-    	for(int i = 0; i < 20; i++){
-    		distance += robot.getSensorValues().getUltrasonicValue();
-    	}
-    	distance = distance * 5;
-    	float difference;
-    	float adistance = robot.getSensorValues().getUltrasonicValue() * 100;
-    	while (adistance > 35.0f){
-        	difference = (robot.getSensorValues().getUltrasonicValue() * 100) - distance; //meter to centimeter
-    		driveAlongWall(300.0f, difference);
-        	adistance = robot.getSensorValues().getUltrasonicValue() * 100;
-    	}
-    	drive.stopMotors();
-    	drive.travelFwd(9);
-    	drive.turnLeftInPlace(85);
-    }
-    
-    private void moveBoxToCorner(){
-    	drive.travelBwd(15);
-    	drive.turnRightInPlace(45);
-    	drive.travelBwd(10);
-    	drive.turnRightInPlace(90);
-    	drive.travelFwd(30);
-    	drive.turnRightInPlace(90);
-    	drive.travelFwd(100);
-    }
-    
-    private void leaveArea(){
-    	
-    }
-    
+
     private void driveAlongWall(float velocity, float difference){
     	final float proportional = 100.0f;
     	final float pdifference = difference * proportional;
