@@ -21,11 +21,12 @@ public class LineFollowingThread implements Runnable {
     private final float TOUCH_PRESSED = 1.0f;
     
     private boolean alreadyDoneWithObstacle = false;
+    private boolean lineFollowingFinished = false;
 
     /*s
      * Target power level ==> Max speed for Robot on line
      */
-    public final float Tp = 200f;
+    public final float Tp = 200f; //200 works but slow
 
     /*
      * Constant for P controller
@@ -37,6 +38,10 @@ public class LineFollowingThread implements Runnable {
 
     }
 
+    
+   public void setLineFollowingFinished(){
+        lineFollowingFinished = true;
+    }
     @Override
     public void run() {
 
@@ -47,7 +52,7 @@ public class LineFollowingThread implements Runnable {
         
 
         try {
-            while (true) {
+            while (!lineFollowingFinished) { //Set after last check for gap state
                 if (Thread.interrupted()) {
 
                     BrickScreen.clearScreen();
