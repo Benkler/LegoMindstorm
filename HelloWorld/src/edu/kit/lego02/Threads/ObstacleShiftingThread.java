@@ -24,7 +24,12 @@ public class ObstacleShiftingThread implements Runnable {
 
     @Override
     public void run() {
+        BrickScreen.clearScreen();
         BrickScreen.show("Obstacle SHifting!!");
+        
+        
+        boolean temp = true;
+       // while(temp);
         
         travelToWall();
         travelToBox();
