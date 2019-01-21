@@ -26,66 +26,102 @@ public class ObstacleShiftingThread implements Runnable {
     public void run() {
         BrickScreen.show("Obstacle SHifting!!");
         
-        travelToStart();
-//        travelToBoxSignal();
+        travelToWall();
+        travelToBox();
 //        moveBoxToWall();
 //        moveBoxToCorner();
 //        leaveArea();
     }
 
-    private void travelToStart(){
+    private void travelToWall(){
 		BrickScreen.show("" + robot.getSensorValues().getColorMode());
 		robot.getSensorValues().setRGB();
+		robot.pointUSSensorForward();
 
+		drive.turnLeftInPlace(30);
+		drive.travelFwd(15);
+		drive.turnRightInPlace(30);
 		float[] colorArray;
-		BrickScreen.show("" + robot.getSensorValues().getColorMode());
-    	//drive.turnLeftInPlace(20);
-    	//drive.travelFwd(200);
-    	try{
-	    	//while(!(blue > COLOR_BLUE)){
-	    	while(true){
-	    		Thread.sleep(5);
-	    		colorArray = robot.getSensorValues().getColorValueArray();
-	    		BrickScreen.clearScreen();
-	    		for(int i = 0; i < colorArray.length; i++){
-		    		BrickScreen.show(i + " : " + colorArray[i]);	    			
-	    		}
-	    	}
-	    	//drive.stopMotors();
-    		//BrickScreen.show("Vorwärts");
-    	} catch(InterruptedException e){
-    	}
-    	drive.travelFwd(50);	
-    }
-    
-    private void travelToBoxSignal(){
-    	float lastDistance = 0f; 
-    	float distance = robot.getSensorValues().getUltrasonicValue();    	
-    	drive.turnRightInPlace(90);    	
-    	drive.turnRightInPlace();    	
-    	try{    		
-	    	while(isSinkingDistance(distance, lastDistance)){
-	        	distance = robot.getSensorValues().getUltrasonicValue();
-	    	    Thread.sleep(5);
-	    	}
-    	} catch(InterruptedException e){
-    		
+		float distance = 5.0f; //distance to Wall
+    	float difference = (robot.getSensorValues().getUltrasonicValue() * 100) - distance; //meter to centimeter
+    	float blue = robot.getSensorValues().getColorValueArray()[2];
+    	while (!(robot.getSensorValues().getLeftTouchValue() == 1)){
+    		driveAlongWall(500.0f, difference);
+        	difference = (robot.getSensorValues().getUltrasonicValue() * 100) - distance; //meter to centimeter
+        	//blue = robot.getSensorValues().getColorValueArray()[2];
     	}
     	drive.stopMotors();
-    	//Korrekturbewegung
-    }    
-    
-    private boolean isSinkingDistance(float distance, float lastDistance){
-    	if (distance > 40 || lastDistance - distance > 0){
-    		return true;
+    	drive.travelBwd(8);
+    	drive.turnInPlace(180); //170 Batterie
+    }
+      
+    private void travelToBox(){
+    	float distance = 0;
+    	for(int i = 0; i < 20; i++){
+    		distance += robot.getSensorValues().getUltrasonicValue();
     	}
-    	return false;
+    	distance = distance * 5;
+    	float difference;
+    	float adistance = robot.getSensorValues().getUltrasonicValue() * 100;
+    	while (adistance > 35.0f){
+        	difference = ((robot.getSensorValues().getUltrasonicValue() * 100) - distance) + 5; //meter to centimeter
+    		driveAlongWall(300.0f, difference);
+        	adistance = robot.getSensorValues().getUltrasonicValue() * 100;
+    	}
+    	drive.stopMotors();
+    	drive.travelFwd(14);
+    	drive.turnRightInPlace(270); //260 Batterie
+    	//drive.travelFwd(70);
+    	while (!(robot.getSensorValues().getLeftTouchValue() == 1)){
+        	drive.changeMotorSpeed(400, 400);
+    	}
+    	drive.travelBwd(7);
+    	drive.turnRightInPlace(90);//85 Batterie
+    	drive.travelBwd(30);
+    	drive.turnLeftInPlace(90);//85 Batterie
+    	while (!(robot.getSensorValues().getLeftTouchValue() == 1)){
+        	drive.changeMotorSpeed(500, 500);
+    	}
+    	drive.travelBwd(3);
+    	drive.turnRightInPlace(90); //85 Batterie
+    	distance = 4.0f;
+    	while (!(robot.getSensorValues().getLeftTouchValue() == 1)){
+        	difference = (robot.getSensorValues().getUltrasonicValue() * 100) - distance; //meter to centimeter
+    		driveAlongWall(300.0f, difference);
+        	adistance = robot.getSensorValues().getUltrasonicValue() * 100;
+    	}
+    	drive.travelBwd(8);
+    	drive.turnRightInPlace(90); //85 Batterie
+    	drive.travelFwd(40);
+    	drive.turnLeftInPlace(90);//85 Batterie
+    	drive.travelFwd(35);
+    	/*for(int i = 0; i < 20; i++){
+    		distance += robot.getSensorValues().getUltrasonicValue();
+    	}
+    	distance = distance * 5;
+    	while (!(robot.getSensorValues().getLeftTouchValue() == 1)){
+        	difference = (robot.getSensorValues().getUltrasonicValue() * 100) - distance; //meter to centimeter
+    		driveAlongWall(300.0f, difference);
+        	adistance = robot.getSensorValues().getUltrasonicValue() * 100;
+    	}*/
     }
     
     private void moveBoxToWall(){
-    	//drive.travelArc(10, 140);
-    	//drive.stopMotors();
-    	drive.travelFwd(200);
+    	float distance = 0;
+    	for(int i = 0; i < 20; i++){
+    		distance += robot.getSensorValues().getUltrasonicValue();
+    	}
+    	distance = distance * 5;
+    	float difference;
+    	float adistance = robot.getSensorValues().getUltrasonicValue() * 100;
+    	while (adistance > 35.0f){
+        	difference = (robot.getSensorValues().getUltrasonicValue() * 100) - distance; //meter to centimeter
+    		driveAlongWall(300.0f, difference);
+        	adistance = robot.getSensorValues().getUltrasonicValue() * 100;
+    	}
+    	drive.stopMotors();
+    	drive.travelFwd(9);
+    	drive.turnLeftInPlace(85);
     }
     
     private void moveBoxToCorner(){
@@ -101,4 +137,24 @@ public class ObstacleShiftingThread implements Runnable {
     private void leaveArea(){
     	
     }
+    
+    private void driveAlongWall(float velocity, float difference){
+    	final float proportional = 100.0f;
+    	final float pdifference = difference * proportional;
+    	float leftSpeed;
+    	float rightSpeed;
+    	//if (Math.abs(pdifference) > 0.4 * velocity){
+    		if (pdifference > 0) {
+    			leftSpeed = velocity - 60;
+    			rightSpeed = velocity + 60;
+    		} else {
+    			leftSpeed = velocity + 60;
+    			rightSpeed = velocity - 60;    			
+    		}
+    	//} else { 
+    	//	leftSpeed = velocity - (pdifference);
+    	//	rightSpeed = velocity + (pdifference);
+    	//}
+    	drive.changeMotorSpeed(leftSpeed, rightSpeed);
+    }    
 }
