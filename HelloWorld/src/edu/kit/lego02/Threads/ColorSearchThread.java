@@ -16,7 +16,7 @@ public class ColorSearchThread implements Runnable {
 
     private boolean lastTurnWasLeft = false;
     private int Kp = 150;
-    private int Tp = 300;
+    private int Tp = 250;
 
     /*
      * Distance to right wall with US Sensor, Right wall is the wall on the
@@ -97,17 +97,17 @@ public class ColorSearchThread implements Runnable {
         // In case Sensor touches the wall
         if (sensorValue == Float.POSITIVE_INFINITY) {
             if (lastTurnWasLeft) { // right wall on the way back to entry site
-                drive.changeMotorSpeed(590, 490);
+                drive.changeMotorSpeed(550, 450);
             } else { // right wall on the way back to entry site
-                drive.changeMotorSpeed(490, 590);
+                drive.changeMotorSpeed(450, 550);
             }
             return;
         }
 
         if (error < 0) {
-            drive.changeMotorSpeed(490, 590);
+            drive.changeMotorSpeed(450, 550);
         } else {
-            drive.changeMotorSpeed(590, 490);
+            drive.changeMotorSpeed(550, 450);
         }
 
     }
@@ -205,9 +205,11 @@ public class ColorSearchThread implements Runnable {
 
         if (lastTurnWasLeft) {
             turnRight180();
+            drive.travelBwd(10);
 
         } else {
             turnLeft180();
+            drive.travelBwd(10);
         }
 
     }
@@ -230,7 +232,7 @@ public class ColorSearchThread implements Runnable {
         if (allColorsFound()) {
             return;
         }
-        drive.turnLeftInPlace(76);
+        drive.turnLeftInPlace(85);
 
         lastTurnWasLeft = true;
 
@@ -248,7 +250,7 @@ public class ColorSearchThread implements Runnable {
         if (allColorsFound()) {
             return;
         }
-        drive.turnRightInPlace(76);
+        drive.turnRightInPlace(80);
         lastTurnWasLeft = false;
     }
 
