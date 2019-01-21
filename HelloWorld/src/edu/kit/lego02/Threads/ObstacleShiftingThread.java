@@ -69,12 +69,13 @@ public class ObstacleShiftingThread implements Runnable {
         	adistance = robot.getSensorValues().getUltrasonicValue() * 100;
     	}
     	drive.stopMotors();
-    	drive.travelFwd(17);
+    	drive.travelFwd(18);
     	drive.turnLeftInPlace(85); //260 Batterie
     	//drive.travelFwd(70);
     	while (!(robot.getSensorValues().getLeftTouchValue() == 1)){
         	drive.changeMotorSpeed(400, 400);
     	}
+    	drive.travelFwd(10);
     	drive.travelBwd(7);
     	drive.turnRightInPlace(85);//85 Batterie
     	drive.travelBwd(30);
