@@ -58,8 +58,35 @@ public class Controller {
             break;
 
         case PARKOUR:
-            routineThread = new Thread(new ParkourThread());
-            routineThread.start();
+            
+            try {
+                routineThread = new Thread(new LineFollowingThread(robot));
+                routineThread.start();
+                routineThread.join();
+                
+                
+                
+                routineThread = new Thread(new ObstacleShiftingThread(robot));
+                routineThread.start(); 
+                routineThread.join();
+                
+                routineThread = new Thread(new BridgeThread(robot));
+                routineThread.start();
+                routineThread.join();
+                
+                routineThread = new Thread(new ColorSearchThread(robot));
+                routineThread.start();
+                routineThread.join();
+                
+                
+                
+                
+                
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        
             break;
 
         default:
