@@ -36,7 +36,7 @@ public class BridgeThread implements Runnable {
     public void run() {
     	
     	robot.pointUSSensorSkew();
-    	
+    	robot.getSensorValues().setColorMode("Red"); //NEU
 //    	printSensorValues();
     	
     	executeStartSequence();
