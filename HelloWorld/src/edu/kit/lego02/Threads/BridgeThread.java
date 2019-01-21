@@ -10,15 +10,13 @@ public class BridgeThread implements Runnable {
 	
 	Robot robot;
 	Drive drive;
-		
-	// last: 0.08f
-	// also ok: 0.16f
+	// last: 0.13f
 	// measured: 0.067f
 	// zu weit rechts -> größer
-	private static float usTargetValue =  0.22f;
-	// Proportional factor for P-control: (try 130 if it doesnt work)
-	private static final float KP = 180f;				// TODO adjust
-	private static final float KI = 0.25f;	// between 0 and 1!
+	private static float usTargetValue =  0.13f; // gut: 0.22f
+	// Proportional factor for P-control:
+	private static final float KP = 130f;	// 180f
+	private static final float KI = 0.15f;	// between 0 and 1! // 0.25f
 	private static final float BASE_SPEED = 120f;
 	private static final int CONTROL_DIFF_HIST_SIZE = 120;
 	
@@ -41,9 +39,9 @@ public class BridgeThread implements Runnable {
     	
 //    	printSensorValues();
     	
-//    	executeStartSequence();
+    	executeStartSequence();
     	crossControlled();
-//    	executeEndSequence();
+    	executeEndSequence();
     }
     
     private void crossControlled() {
@@ -65,6 +63,9 @@ public class BridgeThread implements Runnable {
     			controlDiffHistory.removeFirst();
     		}
     		motorSpeedShift = KP * ((1f - KI) * controlDiff + KI * getHistoryAvg());
+    		if (usValue > 1.5f) {
+    			motorSpeedShift = 100;
+    		}
     		
     		// controlDiff <0 : turn right
     		// controlDiff >=0 : turn left
@@ -84,7 +85,7 @@ public class BridgeThread implements Runnable {
     		
     		drive.changeMotorSpeed(leftMotorSpeed, rightMotorSpeed);
     		
-    		//checkForStateChange();
+    		checkForStateChange();
     		
     		try {
 				Thread.sleep(10);
@@ -114,6 +115,7 @@ public class BridgeThread implements Runnable {
 				BrickScreen.show("First corner detected");
 				
 				executeFirstCornerSequence();
+				//usTargetValue = 0.13f;
 				beforeFirstCorner = false;
 			}
 		} else {
@@ -127,8 +129,8 @@ public class BridgeThread implements Runnable {
     }
     
     private void executeFirstCornerSequence() {
-    	drive.travelFwd(17f);
-		drive.turnLeftInPlace(90);
+    	drive.travelFwd(20f);
+		drive.turnLeftInPlace(80);
 		drive.travelFwd(20f);
 		drive.turnLeftInPlace(20);
 		findEdge();
@@ -138,7 +140,7 @@ public class BridgeThread implements Runnable {
     	BrickScreen.clearScreen();
     	BrickScreen.show("Start sequence");
     	
-    	drive.travelFwd(16);
+    	drive.travelFwd(25);
     	drive.turnLeftInPlace(20);
     	findEdge();
     }
@@ -162,7 +164,7 @@ public class BridgeThread implements Runnable {
     	drive.travelBwd(8);
     	drive.turnRightInPlace(25);
     	drive.travelFwd(8);
-    	drive.turnLeftInPlace(25);
+    	//drive.turnLeftInPlace(25);
     	
     	// Find blue line
 //    	drive.travelFwdAsynchronous(50);
