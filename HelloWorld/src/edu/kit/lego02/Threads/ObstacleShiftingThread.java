@@ -81,9 +81,10 @@ public class ObstacleShiftingThread implements Runnable {
     	drive.turnRightInPlace(85);//85 Batterie
     	drive.travelBwd(30);
     	drive.turnLeftInPlace(85);//85 Batterie
-    	while (!(robot.getSensorValues().getLeftTouchValue() == 1)){
-        	drive.changeMotorSpeed(500, 500);
-    	}
+    	drive.travelFwd(70);
+    	//while (!(robot.getSensorValues().getLeftTouchValue() == 1)){
+        //	drive.changeMotorSpeed(500, 500);
+    	//}
     	drive.travelBwd(3);
     	drive.turnRightInPlace(85); //85 Batterie
     	float distance = 4.0f;
