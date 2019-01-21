@@ -1,5 +1,7 @@
 package edu.kit.lego02.Threads;
 
+import java.util.LinkedList;
+
 import edu.kit.lego02.Robot.Drive;
 import edu.kit.lego02.Robot.Robot;
 import edu.kit.lego02.userIO.BrickScreen;
@@ -8,37 +10,38 @@ public class BridgeThread implements Runnable {
 	
 	Robot robot;
 	Drive drive;
-		
-	// 0.4f
-	// not corners: 0.05f
-	// corners: 0.06f
-	// semi-working: 0.065f
-	private static float usTargetValue;
-	//higher than 0.15f
-	private static final float US_TARGET_VALUE_FIRST_PART =  0.18f;
-	// Proportional factor for P-control: (try 130 if it doesnt work)
-	private static final float KP = 180f;				// TODO adjust
-	private static final float BASE_SPEED = 150f;
+	// last: 0.13f
+	// measured: 0.067f
+	// zu weit rechts -> größer
+	private static float usTargetValue =  0.13f; // gut: 0.22f
+	// Proportional factor for P-control:
+	private static final float KP = 130f;	// 180f
+	private static final float KI = 0.15f;	// between 0 and 1! // 0.25f
+	private static final float BASE_SPEED = 120f;
+	private static final int CONTROL_DIFF_HIST_SIZE = 120;
 	
 	private static final float blackTapeTresh = 0.06f;
 	
 	private static boolean beforeFirstCorner = true;
+	private static boolean endReached = false;
+	
+	private LinkedList<Float> controlDiffHistory = new LinkedList<Float>();
 	
 	public BridgeThread(Robot robot) {
 		this.robot = robot;
 		this.drive = robot.getDrive();
-		usTargetValue = US_TARGET_VALUE_FIRST_PART;
-		robot.getSensorValues().setColorMode("Red");
 	}
 	
     @Override
     public void run() {
-//    	printSensorValues();
     	
     	robot.pointUSSensorSkew();
-//    	executeStartSequence();
+    	
+//    	printSensorValues();
+    	
+    	executeStartSequence();
     	crossControlled();
-//    	executeEndSequence();
+    	executeEndSequence();
     }
     
     private void crossControlled() {
@@ -46,55 +49,88 @@ public class BridgeThread implements Runnable {
     	BrickScreen.show(" Cross controlled");
     	
     	float controlDiff;
+    	float usValue;
+    	float motorSpeedShift;
     	float leftMotorSpeed;
     	float rightMotorSpeed;
     	
-    	while (true) {
+    	while (!endReached) {
     		
-    		controlDiff = robot.getSensorValues().getUltrasonicValue() - usTargetValue;
-    		// controlDiff >0 : turn right
-    		// controlDiff <0 : turn left
-    		if (controlDiff >= 0) { 
-    			leftMotorSpeed = BASE_SPEED + KP;
-    			rightMotorSpeed = BASE_SPEED - KP/2;
-    		} else {	// US sensor is looking over the edge.
-    			leftMotorSpeed = BASE_SPEED - KP/2;
-    			rightMotorSpeed = BASE_SPEED + KP;
+    		usValue = robot.getUltrasonicValue();
+    		controlDiff = Math.signum(usTargetValue - usValue);
+    		controlDiffHistory.addLast(new Float(controlDiff));
+    		if (controlDiffHistory.size() > CONTROL_DIFF_HIST_SIZE) {
+    			controlDiffHistory.removeFirst();
+    		}
+    		motorSpeedShift = KP * ((1f - KI) * controlDiff + KI * getHistoryAvg());
+    		if (usValue > 1.5f) {
+    			motorSpeedShift = 100;
+    		}
+    		
+    		// controlDiff <0 : turn right
+    		// controlDiff >=0 : turn left
+    		//BrickScreen.clearScreen();
+    		BrickScreen.displayString("US " + usValue + " CD " + controlDiff , 0, 1);
+    		
+    		if (motorSpeedShift < 0) { 
+    			// turn right
+    			leftMotorSpeed = BASE_SPEED - motorSpeedShift;
+    			rightMotorSpeed = BASE_SPEED + (motorSpeedShift /*/ 2f*/);
+    			
+    		} else {	
+    			// turn left
+    			leftMotorSpeed = BASE_SPEED - (motorSpeedShift /*/ 2f*/);
+    			rightMotorSpeed = BASE_SPEED + motorSpeedShift; 
     		}
     		
     		drive.changeMotorSpeed(leftMotorSpeed, rightMotorSpeed);
     		
     		checkForStateChange();
     		
-    		if (Thread.currentThread().isInterrupted()){
-    			drive.stopMotors();
+    		try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				drive.stopMotors();
     			robot.pointUSSensorForward();
                 return;
-            }    		
+			}
     	}
+    	
+    	BrickScreen.clearScreen();
+		BrickScreen.show("END");	
+    }
+    
+    private float getHistoryAvg() {
+    	float sum = 0f;
+    	for (Float current : controlDiffHistory) {
+			sum += current.floatValue();
+		}
+    	return sum / ((float) controlDiffHistory.size());
     }
     
     private void checkForStateChange() {
     	if (beforeFirstCorner) {
 			if (robot.getSensorValues().getColorValue() < blackTapeTresh) {
 				BrickScreen.clearScreen();
-				BrickScreen.show("################");
+				BrickScreen.show("First corner detected");
 				
 				executeFirstCornerSequence();
+				//usTargetValue = 0.13f;
 				beforeFirstCorner = false;
 			}
 		} else {
 			if (robot.getSensorValues().getLeftTouchValue()  > 0.9f 
 					|| robot.getSensorValues().getRightTouchValue() > 0.9f) {
 				drive.stopMotors();
+				endReached = true;
 				return;
 			}
 		}
     }
     
     private void executeFirstCornerSequence() {
-    	drive.travelFwd(17f);
-		drive.turnLeftInPlace(90);
+    	drive.travelFwd(20f);
+		drive.turnLeftInPlace(80);
 		drive.travelFwd(20f);
 		drive.turnLeftInPlace(20);
 		findEdge();
@@ -104,7 +140,7 @@ public class BridgeThread implements Runnable {
     	BrickScreen.clearScreen();
     	BrickScreen.show("Start sequence");
     	
-    	drive.travelFwd(16);
+    	drive.travelFwd(25);
     	drive.turnLeftInPlace(20);
     	findEdge();
     }
@@ -128,7 +164,7 @@ public class BridgeThread implements Runnable {
     	drive.travelBwd(8);
     	drive.turnRightInPlace(25);
     	drive.travelFwd(8);
-    	drive.turnLeftInPlace(25);
+    	//drive.turnLeftInPlace(25);
     	
     	// Find blue line
 //    	drive.travelFwdAsynchronous(50);
@@ -140,7 +176,7 @@ public class BridgeThread implements Runnable {
     private void printSensorValues() {
 		while(true) {
     		BrickScreen.clearScreen();
-    		BrickScreen.displayString("" + robot.getSensorValues().getColorValue(), 0, 1);
+    		BrickScreen.displayString("" + robot.getUltrasonicValue(), 0, 1);
     		try {
 				Thread.sleep(200);
 			} catch (InterruptedException e) {

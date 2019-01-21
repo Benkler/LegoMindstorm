@@ -35,10 +35,11 @@ public class CheckForGapState extends LineFollowingState {
         Drive drive = robot.getDrive();
 
         
+        //Get some distance to line
+        drive.travelFwd(1);
      
         long start = System.currentTimeMillis();
-       
-        
+
         //turn left
         drive.changeMotorSpeed(-220, 250); //we do not use drive.turnLeftInPlace as we need to do a little turn
       
@@ -58,7 +59,7 @@ public class CheckForGapState extends LineFollowingState {
         
         //turn right
         drive.changeMotorSpeed(250, -220);
-        while (System.currentTimeMillis() < start + 3100) {
+        while (System.currentTimeMillis() < start + 3000) {
             if (Thread.currentThread().isInterrupted()) {
                 return;
             }
@@ -66,7 +67,16 @@ public class CheckForGapState extends LineFollowingState {
             
         }
 
-        drive.travelFwd(3.0f);
+        //Drive forward to get away from end of line
+        drive.changeMotorSpeed(200, 200);
+        while (System.currentTimeMillis() < start + 200) {
+            if (Thread.currentThread().isInterrupted()) {
+                return;
+            }
+
+            
+        }
+        //drive.travelFwd(3.0f);  use motorSpeed instead
 
     }
 
