@@ -7,9 +7,9 @@ import edu.kit.lego02.userIO.BrickScreen;
 
 public class GapState extends LineFollowingState {
 
-    private final int GAP_SIZE = 15;
+    private final int GAP_SIZE = 17; //15 was to less
 
-    private final int SEARCH_DISTANCE = 2;
+    private final int SEARCH_DISTANCE = 3; // 2 was
 
     private Drive drive;
 
@@ -29,17 +29,28 @@ public class GapState extends LineFollowingState {
         nextState = new StandardLineFollowingState(lineFollowThread);
 
     }
+    
+    @Override
+    public void white() {
+        //Error solution: Still on white line
+       nextState = new CornerState(lineFollowThread);
+    }
+    
+   @Override
+    public void black() {
+       // Error solution: Check on more time
+       nextState = new CheckForGapState(lineFollowThread);
+    }
 
     @Override
     protected void entry() {
 
-        /*
-         * Drive until blue found!
-         */
-        // if(lineFollowThread.isAlreadyDoneWithObstacle()){
-        // travelUntilBlueFound();
-        // return;
-        // }
+       
+         if(lineFollowThread.isAlreadyDoneWithObstacle()){
+             lineFollowThread.setLineFollowingFinished();
+             drive.stopMotors();
+         return;
+         }
 
         // Distance to drive blind
         drive.travelFwd(GAP_SIZE);
@@ -48,16 +59,7 @@ public class GapState extends LineFollowingState {
 
     }
 
-    private void travelUntilBlueFound() {
-        robot.getDrive().stopMotors();
-        BrickScreen.clearScreen();
-        BrickScreen.displayString("FINISH", 0, 0);
-        long time = System.currentTimeMillis();
-        while (System.currentTimeMillis() < time + 5000) {
-            // Entfernen wieder!!!!
-        }
-
-    }
+    
 
     public void travelSearchAlgorithm() {
         

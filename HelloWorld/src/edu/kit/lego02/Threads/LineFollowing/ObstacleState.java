@@ -18,14 +18,14 @@ public class ObstacleState extends LineFollowingState {
         
         // TODO calibrate all the parameters
         drive.travelBwd(5);
-        drive.turnRightInPlace(90.f);
-        drive.travelFwd(20);
+        drive.turnRightInPlace(90);
+        drive.travelFwd(22);
         drive.turnLeftInPlace(90);
-        drive.travelFwd(40);
+        drive.travelFwd(55);
         drive.turnLeftInPlace(80);
         drive.travelFwd(15);
         
-        drive.changeMotorSpeed(150, 150);
+        drive.changeMotorSpeed(80, 200);
         
         //drive forward until grey found
         while(true){

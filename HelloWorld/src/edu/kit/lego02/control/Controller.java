@@ -78,7 +78,7 @@ public class Controller {
             while(routineThread.isAlive()){
                 
             };
-            
+            robot.getDrive().stopMotors();
             routineThread = null;
         } catch (Exception e) {
             BrickScreen.clearScreen();
