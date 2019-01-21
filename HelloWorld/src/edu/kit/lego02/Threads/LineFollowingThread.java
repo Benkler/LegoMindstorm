@@ -77,6 +77,9 @@ public class LineFollowingThread implements Runnable {
                 Thread.sleep(5); // TODO wie schnell regeln?
 
             }
+            
+            BrickScreen.clearScreen();
+            BrickScreen.displayString("Line Following while", 0, 0);
         } catch (InterruptedException e) {
 
         }

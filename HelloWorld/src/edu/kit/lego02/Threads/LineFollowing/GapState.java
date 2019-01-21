@@ -49,6 +49,8 @@ public class GapState extends LineFollowingState {
          if(lineFollowThread.isAlreadyDoneWithObstacle()){
              lineFollowThread.setLineFollowingFinished();
              drive.stopMotors();
+             BrickScreen.clearScreen();
+             BrickScreen.displayString("Finish Line Following", 0, 0);
          return;
          }
 
