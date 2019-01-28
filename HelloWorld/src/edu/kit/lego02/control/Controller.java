@@ -37,24 +37,99 @@ public class Controller {
         case LINE_FOLLOWING:
             // do lineFOllowing
 
-            routineThread = new Thread(new LineFollowingThread(robot));
-            routineThread.start();
+            
+            try {
+                routineThread = new Thread(new LineFollowingThread(robot));
+                routineThread.start();
+                routineThread.join();
+                
+                
+                
+                routineThread = new Thread(new ObstacleShiftingThread(robot));
+                routineThread.start(); 
+                routineThread.join();
+                
+                routineThread = new Thread(new BridgeThread(robot));
+                routineThread.start();
+                routineThread.join();
+                
+                routineThread = new Thread(new ColorSearchThread(robot));
+                routineThread.start();
+                routineThread.join();
+                
+                
+                
+                
+                
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
 
             break;
         case BRIDGE:
-            routineThread = new Thread(new BridgeThread(robot));
-            routineThread.start();
+            
+            try {
+                
+                routineThread = new Thread(new BridgeThread(robot));
+                routineThread.start();
+                routineThread.join();
+                
+                routineThread = new Thread(new ColorSearchThread(robot));
+                routineThread.start();
+                routineThread.join();
+                
+                
+                
+                
+                
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
             break;
 
         case COLOR_SEARCH:
             
-            routineThread = new Thread(new ColorSearchThread(robot));
-            routineThread.start();
+            try {
+        
+                
+                routineThread = new Thread(new ColorSearchThread(robot));
+                routineThread.start();
+                routineThread.join();
+
+                
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
             break;
 
         case OBSTACLE_SHIFTING:
-            routineThread = new Thread(new ObstacleShiftingThread(robot));
-            routineThread.start();
+            
+            try {
+             
+
+                routineThread = new Thread(new ObstacleShiftingThread(robot));
+                routineThread.start(); 
+                routineThread.join();
+                
+                routineThread = new Thread(new BridgeThread(robot));
+                routineThread.start();
+                routineThread.join();
+                
+                routineThread = new Thread(new ColorSearchThread(robot));
+                routineThread.start();
+                routineThread.join();
+                
+                
+                
+                
+                
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
             break;
 
         case PARKOUR:

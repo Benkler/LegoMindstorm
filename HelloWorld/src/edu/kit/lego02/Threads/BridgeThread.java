@@ -141,7 +141,7 @@ public class BridgeThread implements Runnable {
     	BrickScreen.show("Start sequence");
     	
     	drive.travelFwd(25);
-    	drive.turnLeftInPlace(20);
+    	//drive.turnLeftInPlace(20);
     	findEdge();
     }
     
@@ -163,7 +163,8 @@ public class BridgeThread implements Runnable {
     	
     	drive.travelBwd(8);
     	drive.turnRightInPlace(25);
-    	drive.travelFwd(8);
+    	drive.travelFwd(12);
+    	
     	//drive.turnLeftInPlace(25);
     	
     	// Find blue line

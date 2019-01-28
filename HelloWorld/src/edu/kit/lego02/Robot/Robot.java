@@ -95,14 +95,17 @@ public class Robot {
     
     public void pointUSSensorForward() {
     	ultraSonicMotor.rotate(computeUltraSonicMotorInput(US_FWD_ANGLE));
+    	usAngle = US_FWD_ANGLE;
     }
     
     public void pointUSSensorSkew() {
     	ultraSonicMotor.rotate(computeUltraSonicMotorInput(US_SKEW_ANGLE));
+    	usAngle = US_SKEW_ANGLE;
     }
     
     public void pointUSSensorDownward() {
     	ultraSonicMotor.rotate(computeUltraSonicMotorInput(US_DWD_ANGLE));
+    	usAngle = US_DWD_ANGLE;
     }
     
     private int computeUltraSonicMotorInput(int targetAngle) {
