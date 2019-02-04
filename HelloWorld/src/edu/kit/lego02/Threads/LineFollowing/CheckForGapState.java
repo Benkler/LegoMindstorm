@@ -59,7 +59,7 @@ public class CheckForGapState extends LineFollowingState {
         
         //turn right
         drive.changeMotorSpeed(250, -220);
-        while (System.currentTimeMillis() < start + 3000) {
+        while (System.currentTimeMillis() < start + 3100) { //3000
             if (Thread.currentThread().isInterrupted()) {
                 return;
             }

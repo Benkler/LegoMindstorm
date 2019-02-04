@@ -141,7 +141,7 @@ public class BridgeThread implements Runnable {
     	BrickScreen.show("Start sequence");
     	
     	drive.travelFwd(25);
-    	//drive.turnLeftInPlace(20);
+    	drive.turnLeftInPlace(10);
     	findEdge();
     }
     
@@ -163,7 +163,22 @@ public class BridgeThread implements Runnable {
     	
     	drive.travelBwd(8);
     	drive.turnRightInPlace(25);
-    	drive.travelFwd(12);
+    	
+    	long curTime = System.currentTimeMillis();
+    	long difference = 0;
+    	
+    	while(difference < 1800 ){
+    	    difference = System.currentTimeMillis() - curTime;
+    	    drive.changeMotorSpeed(300, 300);
+    	    if(checkIfContact()){
+    	        drive.stopMotors();
+    	        drive.travelBwd(8);
+    	        drive.turnRightInPlace(10);
+    	        drive.travelFwd(23);
+    	        break;
+    	    }
+    	}
+    	//drive.travelFwd(18);
     	
     	//drive.turnLeftInPlace(25);
     	
@@ -172,6 +187,12 @@ public class BridgeThread implements Runnable {
 //    	while(true) {
 //    		// TODO check for blue line via color sensor
 //    	}
+    }
+    
+    
+    private boolean checkIfContact(){
+         return robot.getSensorValues().getLeftTouchValue()  > 0.9f 
+                 || robot.getSensorValues().getRightTouchValue() > 0.9f;
     }
     
     private void printSensorValues() {

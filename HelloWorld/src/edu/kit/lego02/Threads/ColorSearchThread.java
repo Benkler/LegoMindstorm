@@ -205,11 +205,11 @@ public class ColorSearchThread implements Runnable {
 
         if (lastTurnWasLeft) {
             turnRight180();
-            drive.travelBwd(10);
+            drive.travelBwd(12);
 
         } else {
             turnLeft180();
-            drive.travelBwd(10);
+            drive.travelBwd(15);
         }
 
     }
@@ -222,7 +222,7 @@ public class ColorSearchThread implements Runnable {
         // Tail of the robot would touch the wall when turning in th corner
 
         drive.travelBwd(5);
-        drive.turnLeftInPlace(80);
+        drive.turnLeftInPlace(88);
         checkForColor();
         if (allColorsFound()) {
             return;
@@ -232,7 +232,7 @@ public class ColorSearchThread implements Runnable {
         if (allColorsFound()) {
             return;
         }
-        drive.turnLeftInPlace(85);
+        drive.turnLeftInPlace(88);
 
         lastTurnWasLeft = true;
 
@@ -240,7 +240,7 @@ public class ColorSearchThread implements Runnable {
 
     private void turnRight180() {
         drive.travelBwd(5);
-        drive.turnRightInPlace(80);
+        drive.turnRightInPlace(85);
         checkForColor();
         if (allColorsFound()) {
             return;
@@ -250,7 +250,7 @@ public class ColorSearchThread implements Runnable {
         if (allColorsFound()) {
             return;
         }
-        drive.turnRightInPlace(80);
+        drive.turnRightInPlace(88);
         lastTurnWasLeft = false;
     }
 
@@ -268,12 +268,12 @@ public class ColorSearchThread implements Runnable {
 
     private boolean isWhite() {
         colorArray = robot.getSensorValues().getColorValueArray();
-        return colorArray[GREEN] > COLORGREEN;
+        return colorArray[GREEN] > COLORGREEN && colorArray[RED] > COLORRED ;
     }
 
     private boolean isRed() {
         colorArray = robot.getSensorValues().getColorValueArray();
-        return colorArray[RED] > COLORRED;
+        return colorArray[RED] > COLORRED && colorArray[GREEN] < 0.1 && colorArray[2] < 0.1; //Anpassen?!
     }
 
 }

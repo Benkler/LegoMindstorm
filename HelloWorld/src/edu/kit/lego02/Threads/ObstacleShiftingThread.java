@@ -73,7 +73,7 @@ public class ObstacleShiftingThread implements Runnable {
         	adistance = robot.getSensorValues().getUltrasonicValue() * 100;
     	}
     	drive.stopMotors();
-    	drive.travelFwd(18);
+    	drive.travelFwd(17);
     	drive.turnLeftInPlace(85); //260 Batterie
     }
     private void moveBoxToCorner(){	//drive.travelFwd(70);
@@ -93,7 +93,7 @@ public class ObstacleShiftingThread implements Runnable {
     	drive.turnRightInPlace(85); //85 Batterie
     	float distance = 4.0f;
     	float difference;
-    	drive.travelFwd(70);
+    	drive.travelFwd(69);
 //    	while (!(robot.getSensorValues().getLeftTouchValue() == 1)){
 //        	difference = (robot.getSensorValues().getUltrasonicValue() * 100) - distance; //meter to centimeter
 //    		driveAlongWall(300.0f, difference);
@@ -102,7 +102,7 @@ public class ObstacleShiftingThread implements Runnable {
     private void leaveArea(){
     	drive.travelBwd(8);
     	drive.turnRightInPlace(85); //85 Batterie
-    	drive.travelFwd(30);
+    	drive.travelFwd(27);
     	drive.turnLeftInPlace(85);//85 Batterie
     	drive.travelFwd(35);
     }

@@ -81,9 +81,31 @@ public class GapState extends LineFollowingState {
         
         
         //Not on Line: We need travel Search algorithm
-        travelHalfCircles();
+       //travelHalfCircles();
+       findLine();
        
     }
+    
+    
+    public void findLine(){
+
+        drive.changeMotorSpeed(80, 200);
+        //drive forward until grey found on a half circle
+        while(true){
+            if (Thread.currentThread().isInterrupted()) {
+                return;
+            }
+            if(lineFollowThread.isGrey(robot.getSensorValues().getColorValue())){
+                drive.stopMotors();
+                return;
+            }
+            
+        }
+        
+        
+    }
+    
+    
 
     public void travelHalfCircles() {
 
